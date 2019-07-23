@@ -29,11 +29,13 @@ base_dir = '/gpfs/gpfs0/deep/data/Otoliths_cod/codotoliths/'
 
 df_cod = pd.DataFrame(columns=['age', 'path'])
 
-max_dataset_size = 6331
+max_dataset_size = 6330
 new_shape = (380, 380, 3)
 IMG_SHAPE = (380, 380)
 rb_imgs = np.empty(shape=(max_dataset_size,)+new_shape)    
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
+tensorboard_path= './tensorboard_cod_age_softmax'
+checkpoint_path = './checkpoints_cod_age_softmax/cod_oto_efficientnetB4.{epoch:03d}-{val_loss:.2f}.hdf5'
 
 add_count = 0
 for filename in Path(base_dir).glob('**/*.JPG'):
@@ -48,8 +50,10 @@ for filename in Path(base_dir).glob('**/*.JPG'):
     add_count +=1
 
 a_batch_size = 12
+age = df_cod.age.values
 
-early_stopper = EarlyStopping(patience=5)
+
+early_stopper = EarlyStopping(patience=20)
 train_datagen = ImageDataGenerator(
     zca_whitening=True,
     width_shift_range=0.,
@@ -109,6 +113,7 @@ history_callback = scales.fit_generator(train_generator,
         callbacks=[early_stopper, tensorboard, checkpointer],
         validation_data=(val_rb_imgs, val_age),
         class_weight=classWeight)
+        
 test_metrics = scales.evaluate(x=test_rb_imgs, y=test_age)
 print("test metric:"+str(scales.metrics_names))
 print("test metrics:"+str(test_metrics))
@@ -136,6 +141,16 @@ def dense1_linear_output(gray_model):
     z = base_output(gray_model)
     z = Dense(1, activation='linear')(z)
     return z    
+    
+def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
+    
+    tensorboard = TensorBoard(log_dir=tensorboard_path)
+    checkpointer = ModelCheckpoint(
+        filepath = checkpoint_path,
+        verbose = 1,
+        save_best_only = True,
+        save_weights_only = False)
+    return tensorboard, checkpointer    
 
 def train_validate_test_split(pairs, validation_set_size = 0.15, test_set_size = 0.15, a_seed = 8):
     """ split pairs into 3 set, train-, validation-, and test-set
