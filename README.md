@@ -18,7 +18,8 @@ Predicting age of cod otoliths
 >>> len(age)
 6330
 >>> print("test ocurrence of each class:"+str(dict(zip(unique, counts))))
-test ocurrence of each class:{0: 12, 1: 222, 2: 300, 3: 432, 4: 534, 5: 576, 6: 804, 7: 936, 8: 732, 9: 570, 10: 324, 11: 282, 12: 366, 13: 102, 14: 96, 15: 24, 16: 18}
+test ocurrence of each class:
+{0: 12, 1: 222, 2: 300, 3: 432, 4: 534, 5: 576, 6: 804, 7: 936, 8: 732, 9: 570, 10: 324, 11: 282, 12: 366, 13: 102, 14: 96, 15: 24, 16: 18}
 >>>
 >>> unique, counts = np.unique(train_age, return_counts=True)
 >>> dict(zip(unique, counts))
