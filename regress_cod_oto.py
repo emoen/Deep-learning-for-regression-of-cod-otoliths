@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 
 def regress_area():
-    pd_xy = pd.DataFrame(None, columns=['age', 'pixels'])
+    pd_xy = pd.DataFrame(None, columns=['age', 'size', 'file'])
 
     dir1 = '2017'
     dir2 = '2018'
@@ -27,8 +27,16 @@ def regress_area():
          age = int(age)
          #print("age:"+str(age))
          pixels = get_pixels(img_path)
-         pd_xy=pd_xy.append({'age':age, 'size':pixels}, ignore_index=True)
+         pd_xy=pd_xy.append({'age':age, 'size':pixels, 'file':img_path}, ignore_index=True)
          
+    
+    #routine for standardizing image size
+    img_size = pd_xy['size'].values
+    meanOtoSize = np.mean(img_size)
+    for path in pathlist:
+         #cv.INTER_LINEAR for zooming
+         res = cv.resize(img,None,fx=2, fy=2, interpolation = cv.INTER_LINEAR)
+     
     X = pd_xy.pixels.values
     y = pd_xy.age.values
     model = LinearRegression()
@@ -37,21 +45,21 @@ def regress_area():
     X_test=[]
     y_pred =[]
     for i, (train, test) in enumerate(kfold.split(X, y)):
-        model.fit(X.iloc[train,:], y.iloc[train,:])
+        model.fit(X[train], y[train])
         y_pred = model.predict(X)
         mse = mean_squared_error(y, y_pred)
         print(mse)
-        score = model.score(X.iloc[test,:], y.iloc[test,:])
+        score = model.score(X[test], y[test])
         scores.append(score)
-        
+    
     plt.scatter(X_test, y_test,  color='black')
     plt.plot(X_test, y_pred, color='blue', linewidth=3)
-
+    
     plt.xticks(())
     plt.yticks(())
-
+    
     plt.show()
-        
+    
     print(scores)
          
          
@@ -63,7 +71,7 @@ def get_pixels(img):
     if type(im_th) == type(None):
         print("img:"+str(img)+" not an image")
         return 1
-        
+    
     # Copy the thresholded image.
     im_floodfill = im_th.copy()
     
@@ -71,20 +79,20 @@ def get_pixels(img):
     # Notice the size needs to be 2 pixels than the image.
     h, w = im_th.shape[:2]
     mask = np.zeros((h+2, w+2), np.uint8)
-     
+    
     # Floodfill from point (0, 0)
     cv2.floodFill(im_floodfill, None, (0,0), 255);
-     
+    
     # Invert floodfilled image
     im_floodfill_inv = cv2.bitwise_not(im_floodfill)
-     
+    
     # Combine the two images to get the foreground.
     im_out = im_th | im_floodfill_inv
     
     n_white_pix = np.sum(im_out == 255)
     
     return n_white_pix
-
+    
     #cv2.imwrite('area_oto.png',im_out)
     
 if __name__ == '__main__':
