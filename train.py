@@ -27,9 +27,11 @@ from efficientnet import EfficientNetB4
 
 base_dir = '/gpfs/gpfs0/deep/data/Otoliths_cod/codotoliths/'
 
+dirs = set()
+
 df_cod = pd.DataFrame(columns=['age', 'path'])
 
-max_dataset_size = 6330
+max_dataset_size = 1027#6330
 new_shape = (380, 380, 3)
 IMG_SHAPE = (380, 380)
 rb_imgs = np.empty(shape=(max_dataset_size,)+new_shape)    
@@ -38,16 +40,19 @@ tensorboard_path= './tensorboard_cod_age_softmax'
 checkpoint_path = './checkpoints_cod_age_softmax/cod_oto_efficientnetB4.{epoch:03d}-{val_loss:.2f}.hdf5'
 
 add_count = 0
-for filename in Path(base_dir).glob('**/*.JPG'):
+for filename in Path(base_dir).glob('**/*.JPG'):    
     filepath =str(filename)
-    begin_age = filepath.find('age')
-    age = filepath[begin_age+3:begin_age+5]
-    age = int(age)
-    pil_img = load_img(filepath, target_size=IMG_SHAPE, grayscale=False)
-    array_img = img_to_array(pil_img, data_format='channels_last')
-    rb_imgs[add_count] = array_img    
-    df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
-    add_count +=1
+    dirname = os.path.dirname(filepath)
+    if ( dirname not in dirs ):
+        dirs.add(dirname)
+        begin_age = filepath.find('age')
+        age = filepath[begin_age+3:begin_age+5]
+        age = int(age)
+        pil_img = load_img(filepath, target_size=IMG_SHAPE, grayscale=False)
+        array_img = img_to_array(pil_img, data_format='channels_last')
+        rb_imgs[add_count] = array_img    
+        df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
+        add_count +=1
 
 a_batch_size = 12
 age = df_cod.age.values
