@@ -23,7 +23,8 @@ from keras.utils import to_categorical
 from keras import optimizers, layers
 from keras import backend as K
 
-from efficientnet import EfficientNetB4
+#from efficientnet import EfficientNetB4
+import efficientnet.keras as efn
 
 def do_train():
     base_dir = '/gpfs/gpfs0/deep/data/Otoliths_cod/codotoliths/'
@@ -54,7 +55,7 @@ def do_train():
             rb_imgs[add_count] = array_img
             df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
             add_count +=1
-            print(add_count)
+            #print(add_count)
 
     a_batch_size = 12
     age = df_cod.age.values
@@ -70,6 +71,21 @@ def do_train():
         horizontal_flip=False,
         vertical_flip=True,
         rescale=1./255)
+
+    #EXPERIMENT_FOLDER_PATH = os.path.join(parent_dir_of_file, f"reports/experiments/{EXPERIMENT_NAME}")
+    DEFAULT_CONFIG = {
+        "model": "basiccnn",
+        "method": "bayesian_optimization",
+        "train_set_size": 1029,
+        "opt_samples": 3,
+        "opt_last_n_epochs": 3,
+        "opt_initial_points": 10,
+        "child_epochs": 50,
+        "child_first_train_epochs": 0,
+        "child_batch_size": 64,
+        "pre_aug_weights_path": "pre_aug_weights.h5"
+    }
+    deepaug = DeepAugment(rb_imgs, age, config=DEFAULT_CONFIG)
 
     train_idx, val_idx, test_idx = train_validate_test_split( range(0, len(rb_imgs)) )
     train_rb_imgs = np.empty(shape=(len(train_idx),)+new_shape)
@@ -99,6 +115,7 @@ def do_train():
 
     train_generator = train_datagen.flow(train_rb_imgs, train_age, batch_size= a_batch_size)
 
+    efn.EfficientNetB0(weights='imagenet')
     rgb_efficientNetB4 = EfficientNetB4(include_top=False, weights='imagenet', input_shape=new_shape, classes=2)
     z = dense1_linear_output( rgb_efficientNetB4 )
     scales = Model(inputs=rgb_efficientNetB4.input, outputs=z)
@@ -186,4 +203,3 @@ def train_validate_test_split(pairs, validation_set_size = 0.15, test_set_size =
 
 if __name__ == '__main__':
     do_train()
-
