@@ -1,6 +1,9 @@
+# pip install pillow
+# pip install keras
+# pip install pandas
+
 import pandas as pd
 import numpy as np
-
 import glob
 import os
 from pathlib import Path
@@ -23,92 +26,124 @@ from keras.utils import to_categorical
 from keras import optimizers, layers
 from keras import backend as K
 
+
 #from efficientnet import EfficientNetB4
 import efficientnet.keras as efn
+from deepaugment.deepaugment import DeepAugment
+
 
 def do_train():
-    base_dir = '/gpfs/gpfs0/deep/data/Otoliths_cod/codotoliths/'
+base_dir = '/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice' #project/cod-otoliths
 
-    dirs = set()
+dirs = set() # to get just 1 jpg file from each folder
 
-    df_cod = pd.DataFrame(columns=['age', 'path'])
+df_cod = pd.DataFrame(columns=['age', 'path'])
 
-    max_dataset_size = 1029#6330
-    new_shape = (380, 380, 3)
-    IMG_SHAPE = (380, 380)
-    rb_imgs = np.empty(shape=(max_dataset_size,)+new_shape)
-    os.environ["CUDA_VISIBLE_DEVICES"]="1"
-    tensorboard_path= './tensorboard_cod_age_softmax2'
-    checkpoint_path = './checkpoints_cod_age_softmax2/cod_oto_efficientnetB4.{epoch:03d}-{val_loss:.2f}.hdf5'
+max_dataset_size = 1029#6330
+B4_input_shape = (380, 380, 3)
+B0_input_shape = (224, 224, 3)
+#new_shape
+rb_imgs_B0 = np.empty(shape=(max_dataset_size*2,)+B0_input_shape)
+rb_imgs = np.empty(shape=(max_dataset_size,)+B4_input_shape)
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+tensorboard_path= './tensorboard_test'
+checkpoint_path = './checkpoints_test/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
+a_batch_size = 12
 
-    add_count = 0
-    for filename in Path(base_dir).glob('**/*.JPG'):
-        filepath =str(filename)
-        dirname = os.path.dirname(filepath)
-        if ( dirname not in dirs ):
-            dirs.add(dirname)
-            begin_age = filepath.find('age')
-            age = filepath[begin_age+3:begin_age+5]
-            age = int(age)
-            pil_img = load_img(filepath, target_size=IMG_SHAPE, grayscale=False)
-            array_img = img_to_array(pil_img, data_format='channels_last')
-            rb_imgs[add_count] = array_img
-            df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
-            add_count +=1
-            #print(add_count)
+add_count = 0
+for filename in Path(base_dir).glob('**/*.JPG'):                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    filepath =str(filename)
+    dirname = os.path.dirname(filepath)
+    print(dirname in dirs)
+    if ( dirname not in dirs ):
+        print(add_count)
+        dirs.add(dirname)
+        begin_age = filepath.find('age')
+        age = filepath[begin_age+3:begin_age+5]
+        age = int(age)
+        pil_img = load_img(filepath, target_size=B0_input_shape, grayscale=False)
+        array_img = img_to_array(pil_img, data_format='channels_last')
+        rb_imgs_B0[add_count] = array_img
+        rb_imgs_B0[add_count+1] = array_img
+        df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
+        df_cod = df_cod.append({'age':age, 'path':filepath+'2'}, ignore_index=True)
+        add_count +=2
+        print(add_count)
 
-    a_batch_size = 12
-    age = df_cod.age.values
+age = df_cod.age.values
 
 
-    early_stopper = EarlyStopping(patience=20)
-    train_datagen = ImageDataGenerator(
-        zca_whitening=True,
-        width_shift_range=0.,
-        height_shift_range=0., #20,
-        zoom_range=0.,
-        rotation_range=360,
-        horizontal_flip=False,
-        vertical_flip=True,
-        rescale=1./255)
+early_stopper = EarlyStopping(patience=20)
+train_datagen = ImageDataGenerator(
+    zca_whitening=True,
+    width_shift_range=0.,
+    height_shift_range=0., #20,
+    zoom_range=0.,
+    rotation_range=360,
+    horizontal_flip=False,
+    vertical_flip=True,
+    rescale=1./255)
 
     #EXPERIMENT_FOLDER_PATH = os.path.join(parent_dir_of_file, f"reports/experiments/{EXPERIMENT_NAME}")
-    DEFAULT_CONFIG = {
-        "model": "basiccnn",
-        "method": "bayesian_optimization",
-        "train_set_size": 1029,
-        "opt_samples": 3,
-        "opt_last_n_epochs": 3,
-        "opt_initial_points": 10,
-        "child_epochs": 50,
-        "child_first_train_epochs": 0,
-        "child_batch_size": 64,
-        "pre_aug_weights_path": "pre_aug_weights.h5"
-    }
-    deepaug = DeepAugment(rb_imgs, age, config=DEFAULT_CONFIG)
+DEFAULT_CONFIG = {
+    "model": "basicregression",
+    "train_set_size":1800},
+    "method": "bayesian_optimization",
+    "train_set_size": 1029,
+    "opt_samples": 3,
+    "opt_last_n_epochs": 3,
+    "opt_initial_points": 10,
+    "child_epochs": 50,
+    "child_first_train_epochs": 0,
+    "child_batch_size": 64,
+    "pre_aug_weights_path": "pre_aug_weights.h5"
+}
 
-    train_idx, val_idx, test_idx = train_validate_test_split( range(0, len(rb_imgs)) )
-    train_rb_imgs = np.empty(shape=(len(train_idx),)+new_shape)
-    train_age = []
-    for i in range(0, len(train_idx)):
-        train_rb_imgs[i] = rb_imgs[train_idx[i]]
-        train_age.append(age[train_idx[i]])
+deepaug = DeepAugment(images=rb_imgs_B0, labels=age, config=DEFAULT_CONFIG) #DEFAULT_CONFIG[0]
+best_policies = deepaug.optimize(300)
 
-    val_rb_imgs = np.empty(shape=(len(val_idx),)+new_shape)
-    val_age = []
-    for i in range(0, len(val_idx)):
-        val_rb_imgs[i] = rb_imgs[val_idx[i]]
-        val_age.append(age[val_idx[i]])
+add_count = 0
+for filename in Path(base_dir).glob('**/*.JPG'):
+    filepath =str(filename)
+    dirname = os.path.dirname(filepath)
+    if ( dirname not in dirs ):
+        dirs.add(dirname)
+        begin_age = filepath.find('age')
+        age = filepath[begin_age+3:begin_age+5]
+        age = int(age)
+        pil_img = load_img(filepath, target_size=B4_input_shape, grayscale=False)
+        array_img = img_to_array(pil_img, data_format='channels_last')
+        rb_imgs[add_count] = array_img
+        rb_imgs[add_count+1] = array_img
+        df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
+        df_cod = df_cod.append({'age':age, 'path':filepath+'2'}, ignore_index=True)
+        add_count +=2
+        #print(add_count)
 
-    test_rb_imgs = np.empty(shape=(len(test_idx),)+new_shape)
-    test_age = []
-    for i in range(0, len(test_idx)):
-        test_rb_imgs[i] = rb_imgs[test_idx[i]]
-        test_age.append(age[test_idx[i]])
+age = df_cod.age.values
 
-    train_age = np.vstack(train_age)
-    val_age = np.vstack(val_age)
-    test_age = np.vstack(test_age)
+train_idx, val_idx, test_idx = train_validate_test_split( range(0, len(rb_imgs)) )
+train_rb_imgs = np.empty(shape=(len(train_idx),)+new_shape)
+train_age = []
+for i in range(0, len(train_idx)):
+    train_rb_imgs[i] = rb_imgs[train_idx[i]]
+    train_age.append(age[train_idx[i]])
+
+val_rb_imgs = np.empty(shape=(len(val_idx),)+new_shape)
+val_age = []
+for i in range(0, len(val_idx)):
+    val_rb_imgs[i] = rb_imgs[val_idx[i]]
+    val_age.append(age[val_idx[i]])
+
+test_rb_imgs = np.empty(shape=(len(test_idx),)+new_shape)
+test_age = []
+for i in range(0, len(test_idx)):
+    test_rb_imgs[i] = rb_imgs[test_idx[i]]
+    test_age.append(age[test_idx[i]])
+
+train_age = np.vstack(train_age)
+val_age = np.vstack(val_age)
+test_age = np.vstack(test_age)
 
     val_rb_imgs = np.multiply(val_rb_imgs, 1./255)
     test_rb_imgs = np.multiply(test_rb_imgs, 1./255)
@@ -194,11 +229,8 @@ def train_validate_test_split(pairs, validation_set_size = 0.15, test_set_size =
     """
     validation_and_test_set_size = validation_set_size + test_set_size
     validation_and_test_split = validation_set_size / (test_set_size+validation_set_size)
-
     df_train_x, df_notTrain_x = train_test_split(pairs, test_size = validation_and_test_set_size, random_state = a_seed)
-
     df_test_x, df_val_x = train_test_split(df_notTrain_x, test_size = validation_and_test_split, random_state = a_seed)
-
     return df_train_x, df_val_x, df_test_x
 
 if __name__ == '__main__':
