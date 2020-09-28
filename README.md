@@ -12,6 +12,7 @@ Predicting age of cod otoliths
 | Salmon B4            | river age  |0.359   |0.359 |19.58 |0.618|x    |6246     | linear  | x |
 | ~~Cod B4~~                | age        |0.0297  |0.0297|1.588 |0.984|x    |6330     | linear | x |
 | Cod B4               | age        |0.8796  |0.8796|9.228 |0.52597|x    |1029     | linear | x |
+| Cod B4               | age        |-  |-|- |-|x    |1985     | linear | x |
 
 
 ```
