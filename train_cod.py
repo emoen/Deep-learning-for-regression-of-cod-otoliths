@@ -1,6 +1,10 @@
 # pip install pillow
 # pip install keras
 # pip install pandas
+# pip install sklearn
+# pip install scipy
+# pip install -U git+https://github.com/qubvel/efficientnet
+# pip install tensorflow
 
 import pandas as pd
 import numpy as np
@@ -35,7 +39,8 @@ from deepaugment.deepaugment import DeepAugment
 # /scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/nr 04 age_02/IMG_0020.JPG
 #_0
 #/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/Nr03age_02
-def read_jpg_file_paths(B4_input_shape = (380, 380, 3)):
+#/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70331
+def read_jpg_file_paths(B4_input_shape = (380, 380, 3), max_dataset_size = 1985):
     '''
     reads one .jpg file in each folder in structure of folders
     returns tensor with images, and 1-1 correspondence with age
@@ -44,7 +49,6 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3)):
     dirs = set() # to get just 1 jpg file from each folder
     df_cod = pd.DataFrame(columns=['age', 'path'])
     
-    max_dataset_size = 2400 #6330
     image_tensor = np.empty(shape=(max_dataset_size,)+B4_input_shape)
     
     add_count = 0
@@ -60,15 +64,11 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3)):
                 dirs.add(dirname)
                 begin_age = filepath.lower().find('age')
                 age = filepath[begin_age+3:begin_age+5]
-                if '2015' in str(some_year_dir):
-                    print(filepath)
-                    print(age)
                 age = int(age)
                 
                 pil_img = load_img(filepath, target_size=B4_input_shape, grayscale=False)
                 array_img = img_to_array(pil_img, data_format='channels_last')
                 image_tensor[add_count] = array_img
-                image_tensor[add_count+1] = array_img
                 df_cod = df_cod.append({'age':age, 'path':filepath}, ignore_index=True)
                 #df_cod = df_cod.append({'age':age, 'path':filepath+'2'}, ignore_index=True)
                 add_count += 1
@@ -79,7 +79,7 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3)):
 
 
 def do_train():
-    os.environ["CUDA_VISIBLE_DEVICES"]="1"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
     tensorboard_path= './tensorboard_test'
     checkpoint_path = './checkpoints_test/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
     a_batch_size = 12
@@ -90,31 +90,31 @@ def do_train():
     early_stopper = EarlyStopping(patience=20)
     train_datagen = ImageDataGenerator(
         zca_whitening=True,
-        width_shift_range=0.5,
-        height_shift_range=0.5, #20,
+        width_shift_range=5,
+        height_shift_range=5, #20,
         zoom_range=0.,
         rotation_range=360,
         horizontal_flip=False,
         vertical_flip=True,
         rescale=1./255)
 
-    train_idx, val_idx, test_idx = train_validate_test_split( range(0, len(rb_imgs)) )
-    train_rb_imgs = np.empty(shape=(len(train_idx),)+new_shape)
+    train_idx, val_idx, test_idx = train_validate_test_split( range(0, len(image_tensor)) )
+    train_rb_imgs = np.empty(shape=(len(train_idx),)+B4_input_shape)
     train_age = []
     for i in range(0, len(train_idx)):
-        train_rb_imgs[i] = rb_imgs[train_idx[i]]
+        train_rb_imgs[i] = image_tensor[train_idx[i]]
         train_age.append(age[train_idx[i]])
 
-    val_rb_imgs = np.empty(shape=(len(val_idx),)+new_shape)
+    val_rb_imgs = np.empty(shape=(len(val_idx),)+B4_input_shape)
     val_age = []
     for i in range(0, len(val_idx)):
-        val_rb_imgs[i] = rb_imgs[val_idx[i]]
+        val_rb_imgs[i] = image_tensor[val_idx[i]]
         val_age.append(age[val_idx[i]])
 
-    test_rb_imgs = np.empty(shape=(len(test_idx),)+new_shape)
+    test_rb_imgs = np.empty(shape=(len(test_idx),)+B4_input_shape)
     test_age = []
     for i in range(0, len(test_idx)):
-        test_rb_imgs[i] = rb_imgs[test_idx[i]]
+        test_rb_imgs[i] = image_tensor[test_idx[i]]
         test_age.append(age[test_idx[i]])
 
     train_age = np.vstack(train_age)
@@ -126,18 +126,18 @@ def do_train():
 
     train_generator = train_datagen.flow(train_rb_imgs, train_age, batch_size= a_batch_size)
 
-    efn.EfficientNetB0(weights='imagenet')
-    rgb_efficientNetB4 = EfficientNetB4(include_top=False, weights='imagenet', input_shape=new_shape, classes=2)
+    #efn.EfficientNetB0(weights='imagenet')
+    rgb_efficientNetB4 = efn.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
     z = dense1_linear_output( rgb_efficientNetB4 )
-    scales = Model(inputs=rgb_efficientNetB4.input, outputs=z)
+    cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
 
-    learning_rate=0.0001
+    learning_rate=0.00007
     adam = optimizers.Adam(lr=learning_rate)
 
-    for layer in scales.layers:
+    for layer in cod.layers:
         layer.trainable = True
 
-    scales.compile(loss='mse', optimizer=adam, metrics=['accuracy','mse', 'mape'] )
+    cod.compile(loss='mse', optimizer=adam, metrics=['accuracy','mse', 'mape'] )
     tensorboard, checkpointer = get_checkpoint_tensorboard(tensorboard_path, checkpoint_path)
 
     classWeight = None
@@ -207,7 +207,7 @@ def train_validate_test_split(pairs, validation_set_size = 0.15, test_set_size =
     validation_and_test_split = validation_set_size / (test_set_size+validation_set_size)
     df_train_x, df_notTrain_x = train_test_split(pairs, test_size = validation_and_test_set_size, random_state = a_seed)
     df_test_x, df_val_x = train_test_split(df_notTrain_x, test_size = validation_and_test_split, random_state = a_seed)
-    return df_train_x, df_val_x, df_test_x
+    return df_train_x, df_val_x, df_test_x  
 
 if __name__ == '__main__':
     do_train()
