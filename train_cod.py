@@ -30,12 +30,6 @@ from keras.utils import to_categorical
 from keras import optimizers, layers
 from keras import backend as K
 
-
-#from efficientnet import EfficientNetB4
-import efficientnet.keras as efn 
-import efficientnet.tfkeras
-from tensorflow.keras.models import load_model
-
 # Error in folder:
 # /scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/nr 04 age_02/IMG_0020.JPG
 #_0
@@ -127,8 +121,7 @@ def do_train():
 
     train_generator = train_datagen.flow(train_rb_imgs, train_age, batch_size= a_batch_size, save_to_dir="./augmented")
 
-    #efn.EfficientNetB0(weights='imagenet')
-    rgb_efficientNetB4 = efn.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
+    rgb_efficientNetB4 = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
     z = dense1_linear_output( rgb_efficientNetB4 )
     cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
 
