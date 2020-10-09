@@ -33,7 +33,6 @@ from keras import backend as K
 
 #from efficientnet import EfficientNetB4
 import efficientnet.keras as efn
-from deepaugment.deepaugment import DeepAugment
 
 # Error in folder:
 # /scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/nr 04 age_02/IMG_0020.JPG
@@ -142,19 +141,19 @@ def do_train():
 
     classWeight = None
 
-    history_callback = scales.fit_generator(train_generator,
+    history_callback = cod.fit_generator(train_generator,
             steps_per_epoch=1600,
             epochs=150,
             callbacks=[early_stopper, tensorboard, checkpointer],
             validation_data=(val_rb_imgs, val_age),
             class_weight=classWeight)
 
-    test_metrics = scales.evaluate(x=test_rb_imgs, y=test_age)
-    print("test metric:"+str(scales.metrics_names))
+    test_metrics = cod.evaluate(x=test_rb_imgs, y=test_age)
+    print("test metric:"+str(cod.metrics_names))
     print("test metrics:"+str(test_metrics))
 
     print("precision, recall, f1")
-    y_pred_test = scales.predict(test_rb_imgs, verbose=1)
+    y_pred_test = cod.predict(test_rb_imgs, verbose=1)
     y_pred_test_bool = np.argmax(y_pred_test, axis=1)
     y_true_bool = np.argmax(test_age, axis=1)
     #np.argmax inverse of to_categorical
