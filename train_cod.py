@@ -32,7 +32,9 @@ from keras import backend as K
 
 
 #from efficientnet import EfficientNetB4
-import efficientnet.keras as efn
+import efficientnet.keras as efn 
+import efficientnet.tfkeras
+from tensorflow.keras.models import load_model
 
 # Error in folder:
 # /scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/nr 04 age_02/IMG_0020.JPG
@@ -81,9 +83,9 @@ def do_train():
     os.environ["CUDA_VISIBLE_DEVICES"]="0"
     tensorboard_path= './tensorboard_test'
     checkpoint_path = './checkpoints_test/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
-    a_batch_size = 12
+    a_batch_size = 8
     B4_input_shape = (380, 380, 3)
-    
+
     image_tensor, age = read_jpg_file_paths(B4_input_shape)
 
     early_stopper = EarlyStopping(patience=20)
@@ -91,7 +93,7 @@ def do_train():
         zca_whitening=True,
         width_shift_range=5,
         height_shift_range=5, #20,
-        zoom_range=0.,
+        zoom_range=[0.5,1.0],
         rotation_range=360,
         horizontal_flip=False,
         vertical_flip=True,
@@ -123,7 +125,7 @@ def do_train():
     val_rb_imgs = np.multiply(val_rb_imgs, 1./255)
     test_rb_imgs = np.multiply(test_rb_imgs, 1./255)
 
-    train_generator = train_datagen.flow(train_rb_imgs, train_age, batch_size= a_batch_size)
+    train_generator = train_datagen.flow(train_rb_imgs, train_age, batch_size= a_batch_size, save_to_dir="./augmented")
 
     #efn.EfficientNetB0(weights='imagenet')
     rgb_efficientNetB4 = efn.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
@@ -141,12 +143,12 @@ def do_train():
 
     classWeight = None
 
-    history_callback = cod.fit_generator(train_generator,
-            steps_per_epoch=1600,
-            epochs=150,
-            callbacks=[early_stopper, tensorboard, checkpointer],
-            validation_data=(val_rb_imgs, val_age),
-            class_weight=classWeight)
+history_callback = cod.fit_generator(train_generator,
+        steps_per_epoch=1600,
+        epochs=150,
+        callbacks=[],
+        validation_data=(val_rb_imgs, val_age),
+        class_weight=classWeight)
 
     test_metrics = cod.evaluate(x=test_rb_imgs, y=test_age)
     print("test metric:"+str(cod.metrics_names))
