@@ -40,7 +40,7 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3), max_dataset_size = 1985)
     reads one .jpg file in each folder in structure of folders
     returns tensor with images, and 1-1 correspondence with age
     '''
-    base_dir = '/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice' #project/cod-otoliths
+    base_dir = '/scratch/endrem/Savannah_Professional_Practice' #project/cod-otoliths
     dirs = set() # to get just 1 jpg file from each folder
     df_cod = pd.DataFrame(columns=['age', 'path'])
     
@@ -136,7 +136,7 @@ def do_train():
 
     classWeight = None
 
-history_callback = cod.fit_generator(train_generator,
+    history_callback = cod.fit_generator(train_generator,
         steps_per_epoch=1600,
         epochs=150,
         callbacks=[],
