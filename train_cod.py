@@ -1,4 +1,4 @@
-# pip install pillow
+#pip install pillow
 # pip install keras
 # pip install pandas
 # pip install sklearn
@@ -42,7 +42,8 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3), max_dataset_size = 1985)
     reads one .jpg file in each folder in structure of folders
     returns tensor with images, and 1-1 correspondence with age
     '''
-    base_dir = '/test123/Savannah_Professional_Practice' #project/cod-otoliths
+    #base_dir = '/test123/Savannah_Professional_Practice' #project/cod-otoliths
+    base_dir = '/gpfs/gpfs0/deep/data/codotoliths_erlend/'
     dirs = set() # to get just 1 jpg file from each folder
     df_cod = pd.DataFrame(columns=['age', 'path'])
 
