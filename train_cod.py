@@ -82,6 +82,7 @@ def do_train():
     checkpoint_path = './checkpoints_test/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
     a_batch_size = 8
     B4_input_shape = (380, 380, 3)
+    new_shape = B4_input_shape
 
     image_tensor, age = read_jpg_file_paths(B4_input_shape)
 
@@ -165,16 +166,16 @@ def do_train():
     classWeight = None
 
     history_callback = cod.fit( train_datagen.flow(rb_imgs, age, batch_size=8),
-        steps_per_epoch=170,
+        steps_per_epoch=2000,
         epochs=1400,
-        callbacks=[],
+        callbacks=[early_stopper, tensorboard, checkpointer],
         validation_data= (val_rb_imgs, val_age),
         class_weight=classWeight)
 
     history_callback = cod.fit( train_datagen.flow(train_rb_imgs, train_age, batch_size=8),
         steps_per_epoch=170,
         epochs=1400,
-        callbacks=[],
+        callbacks=[early_stopper, tensorboard, checkpointer],
         validation_data= (val_rb_imgs, val_age),
         class_weight=classWeight)
 

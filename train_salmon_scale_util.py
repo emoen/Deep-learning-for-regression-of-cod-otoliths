@@ -23,7 +23,7 @@ from keras import backend as K
 
 from clean_y_true import read_and_clean_4_param_csv
 
-base_dir = '/test123/salmon-scales/dataset_5_param'
+base_dir = '/gpfs/gpfs0/deep/data/salmon-scales/dataset_5_param'
 id_column = 'ID nr.'
 max_dataset_size = 9073
 SEA_AGE = 'sjø'
