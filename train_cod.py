@@ -37,18 +37,19 @@ from train_salmon_scale_util import load_xy
 #_0
 #/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/Nr03age_02
 #/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70331
-def read_jpg_file_paths(B4_input_shape = (380, 380, 3), max_dataset_size = 1985):
+def read_jpg_cods(B4_input_shape = (380, 380, 3), max_dataset_size = 1985):
     '''
     reads one .jpg file in each folder in structure of folders
     returns tensor with images, and 1-1 correspondence with age
     '''
     #base_dir = '/test123/Savannah_Professional_Practice' #project/cod-otoliths
+    #base_dir = '/scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice' #project/cod-otoliths
     base_dir = '/gpfs/gpfs0/deep/data/codotoliths_erlend/'
     dirs = set() # to get just 1 jpg file from each folder
     df_cod = pd.DataFrame(columns=['age', 'path'])
-
+    
     image_tensor = np.empty(shape=(max_dataset_size,)+B4_input_shape)
-
+    
     add_count = 0
     base_dirs_posix = Path(base_dir)
     for some_year_dir in base_dirs_posix.iterdir():
@@ -63,7 +64,7 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3), max_dataset_size = 1985)
                 begin_age = filepath.lower().find('age')
                 age = filepath[begin_age+3:begin_age+5]
                 age = int(age)
-
+                
                 pil_img = load_img(filepath, target_size=B4_input_shape, grayscale=False)
                 array_img = img_to_array(pil_img, data_format='channels_last')
                 image_tensor[add_count] = array_img
@@ -71,7 +72,7 @@ def read_jpg_file_paths(B4_input_shape = (380, 380, 3), max_dataset_size = 1985)
                 #df_cod = df_cod.append({'age':age, 'path':filepath+'2'}, ignore_index=True)
                 add_count += 1
                 #print(add_count)
-
+    
     age = df_cod.age.values
     return image_tensor, age
 
@@ -84,31 +85,7 @@ def do_train():
     B4_input_shape = (380, 380, 3)
     new_shape = B4_input_shape
 
-    image_tensor, age = read_jpg_file_paths(B4_input_shape)
-
-    #############
-    rb_imgs, all_sea_age, all_smolt_age, all_farmed_class, all_spawn_class, all_filenames = load_xy()
-
-    uten_ukjent = len(all_sea_age) - all_sea_age.count(-1.0)
-    rb_imgs2 = np.empty(shape=(uten_ukjent,)+new_shape)
-    unique, counts = np.unique(all_sea_age, return_counts=True)
-    print("age distrib:"+str( dict(zip(unique, counts)) ))
-
-    all_sea_age2 = []
-    found_count = 0
-    all_filenames2 = []
-    for i in range(0, len(all_sea_age)):
-        if all_sea_age[i] > -1:
-            rb_imgs2[found_count] = rb_imgs[i]
-            all_sea_age2.append(all_sea_age[i])
-            found_count += 1
-            all_filenames2.append(all_filenames[i])
-
-    assert found_count == uten_ukjent
-
-    age = all_sea_age2
-    rb_imgs = rb_imgs2
-    ################################
+    image_tensor, age = read_jpg_cods(B4_input_shape)
 
     early_stopper = EarlyStopping(patience=20)
     train_datagen = ImageDataGenerator(
@@ -147,14 +124,11 @@ def do_train():
     val_rb_imgs = np.multiply(val_rb_imgs, 1./255)
     test_rb_imgs = np.multiply(test_rb_imgs, 1./255)
 
-    #train_generator = train_datagen.flow(train_rb_imgs, train_age, batch_size= a_batch_size) #, save_to_dir="./augmented")
-    #train_datagen.flow(train_rb_imgs, train_age, batch_size=a_batch_size)
-
     rgb_efficientNetB4 = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
     z = dense1_linear_output( rgb_efficientNetB4 )
     cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
 
-    learning_rate=0.00007
+    learning_rate=0.001 #0.00007
     adam = optimizers.Adam(lr=learning_rate)
 
     for layer in cod.layers:
@@ -165,17 +139,18 @@ def do_train():
 
     classWeight = None
 
-    history_callback = cod.fit( train_datagen.flow(rb_imgs, age, batch_size=8),
-        steps_per_epoch=2000,
-        epochs=1400,
-        callbacks=[early_stopper, tensorboard, checkpointer],
-        validation_data= (val_rb_imgs, val_age),
-        class_weight=classWeight)
+    #Tensorflow 2.2 - wrap generator in tf.data.Dataset
+    def callGen():
+        return train_datagen.flow(train_rb_imgs, train_age, batch_size=a_batch_size)
 
-    history_callback = cod.fit( train_datagen.flow(train_rb_imgs, train_age, batch_size=8),
-        steps_per_epoch=170,
-        epochs=1400,
-        callbacks=[early_stopper, tensorboard, checkpointer],
+    train_dataset = tf.data.Dataset.from_generator(callGen, (tf.float32, tf.float32)).shuffle(128, reshuffle_each_iteration=True).repeat()
+
+    history_callback = cod.fit(x=train_rb_imgs,y=train_age, steps_per_epoch=1, epochs=150)
+    
+    history_callback = cod.fit(train_dataset ,
+        steps_per_epoch=1600,
+        epochs=150,
+        callbacks=[],
         validation_data= (val_rb_imgs, val_age),
         class_weight=classWeight)
 
@@ -208,7 +183,7 @@ def dense1_linear_output(gray_model):
     return z
 
 def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
-
+    
     tensorboard = TensorBoard(log_dir=tensorboard_path)
     checkpointer = ModelCheckpoint(
         filepath = checkpoint_path,
