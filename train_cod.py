@@ -1,11 +1,3 @@
-#pip install pillow
-# pip install keras
-# pip install pandas
-# pip install sklearn
-# pip install scipy
-# pip install -U git+https://github.com/qubvel/efficientnet
-# pip install tensorflow
-
 import pandas as pd
 import numpy as np
 import glob
@@ -20,17 +12,12 @@ import scipy
 
 import tensorflow as tf
 
-from keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping
-from keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
-from keras.optimizers import SGD
-from keras.applications.imagenet_utils import decode_predictions
-from keras.layers import Activation, Dense, GlobalAveragePooling2D, GlobalMaxPooling2D
-from keras.models import Model
-from keras.utils import to_categorical
-from keras import optimizers, layers
-from keras import backend as K
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping
+from tensorflow.keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
+from tensorflow.keras.layers import Activation, Dense, GlobalAveragePooling2D, GlobalMaxPooling2D
+from tensorflow.keras.models import Model
+from tensorflow.keras import optimizers
 
-from train_salmon_scale_util import load_xy
 
 # Error in folder:
 # /scratch/disk2/Otoliths/codotoliths_erlend/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2015/70117/nr 04 age_02/IMG_0020.JPG
