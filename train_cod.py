@@ -120,8 +120,11 @@ def do_train():
 
     for layer in cod.layers:
         layer.trainable = True
+        
+    def binary_accuracy_for_regression(y_true, y_pred):
+        return K.mean(K.equal(y_true, K.round(y_pred)), axis=-1)
 
-    cod.compile(loss='mse', optimizer=adam, metrics=['accuracy','mse', 'mape'] )
+    cod.compile(loss='mse', optimizer=adam, metrics=['accuracy','mse', 'mape', binary_accuracy_for_regression] )
     tensorboard, checkpointer = get_checkpoint_tensorboard(tensorboard_path, checkpoint_path)
 
     classWeight = None
@@ -132,7 +135,7 @@ def do_train():
 
     train_dataset = tf.data.Dataset.from_generator(callGen, (tf.float32, tf.float32)).shuffle(128, reshuffle_each_iteration=True).repeat()
 
-    history_callback = cod.fit(x=train_rb_imgs,y=train_age, steps_per_epoch=1, epochs=150)
+    history_callback = cod.fit(x=train_rb_imgs,y=train_age, steps_per_epoch=1, epochs=1)
     
     history_callback = cod.fit(train_dataset ,
         steps_per_epoch=1600,
