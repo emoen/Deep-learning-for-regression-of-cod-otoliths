@@ -17,6 +17,11 @@ from tensorflow.keras.preprocessing.image import img_to_array, load_img, ImageDa
 from tensorflow.keras.layers import Activation, Dense, GlobalAveragePooling2D, GlobalMaxPooling2D
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers
+import tensorflow.keras.backend as K
+
+#salmon-scales
+from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output,
+ train_validate_test_split
 
 
 # Error in folder:
@@ -34,9 +39,9 @@ def read_jpg_cods(B4_input_shape = (380, 380, 3), max_dataset_size = 1985):
     base_dir = '/gpfs/gpfs0/deep/data/codotoliths_erlend/'
     dirs = set() # to get just 1 jpg file from each folder
     df_cod = pd.DataFrame(columns=['age', 'path'])
-    
+
     image_tensor = np.empty(shape=(max_dataset_size,)+B4_input_shape)
-    
+
     add_count = 0
     base_dirs_posix = Path(base_dir)
     for some_year_dir in base_dirs_posix.iterdir():
@@ -51,7 +56,7 @@ def read_jpg_cods(B4_input_shape = (380, 380, 3), max_dataset_size = 1985):
                 begin_age = filepath.lower().find('age')
                 age = filepath[begin_age+3:begin_age+5]
                 age = int(age)
-                
+
                 pil_img = load_img(filepath, target_size=B4_input_shape, grayscale=False)
                 array_img = img_to_array(pil_img, data_format='channels_last')
                 image_tensor[add_count] = array_img
@@ -59,15 +64,15 @@ def read_jpg_cods(B4_input_shape = (380, 380, 3), max_dataset_size = 1985):
                 #df_cod = df_cod.append({'age':age, 'path':filepath+'2'}, ignore_index=True)
                 add_count += 1
                 #print(add_count)
-    
+
     age = df_cod.age.values
     return image_tensor, age
 
 
 def do_train():
     os.environ["CUDA_VISIBLE_DEVICES"]="0"
-    tensorboard_path= './tensorboard_test'
-    checkpoint_path = './checkpoints_test/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
+    tensorboard_path= './tensorboard_test2'
+    checkpoint_path = './checkpoints_test2/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
     a_batch_size = 8
     B4_input_shape = (380, 380, 3)
     new_shape = B4_input_shape
@@ -107,6 +112,7 @@ def do_train():
     train_age = np.vstack(train_age)
     val_age = np.vstack(val_age)
     test_age = np.vstack(test_age)
+    age = np.vstack(age)
 
     val_rb_imgs = np.multiply(val_rb_imgs, 1./255)
     test_rb_imgs = np.multiply(test_rb_imgs, 1./255)
@@ -115,12 +121,12 @@ def do_train():
     z = dense1_linear_output( rgb_efficientNetB4 )
     cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
 
-    learning_rate=0.001 #0.00007
+    learning_rate=0.00005
     adam = optimizers.Adam(lr=learning_rate)
 
     for layer in cod.layers:
         layer.trainable = True
-        
+
     def binary_accuracy_for_regression(y_true, y_pred):
         return K.mean(K.equal(y_true, K.round(y_pred)), axis=-1)
 
@@ -135,12 +141,60 @@ def do_train():
 
     train_dataset = tf.data.Dataset.from_generator(callGen, (tf.float32, tf.float32)).shuffle(128, reshuffle_each_iteration=True).repeat()
 
-    history_callback = cod.fit(x=train_rb_imgs,y=train_age, steps_per_epoch=1, epochs=1)
-    
+    #history_callback = cod.fit(x=image_tensor,y=age, steps_per_epoch=1600, epochs=1)
+    #history_callback = cod.fit(callGen(), steps_per_epoch=1600, epochs=1)
+
+    ############## salmon_scales
+    new_shape = (380, 380, 3)
+    age_cod = age
+    rb_imgs, all_sea_age, all_smolt_age, all_farmed_class, all_spawn_class, all_filenames = load_xy()
+
+    uten_ukjent = len(all_sea_age) - all_sea_age.count(-1.0)
+    rb_imgs2 = np.empty(shape=(uten_ukjent,)+new_shape)
+    unique, counts = np.unique(all_sea_age, return_counts=True)
+    print("age distrib:"+str( dict(zip(unique, counts)) ))
+
+    all_sea_age2 = []
+    found_count = 0
+    all_filenames2 = []
+    for i in range(0, len(all_sea_age)):
+        if all_sea_age[i] > -1:
+            rb_imgs2[found_count] = rb_imgs[i]
+            all_sea_age2.append(all_sea_age[i])
+            found_count += 1
+            all_filenames2.append(all_filenames[i])
+
+    assert found_count == uten_ukjent
+
+    age_scales = all_sea_age2
+    rb_imgs = rb_imgs2
+
+    age_scales = np.vstack(age_scales)
+
+    train_datagen_scales = ImageDataGenerator(
+        zca_whitening=False,
+        width_shift_range=5,
+        height_shift_range=5, #20,
+        zoom_range=[0.5,1.0],
+        rotation_range=360,
+        horizontal_flip=False,
+        vertical_flip=True,
+        rescale=1./255)
+
+    train_generator_scales = train_datagen_scales.flow(rb_imgs, age_scales, batch_size= a_batch_size)
+    history_callback_scales = cod.fit(train_generator_scales,
+        steps_per_epoch=1000,
+        epochs=20,
+        #callbacks=[early_stopper, tensorboard, checkpointer],
+        #validation_data= (val_rb_imgs, val_age),
+        class_weight=classWeight)
+
+    ######################
+
     history_callback = cod.fit(train_dataset ,
         steps_per_epoch=1600,
         epochs=150,
-        callbacks=[],
+        callbacks=[early_stopper, tensorboard, checkpointer],
         validation_data= (val_rb_imgs, val_age),
         class_weight=classWeight)
 
@@ -173,7 +227,7 @@ def dense1_linear_output(gray_model):
     return z
 
 def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
-    
+
     tensorboard = TensorBoard(log_dir=tensorboard_path)
     checkpointer = ModelCheckpoint(
         filepath = checkpoint_path,
