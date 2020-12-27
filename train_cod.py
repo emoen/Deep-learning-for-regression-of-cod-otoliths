@@ -20,8 +20,8 @@ from tensorflow.keras import optimizers
 import tensorflow.keras.backend as K
 
 #salmon-scales
-from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output,
- train_validate_test_split
+from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_val
+idate_test_split
 
 
 # Error in folder:
@@ -122,7 +122,7 @@ def do_train():
     cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
 
     learning_rate=0.00005
-    adam = optimizers.Adam(lr=learning_rate)
+    adam = optimizers.Adam(learning_rate=learning_rate)
 
     for layer in cod.layers:
         layer.trainable = True
@@ -190,6 +190,10 @@ def do_train():
         class_weight=classWeight)
 
     ######################
+
+
+    K.set_value(model.optimizer.learning_rate, 0.00001)
+    print("Learning rate before second fit:", model.optimizer.learning_rate.numpy())
 
     history_callback = cod.fit(train_dataset ,
         steps_per_epoch=1600,
