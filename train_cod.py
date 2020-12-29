@@ -192,8 +192,8 @@ def do_train():
     ######################
 
 
-    K.set_value(model.optimizer.learning_rate, 0.00001)
-    print("Learning rate before second fit:", model.optimizer.learning_rate.numpy())
+    K.set_value(cod.optimizer.learning_rate, 0.00001)
+    print("Learning rate before second fit:", cod.optimizer.learning_rate.numpy())
 
     history_callback = cod.fit(train_dataset ,
         steps_per_epoch=1600,

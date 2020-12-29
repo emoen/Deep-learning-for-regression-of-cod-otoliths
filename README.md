@@ -1,6 +1,8 @@
 # cod-otoliths
 
-Predicting age of cod otoliths
+Predicting age of cod otoliths.
+
+In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12311/6 = 2051 unique images (including files starting with ._), and 1984 unique directories.
 
 (MAPE: Mean absolute percentage error)<br />
 (MCC: mathews correlation coefficient)<br />
