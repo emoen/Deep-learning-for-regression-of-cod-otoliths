@@ -79,12 +79,12 @@ def do_train():
 
     image_tensor, age = read_jpg_cods(B4_input_shape)
 
-    early_stopper = EarlyStopping(patience=20)
+    early_stopper = EarlyStopping(patience=40)
     train_datagen = ImageDataGenerator(
         zca_whitening=False,
-        width_shift_range=5,
-        height_shift_range=5, #20,
-        zoom_range=[0.5,1.0],
+        width_shift_range=0.2,
+        height_shift_range=0.2, #20,
+        #zoom_range=[0.5,1.0],
         rotation_range=360,
         horizontal_flip=False,
         vertical_flip=True,
@@ -173,9 +173,9 @@ def do_train():
 
     train_datagen_scales = ImageDataGenerator(
         zca_whitening=False,
-        width_shift_range=5,
-        height_shift_range=5, #20,
-        zoom_range=[0.5,1.0],
+        width_shift_range=0.2,
+        height_shift_range=0.2, #20,
+        #zoom_range=[0.5,1.0],
         rotation_range=360,
         horizontal_flip=False,
         vertical_flip=True,
