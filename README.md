@@ -7,14 +7,15 @@ In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12
 (MAPE: Mean absolute percentage error)<br />
 (MCC: mathews correlation coefficient)<br />
 
-| Species              | Predict    |testLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f | classWeights |
+| Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f | classWeights |
 | ---------------------| -----------|--------|------|------|-----|-----|---------|---------|--------------|
 | Greenland Halibut(1) | age        | x      |2.65  |0.124 |0.262|x    |8875     | linear  | x | 
 | Salmon               | sea age    | -"-    |0.239 |0.141 |0.822|x    |9073     | linear  | x |
 | Salmon B4            | river age  |0.359   |0.359 |19.58 |0.618|x    |6246     | linear  | x |
 | ~~Cod B4~~                | age        |0.0297  |0.0297|1.588 |0.984|x    |6330     | linear | x |
 | Cod B4               | age        |0.8796  |0.8796|9.228 |0.52597|x    |1029     | linear | x |
-| Cod B4               | age        |-  |-|- |-|x    |1985     | linear | x |
+| Cod B4  (epoch41)    | age        |0.9695  |0.9695|- |0.5805|x    |1984     | linear | x |
+| Cod B4  (epoch53)    | age        |0.9785  |0.9785|- |0.6174|x    |1984     | linear | x |
 
 
 ```
