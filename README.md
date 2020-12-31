@@ -37,6 +37,6 @@ plt.bar(x, height=y)
 plt.show()
 ```
 
-| [cod-age_distribution.png](https://github.com/emoen/Deep-learning-for-cod-otoliths/blob/master/img/age_distribution.png) |
+| ![cod-age_distribution.png](https://github.com/emoen/Deep-learning-for-cod-otoliths/blob/master/img/age_distribution.png) |
 |:--:| 
 | *Figure 1.:Age distribution of cod otoliths:* |
