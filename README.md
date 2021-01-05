@@ -16,6 +16,7 @@ In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12
 | Cod B4               | age        |0.8796  |0.8796|9.228 |0.52597|x    |1029     | linear | x |
 | Cod B4  (epoch41)    | age        |0.9695  |0.9695|- |0.5805|x    |1984     | linear | x |
 | Cod B4  (epoch53)    | age        |0.9785  |0.9785|- |0.6174|x    |1984     | linear | x |
+| Cod B4  (test-metric)| age        |0.7814  |0.7814|- |0.6409|x    |1984     | linear | x |
 
 
 ```
