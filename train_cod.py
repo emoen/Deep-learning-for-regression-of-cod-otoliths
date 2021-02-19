@@ -117,9 +117,14 @@ def do_train():
     val_rb_imgs = np.multiply(val_rb_imgs, 1./255)
     test_rb_imgs = np.multiply(test_rb_imgs, 1./255)
 
-    rgb_efficientNetB4 = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
-    z = dense1_linear_output( rgb_efficientNetB4 )
-    cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
+    #rgb_efficientNetB4 = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
+    #z = dense1_linear_output( rgb_efficientNetB4 )
+    #cod = Model(inputs=rgb_efficientNetB4.input, outputs=z)
+    rgb_NFNet1 = NFNet1(include_top=False, weights='imagenet', input_shape=B4_input_shape, classes=2)
+
+    z = dense1_linear_output( rgb_NFNet1 )
+    cod = Model(inputs=rgb_NFNet1.input, outputs=z)
+
 
     learning_rate=0.00005
     adam = optimizers.Adam(learning_rate=learning_rate)
