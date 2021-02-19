@@ -41,3 +41,10 @@ plt.show()
 | ![cod-age_distribution.png](https://github.com/emoen/Deep-learning-for-cod-otoliths/blob/master/img/age_distribution.png) |
 |:--:| 
 | *Figure 1.:Age distribution of cod otoliths:* |
+
+Note to self: start docker with:
+docker build --no-cache -t test_docker_conf_transformers .
+
+docker run --rm -it -d --runtime=nvidia --group-add 5003 --name endrem_transformers -v /localscratch/endrem/deep:/gpfs/gpfs0/deep test_docker_conf_transformers
+
+docker exec --user $(id -u):$(id -g) -it endrem_transformers bash
