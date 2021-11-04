@@ -42,9 +42,12 @@ plt.show()
 |:--:| 
 | *Figure 1.:Age distribution of cod otoliths:* |
 
-Note to self: start docker with:
-docker build --no-cache -t test_docker_conf_transformers .
+## After addictional added 3000 images
 
-docker run --rm -it -d --runtime=nvidia --group-add 5003 --name endrem_transformers -v /localscratch/endrem/deep:/gpfs/gpfs0/deep test_docker_conf_transformers
+![image](https://user-images.githubusercontent.com/1202040/140305662-86f85bf2-355f-4031-86e7-d53130b6864e.png)
 
-docker exec --user $(id -u):$(id -g) -it endrem_transformers bash
+'''
+{0: 11, 1: 380, 2: 509, 3: 504, 4: 617, 5: 795, 6: 532, 7: 544, 8: 476, 9: 319, 10: 214, 11: 120, 12: 54, 13: 26, 14: 7, 15: 4, 16: 1, 17: 1}
+{0: 6, 1: 246, 2: 351, 3: 336, 4: 442, 5: 542, 6: 395, 7: 372, 8: 341, 9: 226, 10: 164, 11: 86, 12: 44, 13: 19, 14: 5, 15: 3, 16: 1}
+'''
+
