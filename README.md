@@ -44,7 +44,8 @@ plt.show()
 
 ## After addictional added 3000 images
 
-![image](https://user-images.githubusercontent.com/1202040/140305866-e75d1ecd-8429-49f9-9b5d-ed18a343c2c6.png)
+![image](https://user-images.githubusercontent.com/1202040/140306617-8f266c26-2248-479e-a1a7-f60c6ccdf636.png)
+
 
 
 <code>
