@@ -1,27 +1,22 @@
 import pandas as pd
 import numpy as np
-import glob
 import os
 from pathlib import Path
 
 from sklearn.model_selection import train_test_split
-from sklearn import preprocessing
-from sklearn.utils import compute_class_weight
 from sklearn.metrics import classification_report, confusion_matrix
-import scipy
 
 import tensorflow as tf
 
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping
 from tensorflow.keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
-from tensorflow.keras.layers import Activation, Dense, GlobalAveragePooling2D, GlobalMaxPooling2D
+from tensorflow.keras.layers import Dense, GlobalMaxPooling2D
 from tensorflow.keras.models import Model
 from tensorflow.keras import optimizers
 import tensorflow.keras.backend as K
 
 #salmon-scales
-from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_val
-idate_test_split
+from salmon_scales/train_salmon_scale_util import load_xy, get_checkpoint_tensorboard, base_output, dense1_linear_output, train_validate_test_split
 
 
 # Error in folder:
