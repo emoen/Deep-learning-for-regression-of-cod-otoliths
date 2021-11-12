@@ -201,8 +201,6 @@ def read_jpg_cods2(B4_input_shape = (380, 380, 3), max_dataset_size = 5180, whic
 
                             df_cod = df_cod.append({'age':age, 'path':full_path[expo_args[4]], 'light': 3, 'ExposureTime':exposures_list[expo_args[0]]}, ignore_index=True)
 
-
-
     print("error_count:"+str(error_count))
     print("add_count:"+str(add_count))
 
@@ -263,9 +261,10 @@ def compile_model( cod ):
     cod.compile(loss='mse', optimizer=adam, metrics=['mse', 'mape', binary_accuracy_for_regression])
 
 def do_train(image_tensor, age, B4_input_shape):
+    ROOTDIR = "./EFFNetB4/"
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    tensorboard_path = './tensorboard_test2'
-    checkpoint_path = './checkpoints_test2/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
+    tensorboard_path = ROOTDIR + 'tensorboard_test2'
+    checkpoint_path = ROOTDIR + 'checkpoints_test2/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
     a_batch_size = 16
 
     new_shape = B4_input_shape
@@ -388,7 +387,7 @@ def do_train(image_tensor, age, B4_input_shape):
         plateau = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=7,
             verbose = 0, mode = 'min')
     
-        log_file_name = 'loss_log/loss_log2_'+str(the_fold)+'.txt'
+        log_file_name = ROOTDIR + 'loss_log/loss_log2_'+str(the_fold)+'.txt'
         print( "log_file_name:"+str(log_file_name) )
         txt_log = open(log_file_name, mode='wt', buffering=1)
 
@@ -402,58 +401,67 @@ def do_train(image_tensor, age, B4_input_shape):
         print("Learning rate before second fit:", cod.optimizer.learning_rate.numpy())
     
         history_callback = cod.fit(train_dataset,
-                                   steps_per_epoch=1600,
-                                   epochs=150,
+                                   steps_per_epoch=100, # 600,
+                                   epochs=1,# 50,
                                    callbacks=[early_stopper, plateau, tensorboard, 
                                        checkpointer, save_op_callback],
                                    validation_data=(val_rb_imgs_new, val_age_new),  # (val_rb_imgs, val_age),
                                    class_weight=None)
     
         test_metrics = cod.evaluate(x=test_rb_imgs, y=test_age)  # np.vstack(test_age)
+        f = open(ROOTDIR + "test_metric_"+str(the_fold)+".txt", "w")
+        f.write("test metric:")
+        f.write(str(cod.metrics_name))
+        f.write(str(test_metrics))
+        f.close()
         print("test metric:" + str(cod.metrics_names))
         print("test metrics:" + str(test_metrics))
-    
-        print("precision, recall, f1")
+
         y_pred_test = cod.predict(test_rb_imgs, verbose=1)
-        print( type(y_pred_test) )
-        print("ypredtest shape:"+str( y_pred_test.shape ) )
-        #print( y_pred_test )
         y_pred_test = np.squeeze( y_pred_test )
-        print("y pred test shape:"+str( y_pred_test.shape ) )
-        np.savetxt('EffB4_pred/pred_fold'+str(the_fold)+'.txt', y_pred_test)
-        np.savetxt('EffB4_pred/y_true.txt', test_age)
-       
-        pred_rounded = [int(round(x)) for x in test_predictions_nn]
+        y_pred_test_rounded = [int(round(x)) for x in y_pred_test]
 
-        print("test age rounded shape:"+str(test_age.shape))
         test_age_rounded = np.squeeze( test_age )
-        print("test age rounded shape:"+str(test_age_rounded.shape))
-
         test_age_rounded = [int(round(x)) for x in test_age_rounded]
-        acc = accuracy_score(test_age_rounded, pred_rounded )
-        print("acc:"+str( acc ) )
 
         test_predictions_nn += y_pred_test / numberOfFolds
-        
-        ###### Save model #############
-        # serialize weights to HDF5
-        cod.save("EffNetB4/EffNetB4_{}.h5".format( the_fold ))
-        print("Saved model to disk")
-
-        ############ Running mean preds - keep it interesting ############
-        #print("test predictions:\n"+str( test_predictions_nn ) )
-        #print("test_age:\n"+str(test_age) )
+        test_predictions_nn_rounded = [int(round(x)) for x in test_predictions_nn]
 
         mse = mean_squared_error(test_age, test_predictions_nn)
-        print("mse:"+str( mse) )
-
-        rounded_pred = [int(round(x)) for x in test_predictions_nn]
         acc = accuracy_score( test_age, rounded_pred )
+        acc_agg = accuracy_score( test_age_rounded, y_pred_test_rounded )
+        mse_agg = mean_squared_error(test_age, test_predictions_nn)
         print("acc:"+str( acc ) )
-        ####################################################
+        print("acc_agg:"+str( acc_agg ) )
+        print("mse:"+str( mse ) )
+        print("mse_agg:"+str( mse_agg ) )
 
+        ######### Write test predictions to file ##########
+        df_test_statistics = pd.DataFrame()
+        df_test_statistics['agg_stat'] = 0
+        df_test_statistics.set_value( 0, 'agg_stat', acc )
+        df_test_statistics.set_value( 1, 'agg_stat', acc_agg )
+        df_test_statistics.set_value( 2, 'agg_stat', mse )
+        df_test_statistics.set_value( 3, 'agg_stat', mse_agg )
+        df_test_statistics['y_pred_test'] = y_pred_test 
+        df_test_statistics['y_pred_test_rounded'] = y_pred_test_rounded
+        df_test_statistics['y_true'] = test_age_rounded
+        df_test_statistics['mse'] = np.abs(df['y_pred_test']-df['y_true'])**2
+        df_test_statistics['acc'] = df_test_statistics['y_pred_test_rounded'] == df_test_statistics['y_true']
+        df_test_statistics['acc'] = df_test_statistics['acc'].astype(int)
+        df_test_statistics['test_predictions_nn'] = test_predictions_nn
+        df_test_statistics['test_predictions_nn_rounded'] = test_predictions_nn_rounded
+        df_test_statistics['agg_mse'] = np.abs(df['test_predictions_nn']-df['y_true'])**2
+        df_test_statistics['agg_acc'] = df_test_statistics['test_predictions_nn_rounded'] == df_test_statistics['y_true']
+        df_test_statistics['agg_acc'] = df_test_statistics['agg_acc'].astype(int)
+
+        df.to_csv(ROOTDIR+'test_set_'+str(the_fold)+'.csv', index=False)        
+        ###### Save model #############
+        # serialize weights to HDF5
+        cod.save(ROOTDIR+"EffNetB4/EffNetB4_{}.h5".format( the_fold ))
+        print("Saved model to disk")
         
-    np.savetxt('EffB4_pred/pred_mean.txt', test_predictions_nn)
+    np.savetxt(ROOTDIR+'EffB4_pred/pred_mean.txt', test_predictions_nn)
     return test_predictions_nn, np.squeeze( test_age )
 
 
@@ -482,7 +490,7 @@ if __name__ == "__main__":
 
     print("acc:"+str( acc ) )
 
-    np.savetxt('EffB4_pred/pred_mean_final.txt', test_predictions_nn)
+    np.savetxt(ROOTDIR+'EffB4_pred/pred_mean_final.txt', test_predictions_nn)
 
 
 
