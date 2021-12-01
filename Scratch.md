@@ -1,27 +1,58 @@
-test metric:['loss', 'mse', 'mape', 'binary_accuracy_for_regression']
-test metrics:[0.47831249237060547, 0.47831249237060547, 23348700.0, 0.6396867036819458]
-24/24 [==============================] - 5s 130ms/step  
-acc:0.639686684073107
-acc_agg:0.0013054830287206266
-mse:0.47831244564347797
-mse_agg:24.02936667885122
+5-fold cross validation predictions on test set:
+['mse', 'binary_accuracy_for_regression']
+[0.48629727959632874, 0.6488250494003296]
+[0.4687076508998871, 0.6697127819061279]
+[0.4820464551448822, 0.6631853580474854]
+[0.4878818988800049, 0.6488250494003296]
+[0.47346818447113037, 0.6579634547233582]
+and across folds:
+mse:0.4216341924334377
+acc:0.6971279373368147 (edited) 
+:+1:
+1
 
-######################
-test metric:['loss', 'mse', 'mape', 'binary_accuracy_for_regression']
-test metrics:[0.4403917193412781, 0.4403917193412781, 23743374.0, 0.6958224773406982]
-24/24 [==============================] - 5s 131ms/step  
-acc:0.695822454308094
-acc_agg:0.006527415143603133
-mse:0.4403916461629166
-mse_agg:13.489040143243404
+3 replies
 
-######################
-test metric:['loss', 'mse', 'mape', 'binary_accuracy_for_regression']
-test metrics:[0.434801310300827, 0.434801310300827, 23361622.0, 0.6736292243003845]
-24/24 [==============================] - 7s 129ms/step  
-acc:0.6736292428198434
-acc_agg:0.06657963446475196
-mse:0.43480129574549803
-mse_agg:6.177933727591576
+Endre Moen  8 days ago
+5-fold cross validation predictions on test set on B4 with:
+standardScalar on target:
+StratifiedKFold
+['mse', 'binary_accuracy_for_regression']
+[0.4904178682121655, 0.643603133159269]
+[0.5347786293189214, 0.6227154046997389]
+[0.4968175576778982, 0.660574412532637]
+[0.4573790357033823, 0.6984334203655352]
+[0.5134489160772718, 0.6514360313315927]
+[9:12 AM] and across folds:
+mse: 0.4257378207634962
+acc: 0.7010443864229765 (edited) 
 
-/var/log/kern.log,
+Endre Moen  3 days ago
+5-fold cross validation predictions on test set on B4 with:
+standardScalar on target:
+StratifiedKFold
+Pretrained on salmon scales for 20 epochs
+['mse', 'binary_accuracy_for_regression']
+[0.46910862052397906, 0.6631853785900783]
+[0.4689538583672292, 0.685378590078329]
+[0.5130625894583206, 0.6514360313315927]
+[0.4741178483435903, 0.6814621409921671]
+[0.47853572666031796, 0.6501305483028721]
+and across folds:
+mse: 0.43275226756928326
+acc: 0.6892950391644909
+
+Endre Moen  3 minutes ago
+5-fold cross validation predictions on test set on B4 with (test-set size 766):
+standardScalar on target:
+StratifiedKFold
+B5, 456x457
+['mse', 'binary_accuracy_for_regression']
+[0.4879588778992661, 0.643603133159269]
+[0.44227318172468605, 0.6827676240208878]
+[0.45540749238625045, 0.6657963446475196]
+[0.4896350671962437, 0.6449086161879896]
+[0.4357191260385627, 0.6566579634464752]
+and across folds:
+mse: 0.4175760842699668
+acc: 0.6932114882506527

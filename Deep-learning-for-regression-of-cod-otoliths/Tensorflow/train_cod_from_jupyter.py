@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-import glob
 import os
 from pathlib import Path
 from PIL import Image, ExifTags
+import gc #garbage collection
 
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
@@ -25,10 +25,13 @@ from tensorflow.keras import optimizers
 import tensorflow.keras.backend as K
 from tensorflow.keras.callbacks import LambdaCallback
 
-import gc #garbage collection
+#cod utils
+from utils.read_jpg_cods import *
+from utils.train_val_test_split import *
 
-#salmon-scales
-from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_validate_test_split
+# if pretraining with salmon-scales
+#from salmon_scales import train_salmon_scale_util
+#from salmon_scales.train_salmon_scale_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_validate_test_split
 
 
 def base_output(model):
@@ -57,172 +60,10 @@ def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
     return tensorboard, checkpointer
 
 
-def train_validate_test_split(pairs, validation_set_size=0.15, test_set_size=0.15, a_seed=8):
-    """ split pairs into 3 set, train-, validation-, and test-set
-        1 - (validation_set_size + test_set_size) = % training set size
-    >>> import pandas as pd
-    >>> import numpy as np
-    >>> data = np.array([np.arange(10)]*2).T  # 2 columns for x, y, and one for index
-    >>> df_ = pd.DataFrame(data, columns=['x', 'y'])
-    >>> train_x, val_x, test_x = \
-             train_validate_test_split( df_, validation_set_size = 0.2, test_set_size = 0.2, a_seed = 1 )
-    >>> train_x['x'].values
-    array([0, 3, 1, 7, 8, 5])
-    >>> val_x['x'].values
-    array([4, 6])
-    >>> test_x['x'].values
-    array([2, 9])
-    """
-    validation_and_test_set_size = validation_set_size + test_set_size
-    validation_and_test_split = validation_set_size / (test_set_size + validation_set_size)
-    df_train_x, df_notTrain_x = train_test_split(pairs, test_size=validation_and_test_set_size, random_state=a_seed)
-    df_test_x, df_val_x = train_test_split(df_notTrain_x, test_size=validation_and_test_split, random_state=a_seed)
-    return df_train_x, df_val_x, df_test_x
 
 
-
-def read_jpg_cods2(B4_input_shape = (380, 380, 3), max_dataset_size = 5180, whichExposure='min'):
-    #    '''
-    #    reads one .jpg file in each folder in structure of folders
-    #    returns tensor with images, and 1-1 correspondence with age
-    #    '''
-
-    #max_dataset_size = 5156
-    #B4_input_shape = (380, 380, 3)
-    df_cod = pd.DataFrame(columns=['age', 'path', 'ExposureTime'])
-    image_tensor1 = np.empty(shape=(max_dataset_size,)+B4_input_shape)
-    image_tensor2 = np.empty(shape=(max_dataset_size,)+B4_input_shape)
-    image_tensor3 = np.empty(shape=(max_dataset_size,)+B4_input_shape)
-
-    base_dir = '/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_06_10_21/CodOtholiths-MachineLearning/Savannah_Professional_Practice'
-    df_cod = pd.DataFrame(columns=['age', 'path', 'ExposureTime'])
-    base_dirs_posix = Path(base_dir)
-
-    error_count=0
-    add_count = 0
-    for some_year_dir in base_dirs_posix.iterdir():
-        if not os.path.isdir( some_year_dir ) or "Extra" in str(some_year_dir):
-            continue
-
-        #dir structure: /year/station_number/cod_img_by_age/6 jpeg images of one fish
-        #if add_count > 0:
-        #    break
-        stat_nos = [name for name in os.listdir( some_year_dir ) if os.path.isdir(os.path.join(some_year_dir , name))]
-        for i in range(0, len(stat_nos)):
-            cod_path = os.path.join( some_year_dir, stat_nos[i] )
-            yr_station_codage_path = [os.path.join(cod_path , n) for n in os.listdir( cod_path )
-                            if os.path.isdir(os.path.join(cod_path , n))]
-            cod_age = [n for n in os.listdir( cod_path )
-                            if os.path.isdir(os.path.join(cod_path , n))]
-
-            assert len(yr_station_codage_path) == len(cod_age)
-            for j in range(0, len(yr_station_codage_path)):
-                #print(onlyfiles)
-                onlyfiles = [f for f in os.listdir( yr_station_codage_path[j] )
-                             if os.path.isfile(os.path.join(yr_station_codage_path[j] , f))]
-
-                #2013/70028/Nr01_age05/Thumbs.db
-                #2016/70008/Nr01_age07/Thumbs.db
-                if len(onlyfiles) != 6:
-                    #print(str(len(onlyfiles)) + '\t' + str( yr_station_codage_path[j] ) + "\t" +'\t'.join(map(str,onlyfiles)))
-                    error_count +=1
-                else:
-                    full_path = [os.path.join(yr_station_codage_path[j] , f)
-                             for f in os.listdir( yr_station_codage_path[j] )
-                         if os.path.isfile(os.path.join(yr_station_codage_path[j] , f))]
-
-                    begin_age = cod_age[j].lower().find('age')
-                    #print(cod_age[j])
-                    age = cod_age[j][begin_age+3:begin_age+5]
-                    try:
-                        age = int(age)
-                    except ValueError:
-                        age = 0
-                        continue
-
-                    full_path.sort()
-                    exposures_set = set()
-                    exposures_list = []
-                    for k in range(0, len(full_path)): #len(full_path) == 6
-                        img = Image.open(full_path[k])
-                        exif = {ExifTags.TAGS[k]: v for k, v in img._getexif().items() if k in ExifTags.TAGS}
-                        #print(exif['ExposureTime'])
-                        exposures_set.add( exif['ExposureTime'] )
-                        exposures_list.append( exif['ExposureTime'] )
-
-
-                    #if len(exposures_set) != 3:
-                        #print("\t"+str (yr_station_codage_path[j] ) + '\t' + str(exposures_list) )
-                    #    continue
-                    #else:
-                    if len(exposures_list) == 6 and len(exposures_set) == 3:
-
-                        expo_args = np.argsort(exposures_list).tolist()
-                        #print( "exposures_list"+str(exposures_list) )
-                        #print(" argsort: "+str(expo_args) )
-
-                        numpy_images = [0,0,0]
-                        file_paths = [0,0,0]
-                        imgs_added = 0
-
-                        #use if loading to memory
-                        """
-                        for k in [0,2,4]:
-                            img = Image.open( full_path[ expo_args[k] ] )
-                            pil_img = load_img(full_path[ expo_args[k] ], target_size=B4_input_shape, grayscale=False)
-                            array_img = img_to_array(pil_img, data_format='channels_last')
-
-                            numpy_images[imgs_added] = array_img
-                            file_paths[imgs_added] = full_path[ expo_args[k] ]
-                            imgs_added += 1
-                        """
-
-
-                        if expo_args != [1, 4, 0, 3, 2, 5]:
-                            print( "exposures_list"+str(exposures_list) )
-                            print(" argsort: "+str(expo_args) )
-                            #print(file_paths)
-
-                        if whichExposure == 'min':
-                            #use if loading to memory
-                            pil_img = load_img(full_path[ expo_args[0] ], target_size=B4_input_shape, grayscale=False)
-                            array_img = img_to_array(pil_img, data_format='channels_last')
-                            image_tensor1[add_count] = array_img
-                            add_count += 1
-
-                            df_cod = df_cod.append({'age':age, 'path':full_path[expo_args[0]], 'light': 1, 'ExposureTime':exposures_list[expo_args[0]]}, ignore_index=True)
-                        if whichExposure == 'middle':
-                            #use if loading to memory
-                            pil_img = load_img(full_path[ expo_args[2] ], target_size=B4_input_shape, grayscale=False)
-                            array_img = img_to_array(pil_img, data_format='channels_last')
-                            image_tensor1[add_count] = array_img
-                            add_count += 1
-
-                            df_cod = df_cod.append({'age':age, 'path':full_path[expo_args[2]], 'light': 2, 'ExposureTime':exposures_list[expo_args[2]]}, ignore_index=True)
-                        if whichExposure == 'max':
-                            #use if loading to memory
-                            pil_img = load_img(full_path[ expo_args[4] ], target_size=B4_input_shape, grayscale=False)
-                            array_img = img_to_array(pil_img, data_format='channels_last')
-                            image_tensor1[add_count] = array_img
-                            add_count += 1
-
-                            df_cod = df_cod.append({'age':age, 'path':full_path[expo_args[4]], 'light': 3, 'ExposureTime':exposures_list[expo_args[4]]}, ignore_index=True)
-
-    print("error_count:"+str(error_count))
-    print("add_count:"+str(add_count))
-
-    if whichExposure == 'min':
-        return image_tensor1, df_cod.age
-    if whichExposure == 'middle':
-        return image_tensor2, df_cod.age
-    if whichExposure == 'max':
-        return image_tensor3, df_cod.age
-
-    return None, None
-
-
-def load_images( B4_input_shape ):
-    image_tensor, age = read_jpg_cods2(B4_input_shape, max_dataset_size = 9180) #5316
+def load_images( config ):
+    image_tensor, age = read_jpg_cods2(config) #5316
 
     print("len age:"+str( len(age) ) )
     print("image tensor shape:"+str( image_tensor.shape ) )
@@ -530,6 +371,22 @@ def do_train(image_tensor, age, B4_input_shape):
 
     return test_predictions_nn, np.squeeze( test_age )
 
+class CONFIG:
+    seed = 42
+    CHANNELS = 'channels_last' #'channels_first' or 'channels_last' - pytorch or keras convention - needed by PIL
+    which_exposure = 'min'
+    debugging = False
+    train_batch_size = 8
+    valid_batch_size = 8
+    img_size = 384
+    val_img_size = 480
+    epochs = 1000
+    learning_rate = 1e-3
+    min_lr = 1e-6
+    weight_decay = 1e-6
+    n_accumulate = 1
+    n_fold = 5
+    target_size = 1
 
 if __name__ == "__main__":
 
@@ -540,7 +397,7 @@ if __name__ == "__main__":
     B4_input_shape = B5_input_shape
     new_shape =B4_input_shape
 
-    image_tensor, age, B4_input_shape = load_images( B4_input_shape )
+    image_tensor, age, B4_input_shape = load_images( CONFIG )
     print("image_tensor_shape"+str( image_tensor.shape) )
 
     test_predictions_nn, test_age = do_train(image_tensor, age, B4_input_shape)
