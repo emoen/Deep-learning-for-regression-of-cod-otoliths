@@ -28,7 +28,7 @@ from tensorflow.keras.callbacks import LambdaCallback
 import gc #garbage collection
 
 #salmon-scales
-#from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_validate_test_split
+from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_validate_test_split
 
 
 def base_output(model):
@@ -46,8 +46,8 @@ def base_output(model):
 
 def dense1_linear_output(gray_model):
     z = base_output(gray_model)
-    #z = Dense(1, activation='linear')(z)
-    z = tf.keras.layers.Lambda( lambda x: 1.6*tf.math.tanh(x, name="output_sigmoid") )(z)
+    z = Dense(1, activation='linear')(z)
+    #z = tf.keras.layers.Lambda( lambda x: 2.8*tf.math.tanh(x, name="output_sigmoid") )(z)
     return z
 
 
@@ -105,8 +105,8 @@ def read_jpg_cods2(B4_input_shape = (380, 380, 3), max_dataset_size = 5180, whic
             continue
 
         #dir structure: /year/station_number/cod_img_by_age/6 jpeg images of one fish
-        if add_count > 0:
-            break
+        #if add_count > 0:
+        #    break
         stat_nos = [name for name in os.listdir( some_year_dir ) if os.path.isdir(os.path.join(some_year_dir , name))]
         for i in range(0, len(stat_nos)):
             cod_path = os.path.join( some_year_dir, stat_nos[i] )
@@ -268,7 +268,7 @@ def compile_model( cod ):
     return cod
 
 def do_train(image_tensor, age, B4_input_shape):
-    ROOTDIR = "./EFFNetB4_groupkfold_stdScalar/"
+    ROOTDIR = "./EFFNetB5_groupkfold_stdScalar/"
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     tensorboard_path = ROOTDIR + 'tensorboard_test2'
     checkpoint_path = ROOTDIR + 'checkpoints_test2/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
@@ -277,9 +277,12 @@ def do_train(image_tensor, age, B4_input_shape):
     new_shape = B4_input_shape
 
     ############## pretrain salmon_scales ###############
-    '''
-    new_shape = (380, 380, 3)
-    age_cod = age
+    """
+    cod = base_model(B4_input_shape)
+    cod = compile_model(cod)
+    #new_shape = (380, 380, 3)
+
+    print("loadxy")
     rb_imgs, all_sea_age, all_smolt_age, all_farmed_class, all_spawn_class, all_filenames = load_xy()
 
     uten_ukjent = len(all_sea_age) - all_sea_age.count(-1.0)
@@ -301,7 +304,6 @@ def do_train(image_tensor, age, B4_input_shape):
 
     age_scales = all_sea_age2
     rb_imgs = rb_imgs2
-
     age_scales = np.vstack(age_scales)
 
     train_datagen_scales = ImageDataGenerator(
@@ -314,20 +316,27 @@ def do_train(image_tensor, age, B4_input_shape):
         vertical_flip=True,
         rescale=1./255)
 
-    train_generator_scales = train_datagen_scales.flow(rb_imgs, age_scales, batch_size= a_batch_size)
-    history_callback_scales = cod.fit(train_generator_scales,
+    #Tensorflow 2.2 - wrap generator in tf.data.Dataset
+    def callGen():
+        return train_datagen_scales.flow( rb_imgs, age_scales, batch_size=a_batch_size )
+
+    train_dataset = tf.data.Dataset.from_generator(callGen, (tf.float32, tf.float32)).shuffle(128, reshuffle_each_iteration=True).repeat()
+
+    history_callback_scales = cod.fit(train_dataset,
         steps_per_epoch=1000,
         epochs=20,
         #callbacks=[early_stopper, tensorboard, checkpointer],
         #validation_data= (val_rb_imgs, val_age),
-        class_weight=classWeight)
+        class_weight=None)
 
     cod.save("NNSalmonScales/salmonNNmodel.h5")
     print("Saved salmon model to disk")
-    '''
-    print("len img tensor"+str(img_tensor.shape))
+
+    print("len img tensor"+str(image_tensor.shape))
+    """
+    ####### End train cod ##################################
     ####### Train/Test split ################################
-    train_idx, val_idx, test_idx = train_validate_test_split(range(0, len(image_tensor)))
+    train_idx, val_idx, test_idx = train_validate_test_split(range(0, image_tensor.shape[0]))
 
     train_idx_oof = train_idx + val_idx  # prepare - train+validation set for 5 KFold cv split
     val_idx = None
@@ -379,19 +388,19 @@ def do_train(image_tensor, age, B4_input_shape):
         val_age_new = np.asarray(val_age_new)
 
         """ standard scalar """
-        unique, counts = np.unique( train_age_new[train_idx], return_counts=True)
+        unique, counts = np.unique( train_age_new, return_counts=True)
         print( dict(zip(unique, counts)) )
         scaler = StandardScaler()
         scaler.fit( train_age_new.reshape(-1,1) )
         train_age_new = scaler.transform( train_age_new.reshape(-1,1) ).squeeze()
-        val_age_new = scaler.transform( val_age_new.reshape(-1,1) ).squeeze()
-        test_age_new = scaler.tranform( test_age.reshape(-1,1) ).squeeze()
+        val_age_new   = scaler.transform( val_age_new.reshape(-1,1) ).squeeze()
+        test_age_new  = scaler.transform( test_age.reshape(-1,1) ).squeeze()
 
         print("scalar transform:")
         print( train_age_new[0:20] )
         print("min/max train_age:"+str(np.min(np.asarray(train_age)))+ ", "+ str(np.max(np.asarray(train_age))) )
         print("min/max train_age:"+str(np.min(np.asarray(train_age_new)))+ ", "+ str(np.max(np.asarray(train_age_new))) )
-        print("min/max val_age:"+str(np.min(np.asarray(val_age)))+ ", "+ str(np.max(np.asarray(val_age))) )
+        print("min/max val_age:"+str(np.min(np.asarray(val_age_new)))+ ", "+ str(np.max(np.asarray(val_age_new))) )
         print("min/max val_age_new:"+str(np.min(np.asarray(val_age_new)))+ ", "+ str(np.max(np.asarray(val_age_new))) )
         print("min/max test_age:"+str(np.min(np.asarray(test_age)))+ ", "+ str(np.max(np.asarray(test_age))) )
         print("min/max test_age_new:"+str(np.min(np.asarray(test_age_new)))+ ", "+ str(np.max(np.asarray(test_age_new))) )
@@ -401,15 +410,19 @@ def do_train(image_tensor, age, B4_input_shape):
         """ end standard scalar """
 
         #####################################################
-        train_dataset = tf.data.Dataset.from_tensor_slices((train_rb_imgs_new, np.vstack(train_age_new)))
+        train_dataset = tf.data.Dataset.from_tensor_slices((train_rb_imgs_new, train_age_new))
         train_dataset = train_dataset.shuffle(len(train_age_new))
         train_dataset = train_dataset.batch(a_batch_size)
         train_dataset = train_dataset.repeat(1000)
 
         ######### build, compile model ####################
         cod = base_model(B4_input_shape)
+        #cod = compile_model(cod)
+        #cod = tf.keras.models.load_model("NNSalmonScales/salmonNNmodel.h5",
+        #        custom_objects={"binary_accuracy_for_regression":binary_accuracy_for_regression},
+        #        compile=False)
         cod = compile_model(cod)
-        ############ CallBacks ##############################
+
         tensorboard, checkpointer = get_checkpoint_tensorboard(tensorboard_path, checkpoint_path)
 
         early_stopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=14, verbose=0,
@@ -432,43 +445,46 @@ def do_train(image_tensor, age, B4_input_shape):
 
         history_callback = cod.fit(train_dataset,
                                    steps_per_epoch=1600,
-                                   epochs=2, #150,
+                                   epochs=150,
                                    callbacks=[early_stopper, plateau, tensorboard,
                                        checkpointer, save_op_callback],
-                                   validation_data=(val_rb_imgs_new, val_age_new.reshape(-1,1)),  # (val_rb_imgs, val_age),
+                                   validation_data=(val_rb_imgs_new, val_age_new),  # (val_rb_imgs, val_age),
                                    class_weight=None)
 
-        test_metrics = cod.evaluate(x=test_rb_imgs, y=test_age_new.reshape(-1,1))  # np.vstack(test_age)
+        test_metrics = cod.evaluate(x=test_rb_imgs, y=test_age_new)  # np.vstack(test_age)
         print("test metric:" + str(cod.metrics_names))
         print("test metrics:" + str(test_metrics))
         f = open(ROOTDIR + "test_metric_"+str(the_fold)+".txt", "w")
-        f.write("test metric:")
+        f.write("test metric:\n")
         f.write(str(cod.metrics_names))
+        f.write("\n")
         f.write(str(test_metrics))
         f.close()
 
-
-
         y_pred_test = cod.predict(test_rb_imgs, verbose=1)
+        print("shape of prediction:"+str(y_pred_test.shape))
         print("scaled predictions+"+str( y_pred_test[0:20] ) )
         y_pred_test = scaler.inverse_transform( y_pred_test )
         print("invers_transf pred:" + str( y_pred_test[0:20] ) )
-        print("y_pred_test.shape:"+str( y_pred_test.shape) )
+        print("y_pred_test.shape:"+str( y_pred_test.shape ) )
         y_pred_test = np.squeeze( y_pred_test )
         y_pred_test = y_pred_test.tolist()
         y_pred_test_rounded = [int(round(x)) for x in y_pred_test]
 
-        print("test_age_new.shape"+str( test_age_new.shape ))
-        test_age_rounded = test_age_new.tolist() #np.squeeze( test_age_new )
+        print("test_age_new.shape"+str( test_age.shape ))
+        test_age_rounded = test_age.tolist() #np.squeeze( test_age_new )
         test_age_rounded = [int(round(x)) for x in test_age_rounded]
 
-        test_predictions_nn += y_pred_test / numberOfFolds
-        test_predictions_nn_rounded = [int(round(x)) for x in test_predictions_nn]
+        test_predictions_nn += np.asarray( y_pred_test ) / numberOfFolds
+
+        ## aggregate accuracy so far: on fold 2: {2/5, 4/5, 6/5} * 5/2
+        test_predictions_nn_mse = test_predictions_nn * ( numberOfFolds/(the_fold+1) )
+        test_predictions_nn_rounded = [int(round(x)) for x in test_predictions_nn_mse]
 
         mse = mean_squared_error(test_age, y_pred_test )
         acc = accuracy_score( test_age_rounded, y_pred_test_rounded )
         acc_agg = accuracy_score( test_age_rounded, test_predictions_nn_rounded )
-        mse_agg = mean_squared_error( test_age, test_predictions_nn )
+        mse_agg = mean_squared_error( test_age, test_predictions_nn_mse )
         print("acc:"+str( acc ) )
         print("acc_agg:"+str( acc_agg ) )
         print("mse:"+str( mse ) )
@@ -512,7 +528,6 @@ def do_train(image_tensor, age, B4_input_shape):
         del df_test_statistics
         gc.collect()
 
-    np.savetxt(ROOTDIR+'EffB4_pred/pred_mean.txt', test_predictions_nn)
     return test_predictions_nn, np.squeeze( test_age )
 
 
@@ -520,8 +535,9 @@ if __name__ == "__main__":
 
     ROOTDIR = "./EFFNetB4_groupkfold_stdScalar/"
 
-    B4_input_shape = (380, 380, 3)
-    #B5_input_shape = (456, 456, 3)
+    #B4_input_shape = (380, 380, 3)
+    B5_input_shape = (456, 456, 3)
+    B4_input_shape = B5_input_shape
     new_shape =B4_input_shape
 
     image_tensor, age, B4_input_shape = load_images( B4_input_shape )
@@ -544,5 +560,7 @@ if __name__ == "__main__":
 
     print("acc:"+str( acc ) )
 
-    np.savetxt(ROOTDIR+'EffB4_pred/pred_mean_final.txt', test_predictions_nn)
-
+    df_final = pd.DataFrame()
+    df_final['test_pred_nn'] = test_predictions_nn
+    df_final['y_true'] = test_age
+    df_final.to_csv(ROOTDIR+'EffB4_pred/pred_mean_final.csv', index=False)
