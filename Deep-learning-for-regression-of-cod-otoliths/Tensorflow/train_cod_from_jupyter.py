@@ -63,7 +63,9 @@ def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
 
 
 def load_images( config ):
-    image_tensor, age = read_jpg_cods2(config) #5316
+    df_cod = read_jpg_cods2( config ) #5316
+    age = df_cod['age'].values
+    image_tensor = np.stack( df['image'].values , axis=0)
 
     print("len age:"+str( len(age) ) )
     print("image tensor shape:"+str( image_tensor.shape ) )
