@@ -7,7 +7,7 @@ from PIL import Image, ExifTags
 from tensorflow.keras.preprocessing.image import img_to_array, load_img
 
 
-def read_jpg_cods2(config):
+def read_jpg_cods(config):
     """
     reads a .jpg file in each folder in structure of folders
     depending on light exposure in {min, middle, max}

@@ -1,4 +1,3 @@
-
 import pandas as pd
 import numpy as np
 import os
@@ -62,15 +61,6 @@ def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
     return tensorboard, checkpointer
 
 
-def load_images( config ):
-    df_cod = read_jpg_cods2( config ) #5316
-    age = df_cod['age'].values
-    image_tensor = np.stack( df_cod['image'].values , axis=0)
-
-    print("len age:"+str( len(age) ) )
-    print("image tensor shape:"+str( image_tensor.shape ) )
-    return image_tensor, age
-
 def base_model( B4_input_shape ):
     ############# Define model ################
     data_augmentation = tf.keras.Sequential([
@@ -107,7 +97,7 @@ def compile_model( cod ):
     cod.compile(loss='mse', optimizer=adam, metrics=['mse', binary_accuracy_for_regression])
     return cod
 
-def do_train(image_tensor, age, config):
+def do_train(df, config):
     os.environ["CUDA_VISIBLE_DEVICES"] = config.CUDA_VISIBLE_DEVICE
     tensorboard_path = config.ROOTDIR + config.tensorboard_path
     checkpoint_path = config.ROOTDIR +config.checkpoint_path
@@ -171,7 +161,7 @@ def do_train(image_tensor, age, config):
     """
     ####### End train cod ##################################
     ####### Train/Test split ################################
-    train_imgs, train_age, test_imgs, test_age, test_path = train_test_split(df, CONFIG, test_size=0.15, a_seed=8)
+    train_imgs, train_age, test_imgs, test_age, test_path = train_test_split(df, config, test_size=config.test_size, a_seed=config.test_split_seed)
     test_path.to_csv( config.ROOTDIR+"test_set_files.csv", index=False)
     ######### Run KFold ####################
     test_predictions_nn = np.zeros(test_age.shape[0])
@@ -372,12 +362,15 @@ class CONFIG:
     tensorboard_path = 'tensorboard_test2'
     checkpoint_path = 'checkpoints_test2/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
     input_shape = (img_size, img_size, 3)
+    test_size = 0.15
+    test_split_seed = 8
 
 
 if __name__ == "__main__":
 
-    image_tensor, age = load_images( CONFIG )
-    print("image_tensor_shape"+str( image_tensor.shape) )
+    #image_tensor, age = load_images( CONFIG )
+    df_cod = read_jpg_cods( config ) #5316
+    print("len df:"+str( len(df) ) )
 
     test_predictions_nn, test_age = do_train(image_tensor, age, CONFIG)
 
