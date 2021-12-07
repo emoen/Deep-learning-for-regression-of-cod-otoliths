@@ -93,7 +93,9 @@ def read_jpg_cods2(config):
                         pil_img = load_img(full_path[expo_args[ index_to_exposed_jpg ]], target_size=(config.img_size, config.img_size))
                         array_img = img_to_array(pil_img, data_format=config.CHANNELS)
                         add_count += 1
-                        print("fp:"+str(full_path[expo_args[ index_to_exposed_jpg ]]) )
+
+                        if config.debugging:
+                            print("fp:"+str(full_path[expo_args[ index_to_exposed_jpg ]]) )
                         df_cod = df_cod.append({
                             'age': age,
                             'image': array_img,
