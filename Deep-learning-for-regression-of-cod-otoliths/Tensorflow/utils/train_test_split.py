@@ -27,15 +27,16 @@ def train_test_split(df, config, test_size=0.15, a_seed=8):
 
     # test_path.to_csv('test_set_files.csv', columns=['path', 'age', 'light', 'ExposureTime'], index=False)
 
-    print("train:" + str(train_imgs.shape))
-    print("trainType:" + str(type(train_imgs)))
-    print("train_age:" + str(train_age.shape))
-    print("train_ageType" + str(type(train_age)))
+    if config.debugging:
+        print("train:" + str(train_imgs.shape))
+        print("trainType:" + str(type(train_imgs)))
+        print("train_age:" + str(train_age.shape))
+        print("train_ageType" + str(type(train_age)))
 
-    print("test:" + str(test_imgs.shape))
-    print("testType:" + str(type(test_imgs)))
-    print("test_age:" + str(test_age.shape))
-    print("test_ageType" + str(type(test_age)))
+        print("test:" + str(test_imgs.shape))
+        print("testType:" + str(type(test_imgs)))
+        print("test_age:" + str(test_age.shape))
+        print("test_ageType" + str(type(test_age)))
 
     train_imgs = np.multiply(train_imgs, 1. / 255)  # Train- + Validation images
     test_imgs = np.multiply(test_imgs, 1. / 255)

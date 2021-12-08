@@ -173,24 +173,11 @@ def do_train(df, config):
     #kfold = KFold(n_splits = 5, random_state = a_seed, shuffle = True)
     #for fold, (trn_ind, val_ind) in enumerate(kfold.split(train_age)):
     print("len train_imgs, len train_age:"+str(train_imgs.shape)+" "+str(len(train_age)))
-    for fold, (trn_ind, val_ind) in enumerate(kfold.split(train_imgs, train_age)):
-        train_idx = trn_ind
-        val_idx = val_ind
-
-        train_imgs_new = np.empty(shape=(len(train_idx),) + config.input_shape)
-        train_age_new = []
-        for i in range(0, len(train_idx)):
-            train_imgs_new[i] = train_imgs[train_idx[i]]
-            train_age_new.append(train_age[train_idx[i]])
-
-        val_imgs_new = np.empty(shape=(len(val_idx),) + config.input_shape)
-        val_age_new = []
-        for i in range(0, len(val_idx)):
-            val_imgs_new[i] = train_imgs[val_idx[i]]
-            val_age_new.append(train_age[val_idx[i]])
-
-        train_age_new = np.asarray(train_age_new)
-        val_age_new = np.asarray(val_age_new)
+    for fold, (train_idx, val_idx) in enumerate(kfold.split(train_imgs, train_age.tolist())):
+        train_imgs_new = train_imgs[train_idx]
+        train_age_new = train_age[train_idx]
+        val_imgs_new = train_imgs[val_idx]
+        val_age_new = train_age[val_idx]
 
         """ standard scalar """
         unique, counts = np.unique( train_age_new, return_counts=True)
@@ -230,10 +217,12 @@ def do_train(df, config):
 
         tensorboard, checkpointer = get_checkpoint_tensorboard(tensorboard_path, checkpoint_path)
 
-        early_stopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=14, verbose=0,
-            mode = 'min', restore_best_weights = True)
-        plateau = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=7,
-            verbose = 0, mode = 'min')
+        early_stopper = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=config.early_stopping_patience,
+                                                         verbose=0, mode = 'min', restore_best_weights = True)
+        plateau = tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss',
+                                                       factor=config.reduceLROnPlateau_factor,
+                                                       patience=config.reduceLROnPlateau_patience,
+                                                       verbose = 0, mode = 'min')
 
         log_file_name = config.ROOTDIR + 'loss_log/loss_log2_'+str(the_fold)+'.txt'
         print( "log_file_name:"+str(log_file_name) )
@@ -245,12 +234,12 @@ def do_train(df, config):
           on_train_end = lambda logs: txt_log.close()
         )
 
-        K.set_value(cod.optimizer.learning_rate, 0.00001)
+        K.set_value(cod.optimizer.learning_rate, config.learning_rate)
         print("Learning rate before second fit:", cod.optimizer.learning_rate.numpy())
 
         history_callback = cod.fit(train_dataset,
-                                   steps_per_epoch=1600,
-                                   epochs=150,
+                                   steps_per_epoch=config.steps_per_epoch,
+                                   epochs=config.epochs,
                                    callbacks=[early_stopper, plateau, tensorboard,
                                        checkpointer, save_op_callback],
                                    validation_data=(val_imgs_new, val_age_new),  # (val_rb_imgs, val_age),
@@ -344,7 +333,7 @@ class CONFIG:
     img_size = 456
     val_img_size = 480
     epochs = 1000
-    learning_rate = 1e-4
+    learning_rate = 1e-5
     min_lr = 1e-6
     weight_decay = 1e-6
     T_max = 10
@@ -358,21 +347,36 @@ class CONFIG:
     CHANNELS = 'channels_last' #'channels_first' or 'channels_last' - pytorch or keras convention - needed by PIL
     KERAS_TRAIN_TEST_SEED = 2021
     ROOTDIR = "./EFFNetB5_groupkfold_stdScalar/"
-    CUDA_VISIBLE_DEVICE = 0
+    CUDA_VISIBLE_DEVICE = "0"
     tensorboard_path = 'tensorboard_test2'
     checkpoint_path = 'checkpoints_test2/cod_oto_efficientnetBBB.{epoch:03d}-{val_loss:.2f}.hdf5'
     input_shape = (img_size, img_size, 3)
     test_size = 0.15
     test_split_seed = 8
+    steps_per_epoch = 1600
+    epochs = 1 #50
+    early_stopping_patience = 14
+    reduceLROnPlateau_factor = 0.2
+    reduceLROnPlateau_patience = 7
 
+import json
+def dump_config_to_json( CONFIG ):
+    config_dict = CONFIG.__dict__
+    config_dict = dict(config_dict)
+    config_dict.pop('device', None)
+    config_dict.pop('__dict__', None)
+    config_dict.pop('__weakref__', None)
+    config_dict.pop('__doc__', None)
+    with open(CONFIG.ROOTDIR + 'config.json', 'w', encoding='utf-8') as f:
+        json.dump(config_dict, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
 
-    #image_tensor, age = load_images( CONFIG )
-    df_cod = read_jpg_cods( config ) #5316
-    print("len df:"+str( len(df) ) )
+    dump_config_to_json(CONFIG)
+    df_cod = read_jpg_cods( CONFIG ) #5316
+    print("len df:"+str( len(df_cod) ) )
 
-    test_predictions_nn, test_age = do_train(image_tensor, age, CONFIG)
+    test_predictions_nn, test_age = do_train(df_cod, CONFIG)
 
     print("test predictions:\n"+str( test_predictions_nn ) )
     print("test_age:\n"+str(test_age) )
