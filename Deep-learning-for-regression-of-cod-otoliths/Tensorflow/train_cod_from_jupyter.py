@@ -143,7 +143,7 @@ def do_train(df, config):
 
     #Tensorflow 2.2 - wrap generator in tf.data.Dataset
     def callGen():
-        return train_datagen_scales.flow( rb_imgs, age_scales, batch_size=a_batch_size )
+        return train_datagen_scales.flow( rb_imgs, age_scales, batch_size=config.train_batch_size )
 
     train_dataset = tf.data.Dataset.from_generator(callGen, (tf.float32, tf.float32)).shuffle(128, reshuffle_each_iteration=True).repeat()
 
@@ -204,7 +204,7 @@ def do_train(df, config):
         #####################################################
         train_dataset = tf.data.Dataset.from_tensor_slices((train_imgs_new, train_age_new))
         train_dataset = train_dataset.shuffle(len(train_age_new))
-        train_dataset = train_dataset.batch(a_batch_size)
+        train_dataset = train_dataset.batch(config.train_batch_size)
         train_dataset = train_dataset.repeat(1000)
 
         ######### build, compile model ####################
@@ -358,6 +358,7 @@ class CONFIG:
     early_stopping_patience = 14
     reduceLROnPlateau_factor = 0.2
     reduceLROnPlateau_patience = 7
+    base_dir = '/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice'
 
 import json
 def dump_config_to_json( CONFIG ):

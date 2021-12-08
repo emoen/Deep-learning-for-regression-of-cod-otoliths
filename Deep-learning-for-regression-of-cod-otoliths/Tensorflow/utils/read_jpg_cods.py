@@ -15,7 +15,7 @@ def read_jpg_cods(config):
     """
     df_cod = pd.DataFrame(columns=['age', 'image', 'path', 'light', 'ExposureTime'])
 
-    base_dir = '/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_06_10_21/CodOtholiths-MachineLearning/Savannah_Professional_Practice'
+    base_dir = config.base_dir
     base_dirs_posix = Path(base_dir)
 
     error_count = 0
