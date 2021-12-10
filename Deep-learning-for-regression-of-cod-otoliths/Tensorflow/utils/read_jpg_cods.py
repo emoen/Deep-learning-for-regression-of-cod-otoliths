@@ -20,36 +20,36 @@ def read_jpg_cods(config):
 
     error_count = 0
     add_count = 0
-    for some_year_dir in base_dirs_posix.iterdir():
+    for some_year_dir in sorted(base_dirs_posix.iterdir()):
         if config.debugging: # terminate quickly for testing
             if add_count > 0:
                 break
 
-        if not os.path.isdir(some_year_dir) or "Extra" in str(some_year_dir): #dont read files in root dir, or folder "Extra"
+        if not os.path.isdir(some_year_dir) or "Extra" in str(some_year_dir): #dont read files or "Extra" folder
             continue
 
         # dir structure: /year/station_number/cod_img_by_age/6 jpeg images of one fish
         stat_nos = [name for name in os.listdir(some_year_dir) if os.path.isdir(os.path.join(some_year_dir, name))]
+        stat_nos = sorted(stat_nos)
         for i in range(0, len(stat_nos)):
             cod_path = os.path.join(some_year_dir, stat_nos[i])
-            yr_station_codage_path = [os.path.join(cod_path, n) for n in os.listdir(cod_path)
-                                      if os.path.isdir(os.path.join(cod_path, n))]
-            cod_age = [n for n in os.listdir(cod_path)
-                       if os.path.isdir(os.path.join(cod_path, n))]
+            cod_no_and_age = sorted( os.listdir(cod_path) )
+            cod_age_path=[os.path.join(cod_path, n) for n in cod_no_and_age if os.path.isdir(os.path.join(cod_path, n))]
+            cod_age     =[n                         for n in cod_no_and_age if os.path.isdir(os.path.join(cod_path, n))]
 
-            assert len(yr_station_codage_path) == len(cod_age)
-            for j in range(0, len(yr_station_codage_path)):
+            assert len(cod_age_path) == len(cod_age)
+            for j in range(0, len(cod_age_path)):
                 # print(onlyfiles)
-                onlyfiles = [f for f in os.listdir(yr_station_codage_path[j])
-                             if os.path.isfile(os.path.join(yr_station_codage_path[j], f))]
+                onlyfiles = [f for f in os.listdir(cod_age_path[j])
+                             if os.path.isfile(os.path.join(cod_age_path[j], f))]
 
                 if len(onlyfiles) != 6:
-                    # print(str(len(onlyfiles)) + '\t' + str( yr_station_codage_path[j] ) + "\t" +'\t'.join(map(str,onlyfiles)))
+                    # print(str(len(onlyfiles)) + '\t' + str( cod_age_path[j] ) + "\t" +'\t'.join(map(str,onlyfiles)))
                     error_count += 1
                 else:
-                    full_path = [os.path.join(yr_station_codage_path[j], f)
-                                 for f in os.listdir(yr_station_codage_path[j])
-                                 if os.path.isfile(os.path.join(yr_station_codage_path[j], f))]
+                    full_path = [os.path.join(cod_age_path[j], f)
+                                 for f in os.listdir(cod_age_path[j])
+                                 if os.path.isfile(os.path.join(cod_age_path[j], f))]
 
                     begin_age = cod_age[j].lower().find('age')
                     age = cod_age[j][begin_age + 3:begin_age + 5]
