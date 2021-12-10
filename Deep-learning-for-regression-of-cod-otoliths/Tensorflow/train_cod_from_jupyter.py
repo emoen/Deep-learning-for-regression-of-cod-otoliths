@@ -330,7 +330,7 @@ class CONFIG:
     torch_model_name = 'tf_efficientnetv2_xl_in21k'
     train_batch_size = 16
     valid_batch_size = 8
-    img_size = 10 #456
+    img_size = 456
     val_img_size = 480
     epochs = 1000
     learning_rate = 1e-5
