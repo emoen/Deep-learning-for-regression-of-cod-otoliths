@@ -61,7 +61,7 @@ def get_checkpoint_tensorboard(tensorboard_path, checkpoint_path):
     return tensorboard, checkpointer
 
 
-def base_model( B4_input_shape ):
+def base_model(input_shape):
     ############# Define model ################
     data_augmentation = tf.keras.Sequential([
       layers.experimental.preprocessing.RandomFlip("horizontal"),
@@ -70,12 +70,12 @@ def base_model( B4_input_shape ):
       # possible width shift, height shift
     )
 
-    rgb_efficientNetB4 = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet',
-                                                              input_shape=B4_input_shape, classes=2)
-    z = dense1_linear_output( rgb_efficientNetB4 )
-    cod_tmp = Model(inputs=rgb_efficientNetB4.input, outputs=z)
+    rgb_efficientNetB = tf.keras.applications.EfficientNetB4(include_top=False, weights='imagenet',
+                                                              input_shape=input_shape, classes=2)
+    z = dense1_linear_output( rgb_efficientNetB )
+    cod_tmp = Model(inputs=rgb_efficientNetB.input, outputs=z)
 
-    inputLayer = tf.keras.layers.Input(shape=B4_input_shape)
+    inputLayer = tf.keras.layers.Input(shape=input_shape)
     x = data_augmentation(inputLayer)
     x = cod_tmp(x)
     cod = Model(inputs=inputLayer, outputs=x)
@@ -86,9 +86,9 @@ def base_model( B4_input_shape ):
 def binary_accuracy_for_regression(y_true, y_pred):
     return K.mean(K.equal(y_true, K.round(y_pred)), axis=-1)
 
-def compile_model( cod ):
+def compile_model( cod, config ):
     ########### Compile model ##################
-    learning_rate = 0.00001  # 0.00005
+    learning_rate = config.learning_rate #0.00001  # 0.00005
     adam = optimizers.Adam(learning_rate=learning_rate)
 
     for layer in cod.layers:
@@ -104,7 +104,7 @@ def do_train(df, config):
     ############## pretrain salmon_scales ###############
     """
     cod = base_model(config.input_shape) B4_input_shape
-    cod = compile_model(cod)
+    cod = compile_model(cod, config)
     new_shape = config.input_shape
 
     print("loadxy")
@@ -209,11 +209,11 @@ def do_train(df, config):
 
         ######### build, compile model ####################
         cod = base_model(config.input_shape)
-        #cod = compile_model(cod)
+        #cod = compile_model(cod, config)
         #cod = tf.keras.models.load_model("NNSalmonScales/salmonNNmodel.h5",
         #        custom_objects={"binary_accuracy_for_regression":binary_accuracy_for_regression},
         #        compile=False)
-        cod = compile_model(cod)
+        cod = compile_model(cod, config)
 
         tensorboard, checkpointer = get_checkpoint_tensorboard(tensorboard_path, checkpoint_path)
 
@@ -330,7 +330,7 @@ class CONFIG:
     torch_model_name = 'tf_efficientnetv2_xl_in21k'
     train_batch_size = 16
     valid_batch_size = 8
-    img_size = 456
+    img_size = 10 #456
     val_img_size = 480
     epochs = 1000
     learning_rate = 1e-5
@@ -354,11 +354,12 @@ class CONFIG:
     test_size = 0.15
     test_split_seed = 8
     steps_per_epoch = 1600
-    epochs = 1 #50
+    epochs = 150
     early_stopping_patience = 14
     reduceLROnPlateau_factor = 0.2
     reduceLROnPlateau_patience = 7
     base_dir = '/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice'
+    #base_dir = '/scratch/disk2/Otoliths/endrem/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice'
 
 import json
 def dump_config_to_json( CONFIG ):
