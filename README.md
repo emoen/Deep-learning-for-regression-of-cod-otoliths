@@ -1,11 +1,5 @@
 # cod-otoliths
-
-Predicting age of cod otoliths.
-
 In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12311/6 = 2051 unique images (including files starting with ._), and 1984 unique directories.
-
-(MAPE: Mean absolute percentage error)<br />
-(MCC: mathews correlation coefficient)<br />
 
 | Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f | classWeights |
 | ---------------------| -----------|--------|------|------|-----|-----|---------|---------|--------------|
@@ -17,6 +11,14 @@ In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12
 | Cod B4  (epoch41)    | age        |0.9695  |0.9695|- |0.5805|x    |1984     | linear | x |
 | Cod B4  (epoch53)    | age        |0.9785  |0.9785|- |0.6174|x    |1984     | linear | x |
 | Cod B4  (test-metric)| age        |0.7814  |0.7814|- |0.6409|x    |1984     | linear | x |
+
+### 5-fold training after adding 3000 images - testset 15%
+| NN-config              | fold-1 (acc, mse) | fold-3 | fold-3  | fold-4 | fold-5 | mean MSE | mean ACC  | datset size |  |
+| -----------------------| ------------------|--------|---------|--------|--------|----------|-----------|-------------|--|
+| B4                     | [0.48629727959632874, 0.6488250494003296]|[0.4687076508998871, 0.6697127819061279]|[0.4820464551448822, 0.6631853580474854] |[0.4878818988800049, 0.6488250494003296]|[0.47346818447113037, 0.6579634547233582] |0.4216341924334377 |0.6971279373368147 |  5150       |  | 
+
+
+
 
 
 ```
