@@ -12,10 +12,10 @@ for i in range(0,10):
 for i in range(0,10):
   print(mean_squared_error(t[i].y_pred_test, t[i].y_true))   
   
-tmp = t[0].y_pred_test
+aggregate_pred = t[0].y_pred_test.values
 for i in range(1,10):
-  tmp += tmp[i].y_pred_test
+  aggregate_pred += t[i].y_pred_test.values
 
-tmp = tmp.values/10.0
-print(accuracy_score(tmp.rounded().astype("int"), t[0].y_true))
-print(mean_squared_error(tmp, t[0].y_true))
+aggregate_pred = aggregate_pred/10.0
+print(accuracy_score(aggregate_pred.round().astype("int"), t[0].y_true))
+print(mean_squared_error(aggregate_pred, t[0].y_true))
