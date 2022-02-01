@@ -1,26 +1,22 @@
 # cod-otoliths
 
-For full-precision results: [readme details](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/edit/master/README.md)
-In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12311/6 = 2051 unique images (including files starting with ._), and 1984 unique directories.
+For full-precision results: [readme details](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/README_detailed.md)
 
+Summary of best results on training on cod otoliths compared to other projects: 
 | Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f | classWeights |
-| ---------------------| -----------|--------|------|------|-----|-----|---------|---------|--------------|
-| Greenland Halibut(1) | age        | x      |2.65  |0.124 |0.262|x    |8875     | linear  | x | 
-| Salmon               | sea age    | -"-    |0.239 |0.141 |0.822|x    |9073     | linear  | x |
-| Salmon B4            | river age  |0.359   |0.359 |19.58 |0.618|x    |6246     | linear  | x |
-| ~~Cod B4~~                | age        |0.0297  |0.0297|1.588 |0.984|x    |6330     | linear | x |
-| Cod B4               | age        |0.8796  |0.8796|9.228 |0.52597|x    |1029     | linear | x |
-| Cod B4  (epoch41)    | age        |0.9695  |0.9695|- |0.5805|x    |1984     | linear | x |
-| Cod B4  (epoch53)    | age        |0.9785  |0.9785|- |0.6174|x    |1984     | linear | x |
-| Cod B4  (test-metric)| age        |0.7814  |0.7814|- |0.6409|x    |1984     | linear | x |
+| ---------------------| -----------|--------|------|-------|-----|-----|---------|---------|--------------|
+| Greenland Halibut(1) | age        | x      |2.65  |0.124  |0.262|x    |8875     | linear  | x | 
+| Salmon               | sea age    | -"-    |0.239 |0.141  |0.822|x    |9073     | linear  | x |
+| Salmon B4            | river age  |0.359   |0.359 |19.58  |0.618|x    |6246     | linear  | x |
+| Cod B5               | age        |0.277   |0.8796| -     |0.744|x    |5150     | linear  | x |
 
 ### 5-fold training after adding 3000 images - testset 15%
 | NN-config              | fold-1 (mse, acc) | fold-2 | fold-3  | fold-4 | fold-5 | mean MSE | mean ACC  | datset size |  |
 | -----------------------| ------------------|--------|---------|--------|--------|----------|-----------|-------------|--|
-| B4                     | [0.48629727959632874, 0.6488250494003296]|[0.4687076508998871, 0.6697127819061279]|[0.4820464551448822, 0.6631853580474854] |[0.4878818988800049, 0.6488250494003296]|[0.47346818447113037, 0.6579634547233582] |0.4216341924334377 |0.6971279373368147 |  5150       |  | 
-| B4,standardScalar on target, StratifiedKFold| [0.4904178682121655, 0.643603133159269] |[0.5347786293189214, 0.6227154046997389] | [0.4968175576778982, 0.660574412532637] | [0.4573790357033823, 0.6984334203655352] | [0.5134489160772718, 0.6514360313315927] |0.4257378207634962 |0.7010443864229765  |  5150       |  | 
-| B4,standardScalar on target, StratifiedKFold, pretraining on salmon-scales 20 epochs |[0.46910862052397906, 0.6631853785900783] | [0.4689538583672292, 0.685378590078329] | [0.5130625894583206, 0.6514360313315927] | [0.4741178483435903, 0.6814621409921671] |[0.47853572666031796, 0.6501305483028721] | 0.43275226756928326 | 0.6892950391644909 |  5150       |  | 
-| B5,standardScalar on target, StratifiedKFold | [0.4353308031328409, 0.667098445595855 ] | [0.44663970124877767, 0.6826424870466321] | [0.45198405952545945, 0.677461139896373] | [0.430863676385045, 0.6748704663212435] | [0.44126310267337826, 0.6917098445595855] | 0.40109202928591997 | 0.7072538860103627 |  5150       |  |
+| B4                     | 0.486, 0.649| 0.469, 0.670| 0.482, 0.663 | 0.488, 0.649| 0.473, 0.658 | 0.422 |0.697 |  5150       |  | 
+| B4,standardScalar on target, StratifiedKFold| 0.490, 0.644 |0.535, 0.623 | 0.497, 0.661 | 0.457, 0.698 | 0.513, 0.651 |0.426 |0.701 |  5150       |  | 
+| B4,standardScalar on target, StratifiedKFold, pretraining on salmon-scales 20 epochs |0.469, 0.663 | 0.469, 0.685 | 0.513, 0.651 | 0.474, 0.681 | 0.479, 0.650 | 0.433 | 0.689 |  5150       |  | 
+| B5,standardScalar on target, StratifiedKFold | 0.435, 0.667 | 0.447, 0.683 | [0.451, 0.677 | 0.431, 0.675 | [0.441, 0.692 | 0.401 | 0.707 |  5150       |  |
 
 
 
