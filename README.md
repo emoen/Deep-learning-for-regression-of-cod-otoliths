@@ -20,8 +20,8 @@ Summary of best results on training on cod otoliths compared to other projects:
 
 
 ### 10-fold training - testset 10%
-| NN-config              | fold-1 (mse, acc)(max, mean, min) | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size | 
-| -----------------------| ------------------|--------|---------|--------|--------|--------|--------|--------|--------|-------- |----------|-----------|-------------|
+| NN-config (mse, acc)   | fold-1  | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size | 
+| -----------------------| --------|--------|---------|--------|--------|--------|--------|--------|--------|-------- |----------|-----------|-------------|
 | B4 with B5 img size,standardScalar on target, StratifiedKFold       | 0.320,0.699| 0.318,0.689| 0.306,0.687|0.313,0.683|0.322,0.689|0.314,0.701|0.315,0.697|0.316,0.668|0.306,0.689|0.302,0.724|0.277|0.728|5150|
 |B5,standardScalar on target, StratifiedKFold |0.324,0.718|0.322,0.691|0.325,0.693|0.336,0.668|0.291,0.736|0.314,0.707|0.320,0.662|0.331,0.683|0.3298,0.695|0.317,0.687|0.277|0.744|5150|
 |B6,standardScalar on target, StratifiedKFold |0.325,0.683|0.329,0.685|0.334,0.664|0.293,0.724|0.312, 0.707|0.290,0.709|0.320,0.693|0.306,0.693|0.276,0.720|0.300,0.689|0.272|0.734|5150|
@@ -33,7 +33,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 | EfficientNetV2-l MLP(256,32,1)| 0.363,0.664|0.378,0.654|0.405,0.662|0.342,0.660|0.393,0.654|0.370, 0.668|0.446,0.639|0.344,0.668|0.333,0.666|0.363,0.656|0.358|0.662|5150|
 
 ### 10-fold training - testset 10% on EffNetV2 with albumenation (-90,90) rotation
-| NN-config              | fold-1 (val_mse,val_acc),(mse, acc) | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size |
+| NN-config (val_mse,val_acc),(mse, acc)| fold-1  | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size |
 | -----------------------| ------------------|--------|---------|--------|--------|--------|--------|--------|--------|-------- |----------|-----------|-------------|
 |EfficientNetV2-m exposure="max"|0.371,0.662|0.456,0.623|0.355,0.645|0.405,0.614|0.886,0.441|0.481,0.623|0.370,0.654|0.459,0.633|0.803,0.521|0.595,0.6]|0.381|0.658|5150|
 |EfficientNetV2-m exposure="max" MLE savepoints|0.390,0.635|0.398,0.619|0.346,0.650|0.392,0.647|0.394,0.619|0.365,0.662|0.329,0.672|0.459,0.581|0.448,0.614|0.381,0.645|0.402|0.650|5150|
