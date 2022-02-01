@@ -1,6 +1,6 @@
 # cod-otoliths
 
-For full-precision results: [readme details |https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/edit/master/README.md ]
+For full-precision results: [readme details](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/edit/master/README.md)
 In folders- 2014  2015  2016  2017  2018  Extra - there are 12311 .JPG files. 12311/6 = 2051 unique images (including files starting with ._), and 1984 unique directories.
 
 | Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f | classWeights |
