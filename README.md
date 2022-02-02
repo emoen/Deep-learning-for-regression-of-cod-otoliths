@@ -31,8 +31,6 @@ Summary of best results on training on cod otoliths compared to other projects:
 | EfficientNetV2-m exposure="max"| 0.455,0.588|0.369,0.652|0.412,0.610|0.351,0.645|0.343,0.680|0.413,0.604|0.358,0.658|0.365,0.649|0.441,0.581|0.354,0.654|0.360|0.652|5150|
 | EfficientNetV2-m exposure="max" without mixed precision (amp.GradScaler())|0.456, 0.579|0.396,0.639|0.387,0.631|0.372,0.643|0.395,0.635|0.381,0.631|0.369,0.635|0.447,0.579|0.433,0.610|0.3631,0.633|0.383|0.627|5150|
 | EfficientNetV2-l MLP(256,32,1)| 0.363,0.664|0.378,0.654|0.405,0.662|0.342,0.660|0.393,0.654|0.370, 0.668|0.446,0.639|0.344,0.668|0.333,0.666|0.363,0.656|0.358|0.662|5150|
-| EfficientNetV2-l MLP(256,32,1) Reload weights| 0.322, 0.666|0.3455, 0.636||||||||||||5150|
-| EfficientNetV2-l MLP(256,32,1) Reload weights test_img size 480x480|0.336,0.656|0.331,0.645||||||||||||5150|
 
 ### 10-fold training - testset 10% on EffNetV2 with albumenation (-90,90) rotation
 | NN-config (val_mse,val_acc),(mse, acc)| fold-1  | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size |
@@ -40,6 +38,8 @@ Summary of best results on training on cod otoliths compared to other projects:
 |EfficientNetV2-m exposure="max"|0.371,0.662|0.456,0.623|0.355,0.645|0.405,0.614|0.886,0.441|0.481,0.623|0.370,0.654|0.459,0.633|0.803,0.521|0.595,0.6]|0.381|0.658|5150|
 |EfficientNetV2-m exposure="max" MLE savepoints|0.390,0.635|0.398,0.619|0.346,0.650|0.392,0.647|0.394,0.619|0.365,0.662|0.329,0.672|0.459,0.581|0.448,0.614|0.381,0.645|0.402|0.650|5150|
 |EfficientNetV2-l MLP(256,32,1) MLE savepoints, same test image size |0.301,0.697|0.281,0.734|0.299,0.691|0.318,0.670|0.282,0.718|0.305,0.699|0.280, 0.726|0.334,0.682|0.300,0.705|0.310,0.703|0.280|0.718|5150|
+| EfficientNetV2-l MLP(256,32,1) Reload weights| 0.322, 0.666|0.3455, 0.636|0.428,0.596|||||||||||5150|
+| EfficientNetV2-l MLP(256,32,1) Reload weights test_img size 480x480|0.336,0.656|0.331,0.645||||||||||||5150|
 |RexNet| ||||||||||||5150|
 
 ### Test-set age distribution
