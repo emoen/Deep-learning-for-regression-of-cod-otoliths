@@ -39,7 +39,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 |EfficientNetV2-m exposure="max" MLE savepoints|0.390,0.635|0.398,0.619|0.346,0.650|0.392,0.647|0.394,0.619|0.365,0.662|0.329,0.672|0.459,0.581|0.448,0.614|0.381,0.645|0.402|0.650|5150|
 |EfficientNetV2-l MLP(256,32,1) MLE savepoints, same test image size |0.301,0.697|0.281,0.734|0.299,0.691|0.318,0.670|0.282,0.718|0.305,0.699|0.280, 0.726|0.334,0.682|0.300,0.705|0.310,0.703|0.280|0.718|5150|
 | EfficientNetV2-l MLP(256,32,1) Reload weights| 0.322, 0.666|0.3455, 0.636|0.428,0.596|||||||||||5150|
-| EfficientNetV2-l MLP(256,32,1) Reload weights test_img size 480x480|0.336,0.656|0.331,0.645||||||||||||5150|
+| EfficientNetV2-l MLP(256,32,1) Reload weights test_img size 480x480|0.336,0.656|0.331,0.645|0.324,0.648|||||||||||5150|
 |RexNet| ||||||||||||5150|
 
 ### Test-set age distribution
