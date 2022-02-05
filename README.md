@@ -12,7 +12,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 | Salmon B4            | river age  |0.359   |0.359 |19.58  |0.618|x    |6246     | linear  |
 | Cod B5               | age        |0.277   |0.8796| -     |0.744|x    |5150     | linear  |
 
-### 5-fold training - testset 15%
+### 5-fold training - training set: 68%, validation set: 17%, test set 15%
 | NN-config              | fold-1 (mse, acc) | fold-2 | fold-3  | fold-4 | fold-5 | mean MSE | mean ACC  | datset size | 
 | -----------------------| ------------------|--------|---------|--------|--------|----------|-----------|-------------|
 | B4                     | 0.486, 0.649| 0.469, 0.670| 0.482, 0.663 | 0.488, 0.649| 0.473, 0.658 | 0.422 |0.697 |  5150 |
@@ -21,7 +21,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 | B5,standardScalar on target, StratifiedKFold | 0.435, 0.667 | 0.447, 0.683 | 0.451, 0.677 | 0.431, 0.675 | 0.441, 0.692 | 0.401 | 0.707 |  5150|
 
 
-### 10-fold training - testset 10%
+### 10-fold training, training set: 81% validation set: 9%, test set 10%  - 515 images
 | NN-config (mse, acc)   | fold-1  | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size | 
 | -----------------------| --------|--------|---------|--------|--------|--------|--------|--------|--------|-------- |----------|-----------|-------------|
 | B4 with B5 img size,standardScalar on target, StratifiedKFold       | 0.320,0.699| 0.318,0.689| 0.306,0.687|0.313,0.683|0.322,0.689|0.314,0.701|0.315,0.697|0.316,0.668|0.306,0.689|0.302,0.724|0.277|0.728|5150|
