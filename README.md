@@ -1,6 +1,6 @@
 # cod-otoliths
 
-Findings: B5, and B6 er better than V2 large, training on more data is better.
+Findings: B5, and B6 is better than V2 large, training on more data is better.
 
 For full-precision results: [readme details](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/README_detailed.md)
 
