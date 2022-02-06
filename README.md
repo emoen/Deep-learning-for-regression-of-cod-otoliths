@@ -1,6 +1,6 @@
 # cod-otoliths
 
-Findings: B5, and B6 is better than V2 large, training on more data is better.
+Findings: B5, and B6 is better than V2 large, training on more data is better. Testing on same size as training set gives higher accuracy than on test set size, as described in the paper. Training on 3 images (9 channels) with different lighting is better than any one lighting.
 
 For full-precision results: [readme details](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/README_detailed.md)
 
