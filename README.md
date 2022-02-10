@@ -1,6 +1,7 @@
 # cod-otoliths
 
 | Minimum Exposure | Minimum Exposure | Maximum Exposure |
+| - | - | - |
 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0457_2016_70021.JPG" width="10%" height="10%"> |
  <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0458_2016_70021.JPG" width="10%" height="10%"> |
  <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0459_2016_70021.JPG" width="10%" height="10%"> |
