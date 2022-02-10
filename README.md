@@ -2,7 +2,7 @@
 
 | Middle Exposure | Min Exposure | Max Exposure |
 | - | - | - |
-| <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0457_2016_70021.JPG" > | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0458_2016_70021.JPG" width="10%" height="10%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0459_2016_70021.JPG" width="10%" height="10%"> |
+| <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0457_2016_70021.JPG" width="50%" height="50%" > | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0458_2016_70021.JPG" width="10%" height="10%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0459_2016_70021.JPG" width="10%" height="10%"> |
 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0460_2016_70021.JPG" width="10%" height="10%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0461_2016_70021.JPG" width="10%" height="10%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0462_2016_70021.JPG" width="10%" height="10%"> |
 
 
