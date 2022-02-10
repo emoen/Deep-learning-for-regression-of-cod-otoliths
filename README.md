@@ -1,14 +1,19 @@
 # cod-otoliths
 
-The data set consists of 6 images of each otolith. First 3 images with 3 different exposures. Then a rotation of 180 degrees and another 3 images.
-The project investigates both which architectures in the EfficientNet family is best to age the otoliths as a regression task using Mean Squared Error (MSE), and which images in the protocol produces the best images. The images to investigate is min, middle and max exposure aswell as a 9 channel image containing all the 3 images.
+
 | Middle Exposure | Min Exposure | Max Exposure |
 | - | - | - |
 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0457_2016_70021.JPG" width="50%" height="50%" > | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0458_2016_70021.JPG" width="50%" height="50%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0459_2016_70021.JPG" width="50%" height="50%"> |
 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0460_2016_70021.JPG" width="50%" height="50%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0461_2016_70021.JPG" width="50%" height="50%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0462_2016_70021.JPG" width="50%" height="50%"> |
 
-An example of a 9 channel image at the bottom right, where the image is represented as the expectation of the 3 images across channels.
-<img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/2013_70174_Nr06_age09_IMG_0031_32_33.png" width="50%" height="50%" >
+The data set consists of 6 images of each otolith. First 3 images with 3 different exposures. Then a rotation of 180 degrees and another 3 images.
+The project investigates both which architectures in the EfficientNet family is best to age the otoliths as a regression task using Mean Squared Error (MSE), and which images in the protocol produces the best images. The images to investigate is min, middle and max exposure aswell as a 9 channel image containing all the 3 images.
+
+|<img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/2013_70174_Nr06_age09_IMG_0031_32_33.png" width="50%" height="50%" >|
+|:--:| 
+| *Figure 1.:An example of a 9 channel image at the bottom right, where the image is represented as the expectation of the 3 images across channels.:* |
+
+
 
 Findings so far: B5, and B6 is better than V2 large, training on more data is better. Testing on same size as training set gives higher accuracy than on test set size, as described in the paper. Training on 3 images (9 channels) with different lighting is better than any one lighting.
 
@@ -62,11 +67,11 @@ Summary of best results on training on cod otoliths compared to other projects:
 ```{1: 382, 2: 522, 3: 509, 4: 624, 5: 805, 6: 540, 7: 544, 8: 477, 9: 327, 10: 217, 11: 122, 12: 55, 13: 26}```
 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/age_distribution.png" width="50%" height="50%"> |
 |:--:| 
-| *Figure 1.:Age distribution of cod otoliths:* |
+| *Figure 2.:Age distribution of cod otoliths:* |
 
 ### Test-set age distribution of data set of 515 images
 
 ```{1: 41, 2: 59, 3: 52, 4: 60, 5: 90, 6: 52, 7: 55, 8: 47, 9: 23, 10: 19, 11: 13, 12: 2, 13: 2}```
 |<img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/age_distribution_test.png" width="50%" height="50%"> |
 |:--:| 
-| *Figure 2.:Test set age distribution of cod otoliths:* |
+| *Figure 3.:Test set age distribution of cod otoliths:* |
