@@ -47,42 +47,17 @@ Summary of best results on training on cod otoliths compared to other projects:
 | EfficientNetV2-l MLP(256,32,1) 9 channels, mse savepoints,test_img=384 |0.29193315747573656,0.7087378640776699|||||||||||||5150|
 |RexNet|0.388, 0.616 |0.446, 0.561|0.379,0.61||||||||||5150|
 
+### Age distribution of data set of 5150 images
+
+```{1: 382, 2: 522, 3: 509, 4: 624, 5: 805, 6: 540, 7: 544, 8: 477, 9: 327, 10: 217, 11: 122, 12: 55, 13: 26}```
+
 ### Test-set age distribution
 
 ```{1: 41, 2: 59, 3: 52, 4: 60, 5: 90, 6: 52, 7: 55, 8: 47, 9: 23, 10: 19, 11: 13, 12: 2, 13: 2}```
 
-### Age distribution - of dataset
-```
->>> len(age)
-1985
->>> unique, counts = np.unique(age, return_counts=True)
->>> age_range_freq = dict(zip(unique, counts))
-test ocurrence of each class:
-{0: 7, 1: 149, 2: 187, 3: 209, 4: 204, 5: 298, 6: 217, 7: 228, 8: 162, 9: 120, 10: 98, 11: 52, 12: 33, 13: 13, 14: 4, 15: 2, 16: 2
-
-import matplotlib.pyplot as plt
-import numpy as np
-
-N_points = len(age)
-n_bins = 2
-x=unique
-y=counts
-plt.bar(x, height=y)
-plt.show()
-```
 
 | ![cod-age_distribution.png](https://github.com/emoen/Deep-learning-for-cod-otoliths/blob/master/img/age_distribution.png) |
 |:--:| 
 | *Figure 1.:Age distribution of cod otoliths:* |
 
-## After addictional added 3000 images
-
 ![image](https://user-images.githubusercontent.com/1202040/140306617-8f266c26-2248-479e-a1a7-f60c6ccdf636.png)
-
-
-
-<code>
-{0: 11, 1: 380, 2: 509, 3: 504, 4: 617, 5: 795, 6: 532, 7: 544, 8: 476, 9: 319, 10: 214, 11: 120, 12: 54, 13: 26, 14: 7, 15: 4, 16: 1, 17: 1}
-{0: 6, 1: 246, 2: 351, 3: 336, 4: 442, 5: 542, 6: 395, 7: 372, 8: 341, 9: 226, 10: 164, 11: 86, 12: 44, 13: 19, 14: 5, 15: 3, 16: 1}
-</code>
-
