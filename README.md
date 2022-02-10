@@ -7,7 +7,8 @@
 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0460_2016_70021.JPG" width="50%" height="50%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0461_2016_70021.JPG" width="50%" height="50%"> | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/IMG_0462_2016_70021.JPG" width="50%" height="50%"> |
 
 The data set consists of 6 images of each otolith. First 3 images with 3 different exposures. Then a rotation of 180 degrees and another 3 images.
-The project investigates both which architectures in the EfficientNet family is best to age the otoliths as a regression task using Mean Squared Error (MSE), and which images in the protocol produces the best images. The images to investigate is min, middle and max exposure aswell as a 9 channel image containing all the 3 images.
+The project investigates both which architectures in the EfficientNet family is best to age the otoliths as a regression task using Mean Squared Error (MSE), and which images in the protocol produces the best images. The images to investigate is min, middle and max exposure aswell as a 9 channel image containing all the 3 images. 
+The data set consists of 5150 images from age 1 to 13.
 
 |<img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/2013_70174_Nr06_age09_IMG_0031_32_33.png" width="50%" height="50%" >|
 |:--:| 
