@@ -90,18 +90,47 @@ def read_jpg_cods(config):
                             index_to_exposed_jpg = 4
                             light_value = 3
 
-                        pil_img = load_img(full_path[expo_args[ index_to_exposed_jpg ]], target_size=(config.img_size, config.img_size))
-                        array_img = img_to_array(pil_img, data_format=config.CHANNELS)
-                        add_count += 1
+                        if config.which_exposure != 'all':
+                            pil_img = load_img(full_path[expo_args[ index_to_exposed_jpg ]], target_size=(config.img_size, config.img_size))
+                            array_img = img_to_array(pil_img, data_format=config.CHANNELS)
+                            add_count += 1
 
-                        if config.debugging:
-                            print("fp:"+str(full_path[expo_args[ index_to_exposed_jpg ]]) )
-                        df_cod = df_cod.append({
-                            'age': age,
-                            'image': array_img,
-                            'path': full_path[expo_args[ index_to_exposed_jpg ]],
-                            'light': light_value,
-                            'ExposureTime': exposures_list[expo_args[ index_to_exposed_jpg ]]}, ignore_index=True)
+                            if config.debugging:
+                                print("fp:"+str(full_path[expo_args[ index_to_exposed_jpg ]]) )
+                            df_cod = df_cod.append({
+                                'age': age,
+                                'image': array_img,
+                                'path': full_path[expo_args[ index_to_exposed_jpg ]],
+                                'light': light_value,
+                                'ExposureTime': exposures_list[expo_args[ index_to_exposed_jpg ]]}, ignore_index=True)
+                        else: #assume first 3 images have same rotation
+                            pil_img1 = load_img(full_path[0], target_size=(config.img_size, config.img_size))
+                            pil_img2 = load_img(full_path[1], target_size=(config.img_size, config.img_size))
+                            pil_img3 = load_img(full_path[2], target_size=(config.img_size, config.img_size))
+
+                            array_img = img_to_array(pil_img1, data_format=config.CHANNELS)
+                            array_img2 = img_to_array(pil_img2, data_format=config.CHANNELS)
+                            array_img3 = img_to_array(pil_img3, data_format=config.CHANNELS)
+
+                            array_img_6D = np.append(array_img, array_img2, axis=0)
+                            array_img_9D = np.append(array_img_6D, array_img3, axis=0)
+
+                            if config.debugging:
+                                print("all 3 exposures:")
+                                print("filenames:"+str(full_path[0]))
+                                print("filenames:" + str(full_path[1]))
+                                print("filenames:" + str(full_path[2]))
+                                print("dimension:"+str(array_img_9D.shape))
+
+                            df_cod = df_cod.append({
+                                'age': age,
+                                'image': array_img_9D,
+                                'path': full_path[expo_args[ index_to_exposed_jpg ]],
+                                'light': -2,
+                                'ExposureTime': exposures_list[expo_args[ index_to_exposed_jpg ]]}, ignore_index=True)
+
+                            add_count += 1
+
 
     print("error_count:" + str(error_count))
     print("add_count:" + str(add_count))
