@@ -1,4 +1,5 @@
-# cod-otoliths
+# Deep learning for regression of cod otoliths
+
 
 
 | Middle Exposure | Min Exposure | Max Exposure |
