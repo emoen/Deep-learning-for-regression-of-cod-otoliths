@@ -53,7 +53,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 | EfficientNetV2-l MLP(256,32,1)| 0.363,<br/>0.664|0.378,<br/>0.654|0.405,<br/>0.662|0.342,<br/>0.660|0.393,<br/>0.654|0.370,<br/> 0.668|0.446,<br/>0.639|0.344,<br/>0.668|0.333,<br/> 0.666|0.363,<br/>0.656|0.358|0.662|5150|
 
 ### 10-fold training - testset 10% on EffNetV2 with albumenation (-90,90) rotation
-| NN-config (val_mse,val_acc),(mse, acc)| 1  | 2 | 3  | 4 | 5 | 6 | 7 | 8 | 9 | fold-10 | mean MSE | mean ACC  | datset size |
+| NN-config (val_mse,val_acc),(mse, acc)| 1  | 2 | 3  | 4 | 5 | 6 | 7 | 8 | 9 | 10 | mean MSE | mean ACC  | datset size |
 | -----------------------| ------------------|--------|---------|--------|--------|--------|--------|--------|--------|-------- |----------|-----------|-------------|
 |EfficientNetV2-m exposure="max"|0.371,<br/>0.662|0.456,<br/>0.623|0.355,<br/>0.645|0.405,<br/>0.614|0.886,<br/>0.441|0.481,<br/>0.623|0.370,<br/>0.654|0.459,<br/>0.633|0.803,<br/>0.521|0.595,<br/>0.6]|0.381|0.658|5150|
 |EfficientNetV2-m exposure="max" MLE savepoints|0.390,<br/>0.635|0.398,<br/>0.619|0.346,<br/>0.650|0.392,<br/>0.647|0.394,<br/>0.619|0.365,<br/>0.662|0.329,<br/>0.672|0.459,<br/>0.581|0.448,<br/>0.614|0.381,<br/>0.645|0.402|0.650|5150|
