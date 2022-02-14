@@ -50,7 +50,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 | EfficientNetV2-m exposure="middle" |0.397, 0.608 |0.374,<br/>0.652|0.356,<br/>0.660|0.384,<br/>0.627|0.350,<br/>0.654|0.337,<br/>0.668|0.326,<br/>0.658|0.365,<br/>0.621|0.353,<br/>0.664|0.335,<br/>0.664|0.336|0.643|5150|
 | EfficientNetV2-m exposure="max"| 0.455,<br/>0.588|0.369,<br/>0.652|0.412,<br/>0.610|0.351,<br/>0.645|0.343,<br/>0.680|0.413,<br/>0.604|0.358,<br/>0.658|0.365,<br/>0.649|0.441,<br/>0.581|0.354,<br/>0.654|0.360|0.652|5150|
 | EfficientNetV2-m exposure="max" without mixed precision (amp.GradScaler())|0.456,<br/> 0.579|0.396,<br/>0.639|0.387,<br/>0.631|0.372,<br/>0.643|0.395,<br/>0.635|0.381,<br/>0.631|0.369,<br/>0.635|0.447,<br/>0.579|0.433,<br/>0.610|0.3631,<br/>0.633|0.383|0.627|5150|
-| EfficientNetV2-l MLP(256,32,1)| 0.363,<br/>0.664|0.378,<br/>0.654|0.405,<br/>0.662|0.342,<br/>0.660|0.393,<br/>0.654|0.370,<br/> 0.668|0.446,<br/>0.639|0.344,<br/>0.668|0.333,0.666|0.363,<br/>0.656|0.358|0.662|5150|
+| EfficientNetV2-l MLP(256,32,1)| 0.363,<br/>0.664|0.378,<br/>0.654|0.405,<br/>0.662|0.342,<br/>0.660|0.393,<br/>0.654|0.370,<br/> 0.668|0.446,<br/>0.639|0.344,<br/>0.668|0.333,<br/> 0.666|0.363,<br/>0.656|0.358|0.662|5150|
 
 ### 10-fold training - testset 10% on EffNetV2 with albumenation (-90,90) rotation
 | NN-config (val_mse,val_acc),(mse, acc)| fold-1  | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size |
