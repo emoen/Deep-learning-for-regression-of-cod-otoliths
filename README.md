@@ -39,7 +39,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 
 
 ### 10-fold training, training set: 81% validation set: 9%, test set 10%  - 515 images - no augmentaion on EfficientNetV2
-| NN-config (mse, acc)   | fold-1  | fold-2 | fold-3  | fold-4 | fold-5 | fold-6 | fold-7 | fold-8 | fold-9 | fold-10 | mean MSE | mean ACC  | datset size | 
+| NN-config (mse, acc)   | 1  | 2 | 3  | 4 | 5 | 6 | 7 | 8 | 9 | 10 | mean MSE | mean ACC  | datset size | 
 | -----------------------| --------|--------|---------|--------|--------|--------|--------|--------|--------|-------- |----------|-----------|-------------|
 | B4 with B5 img size,standardScalar on target, StratifiedKFold       | 0.320,0.699| 0.318,0.689| 0.306,0.687|0.313,0.683|0.322,0.689|0.314,0.701|0.315,0.697|0.316,0.668|0.306,0.689|0.302,0.724|0.277|0.728|5150|
 |B5,standardScalar on target, StratifiedKFold |0.324,0.718|0.322,0.691|0.325,0.693|0.336,0.668|0.291,0.736|0.314,0.707|0.320,0.662|0.331,0.683|0.3298,0.695|0.317,0.687|0.277|0.744|5150|
