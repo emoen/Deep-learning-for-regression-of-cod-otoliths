@@ -3,7 +3,8 @@
 ### 10-fold training - testset 10% 
 | CNN-config | MSE, ACC  | MSE, ACC exl min/max | model error | summary statistics | model error exl.min-max | pred. error | pred. residuals | residuals misclassificaiton |
 | - | - | - | - | - | - | - | - | - |
-| EffNetV2 Medium, middle expo.| 0.724<br/> 0.292 | 0.724<br/> 0.295 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/eda/EFFNetV2_m_middle_mse/model.png" width="50%" height="50%" > | count	515.000000
+| EffNetV2 Medium, middle expo.| 0.724<br/> 0.292 | 0.724<br/> 0.295 | <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/eda/EFFNetV2_m_middle_mse/model.png" width="50%" height="50%" > | 
+count	515 <br/>
 mean	0.011365 <br/>
 std	0.540606 <br/>
 min	-1.939247 <br/>
