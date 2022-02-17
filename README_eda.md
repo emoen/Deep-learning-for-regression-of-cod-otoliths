@@ -1,11 +1,11 @@
 ## Exploratory Data Analysis on test-set predictions by the models
 
 ### 10-fold training - testset 10% 
-| CNN-config | MSE, ACC*  |  Box plot model error summary | summary statistics |  prediction erroradsfdsafdfdsf | prediction residualsadsfsdfsdf | residuals misclassificaiton | residual class s.t. rounding error *** |
+| CNN-config | MSE, ACC*  |  Box plot model error summary | summary statistics |  prediction erroradsfdsafdfdsf | prediction residualsadsfsdfsdf | residuals misclassificaiton*** |  
 | -  | - | - | - | - | - | - | - | 
 | EffNetV2 Medium, middle expo.| (0.724 0.292) <br/> (0.724, 0.295) | <img src="manuscript/eda/EFFNetV2_m_middle_mse/model.png" width="200%" height="200%" > | <img src="manuscript/eda/EFFNetV2_m_middle_mse/summary.png" width="200%" height="200%" > | <img src="manuscript/eda/EFFNetV2_m_middle_mse/boxplot_pr_age.png" width="200%" height="200%" >  | <img src="manuscript/eda/EFFNetV2_m_middle_mse/boxplot_residual.png" width="200%" height="200%" > | <img src="manuscript/eda/EFFNetV2_m_middle_mse/misclassification.png" width="200%" height="200%" > <br/> [0.5, 1.5):135, [1.5, \inf):7, sum:142 |
 | EffNet B6, min expo| (0.734, 0.272) <br/> (0.740, 0.268) | <img src="manuscript/eda/tf_EFFNetB6_groupkfold_stdScalar_10_test_min/model.png" width="250%" height="250%" > | <img src="manuscript/eda/tf_EFFNetB6_groupkfold_stdScalar_10_test_min/summary.png" width="250%" height="250%" > | <img src="manuscript/eda/tf_EFFNetB6_groupkfold_stdScalar_10_test_min/boxplot_pr_age.png" width="200%" height="200%" >| <img src="manuscript/eda/tf_EFFNetB6_groupkfold_stdScalar_10_test_min/boxplot_residual.png" width="200%" height="200%" > | <img src="manuscript/eda/tf_EFFNetB6_groupkfold_stdScalar_10_test_min/misclassification.png" width="150%" height="150%" > <br/> [0.5, 1.5):135, [1.5, \inf):7, sum:137 |
  
 \* Mean MSE, and ACCuracy across 10 models from the 10-fold split <br/>
 \** Mean MSE, ACCuracy across 10 models but excluding max/min predictions on each image in the test set
-\*** errors larger than 0.5 results in a 1 year misclassification error, 1.5 results in 2 years missclassification error and so on
+\*** residual class s.t. rounding error: errors larger than 0.5 results in a 1 year misclassification error, 1.5 results in 2 years missclassification error and so on
