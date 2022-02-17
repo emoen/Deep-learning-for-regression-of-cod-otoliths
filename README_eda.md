@@ -3,7 +3,7 @@
 ### 10-fold training - testset 10% 
 | CNN-config | mean MSE, ACC  | model error | model error exl.min-max | pred. error | pred. residuals | residuals misclassificaiton |
 | - | - | - | - | - | - | - |
-| EffNetV2 Medium, middle expo.| 0.724 0.292 | 0.724 0.295 | | | | |
-| EffNet B6, min expo| 0.734 0.272 | 0.740 0.268 | | | | |
+| EffNetV2 Medium, middle expo.| 0.724<br/> 0.292 | 0.724<br/> 0.295 | | | | |
+| EffNet B6, min expo| 0.734<br/> 0.272 | 0.740<br/> 0.268 | | | | |
  
 
