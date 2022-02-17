@@ -21,6 +21,8 @@ Findings so far: B5, and B6 is better than V2 large, training on more data is be
 
 For full-precision results: [readme details](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/README_detailed.md)
 
+Exporatory Data Analysis (EDA) on the models: [readme eda](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/README_eda.md)
+
 Summary of best results on training on cod otoliths compared to other projects: 
 | Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f |
 | ---------------------| -----------|--------|------|-------|-----|-----|---------|---------|
