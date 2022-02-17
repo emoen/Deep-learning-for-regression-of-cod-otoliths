@@ -1,5 +1,10 @@
 ## Exploratory Data Analysis on test-set predictions by model
 
+Box-plot of models on the 10-fold predictions on the test-set. The red line is the ensembled accuracy/MSE.
+
+<img src="manuscript/eda/box_plot_models_acc.png" width="50%" height="50%" > <br/>
+<img src="manuscript/eda/box_plot_models_mse.png" width="50%" height="50%" >
+
 ### 10-fold training - testset 10% 
 | CNN-config | MSE, ACC*  |  Box plot model error summary | summary statistics |  prediction error | prediction residual | residuals misclassificaiton** |  
 | -  | - | - | - | - | - | - | 
