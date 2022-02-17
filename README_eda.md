@@ -1,4 +1,4 @@
-## Exploratory Data Analysis on test-set predictions by the models
+## Exploratory Data Analysis on test-set predictions by model
 
 ### 10-fold training - testset 10% 
 | CNN-config | MSE, ACC*  |  Box plot model error summary | summary statistics |  prediction error | prediction residual | residuals misclassificaiton** |  
