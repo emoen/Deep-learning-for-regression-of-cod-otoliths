@@ -62,11 +62,11 @@ Outliers with an error of more than 1.5 years:
 
 | Index | Image |
 | - | - |
-| 13 | <img src="manuscript/eda/outliers/IMG_0284_13.JPG" width="100%" height="100%" > |
-| 71 | <img src="manuscript/eda/outliers/IMG_0230_71.JPG" width="100%" height="100%" > |
-| 270 | <img src="manuscript/eda/outliers/IMG_0104_270.JPG" width="100%" height="100%" > |
-| 342 | <img src="manuscript/eda/outliers/IMG_0044_342.JPG" width="100%" height="100%" > |
-| 360 | <img src="manuscript/eda/outliers/IMG_0086_360.JPG" width="100%" height="100%" > |
-| 369 | <img src="manuscript/eda/outliers/IMG_0122_369.JPG" width="100%" height="100%" > |
+| 13 | <img src="manuscript/eda/outliers/IMG_0284_13.JPG" width="10%" height="10%" > |
+| 71 | <img src="manuscript/eda/outliers/IMG_0230_71.JPG" width="10%" height="10%" > |
+| 270 | <img src="manuscript/eda/outliers/IMG_0104_270.JPG" width="10%" height="10%" > |
+| 342 | <img src="manuscript/eda/outliers/IMG_0044_342.JPG" width="10%" height="10%" > |
+| 360 | <img src="manuscript/eda/outliers/IMG_0086_360.JPG" width="10%" height="10%" > |
+| 369 | <img src="manuscript/eda/outliers/IMG_0122_369.JPG" width="10%" height="10%" > |
 
 
