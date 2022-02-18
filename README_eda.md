@@ -17,6 +17,8 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 \** Numbers at the bottom are errors larger than 0.5 results in a 1 year misclassification error, 1.5 results in 2 years missclassification error and so on
 
 ## Outliers
+
+Outliers with an error of more than 1.5 years:
 | V2-m, middle | B4, min | B5, min |  B6, min |
 |--------------|---------|---------|----------|
 |              | 13      | 13      | 13       |
@@ -36,7 +38,7 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 | count:       |         |         |          |
 | 7            | 8       | 7       | 9        |
 
-## Outliers with predictions and ground-truth
+## Largest outliers with predictions and ground-truth
 | V2-m, middle | prediction | B4, min | prediction | B5, min | prediction |  B6, min | prediction | y_true |
 |--------------|------------|---------|------------|---------|------------|----------|------------|--------|
 |              |            | 13      | 9.79       | 13      | 9.64       | 13       | 9.74       | 8      |
@@ -58,9 +60,13 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 
 ## Images of most common outliers: {13, 71, 270, 342, 360, 369}
 
-<img src="manuscript/eda/outliers/IMG_0044_342.JPG" width="100%" height="100%" > 
-<img src="manuscript/eda/outliers/IMG_0086_360.JPG" width="100%" height="100%" > 
-<img src="manuscript/eda/outliers/IMG_0104_270.JPG" width="100%" height="100%" > 
-<img src="manuscript/eda/outliers/IMG_0122_369.JPG" width="100%" height="100%" > 
-<img src="manuscript/eda/outliers/IMG_0230_71.JPG" width="100%" height="100%" > 
-<img src="manuscript/eda/outliers/IMG_0284_13.JPG" width="100%" height="100%" > 
+| Index | Image |
+| - | - |
+| 13 | <img src="manuscript/eda/outliers/IMG_0284_13.JPG" width="100%" height="100%" > |
+| 71 | <img src="manuscript/eda/outliers/IMG_0230_71.JPG" width="100%" height="100%" > |
+| 270 | <img src="manuscript/eda/outliers/IMG_0104_270.JPG" width="100%" height="100%" > |
+| 342 | <img src="manuscript/eda/outliers/IMG_0044_342.JPG" width="100%" height="100%" > |
+| 360 | <img src="manuscript/eda/outliers/IMG_0086_360.JPG" width="100%" height="100%" > |
+| 369 | <img src="manuscript/eda/outliers/IMG_0122_369.JPG" width="100%" height="100%" > |
+
+
