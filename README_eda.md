@@ -17,7 +17,6 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 \** Numbers at the bottom are errors larger than 0.5 results in a 1 year misclassification error, 1.5 results in 2 years missclassification error and so on
 
 ## Outliers
-
 | V2-m, middle | B4, min | B5, min |  B6, min |
 |--------------|---------|---------|----------|
 |              | 13      | 13      | 13       |
@@ -34,3 +33,5 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 | 423          |         |         |          |
 |              |         | 444     |          |
 |              |         |         | 502      |
+| count:       |         |         |          |
+| 7            | 8       | 7       | 9        |
