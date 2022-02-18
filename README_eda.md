@@ -15,3 +15,22 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
  
 \* First 2 numbers is mean MSE, and ACCuracy across 10 models from the 10-fold split, then the second 2 numbers are mean MSE, ACCuracy across 10 models but excluding max/min predictions on each image in the test set <br/>
 \** Numbers at the bottom are errors larger than 0.5 results in a 1 year misclassification error, 1.5 results in 2 years missclassification error and so on
+
+## Outliers
+
+| V2-m, middle | B4, min | B5, min |  B6, min |
+|--------------|---------|---------|----------|
+|              | 13      | 13      | 13       |
+|              |         |         | 48       |
+| 71           | 71      | 71      | 71       |
+| 92           |         |         |          |
+|              | 270     | 270     |          |
+| 279          | 279     | 279     | 279      |
+|              | 320     |         |          |
+| 362          | 362     | 362     | 362      |
+| 342          | 342     | 342     | 342      |
+| 369          | 369     |         | 369      |
+|              |         |         | 393      |
+| 423          |         |         |          |
+|              |         | 444     |          |
+|              |         |         | 502      |
