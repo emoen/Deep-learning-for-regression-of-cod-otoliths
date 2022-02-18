@@ -54,7 +54,7 @@ Outliers with an error of more than 1.5 years:
 | 393 |              |         |         | 10.75    |        |
 | 423 | 5.39         |         |         |          | 8      |
 | 444 |              |         | 10.95   |          | 9      |
-|     |              |         |         | 9.4      | 11     |
+| 502 |              |         |         | 9.4      | 11     |
 
 ## Images of most common outliers: {13, 71, 270, 342, 360, 369}
 
