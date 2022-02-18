@@ -35,3 +35,32 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 |              |         |         | 502      |
 | count:       |         |         |          |
 | 7            | 8       | 7       | 9        |
+
+## Outliers with predictions and ground-truth
+| V2-m, middle | prediction | B4, min | prediction | B5, min | prediction |  B6, min | prediction | y_true |
+|--------------|------------|---------|------------|---------|------------|----------|------------|--------|
+|              |            | 13      | 9.79       | 13      | 9.64       | 13       | 9.74       | 8      |
+|              |            |         |            |         |            | 48       | 7.6        | 6      |
+| 71           | 4.96       | 71      | 5.14       | 71      | 4.79       | 71       | 5.06       | 7      |
+| 92           | 10.95      |         |            |         |            |          |            | 13     |
+|              |            | 270     | 11.66      | 270     | 11.71      |          |            | 10     |
+| 279          | 9.93       | 279     | 9.89       | 279     | 9.69       | 279      | 9.67       | 8      |
+|              |            | 320     | 5.47       |         |            |          |            | 7      |
+| 362          | 5.11       | 362     | 5.11       | 362     | 5.29       | 362      | 5.24       | 7      |
+| 342          | 10.35      | 342     | 11.05      | 342     | 10.75      | 342      | 10.69      | 13     |
+| 369          | 8.17       | 369     | 8.24       |         |            | 369      | 7.85       | 10     |
+|              |            |         |            |         |            | 393      | 10.75      |        |
+| 423          | 5.39       |         |            |         |            |          |            | 8      |
+|              |            |         |            | 444     | 10.95      |          |            | 9      |
+|              |            |         |            |         |            | 502      | 9.4        | 11     |
+|              |            |         |            |         |            |          |            |        |
+| 7            |            | 8       |            | 7       |            | 9        |            |        |
+
+## Images of most common outliers: {13, 71, 270, 342, 360, 369}
+
+<img src="manuscript/eda/outliers/IMG_0044_342.JPG" width="100%" height="100%" > 
+<img src="manuscript/eda/outliers/IMG_0086_360.JPG" width="100%" height="100%" > 
+<img src="manuscript/eda/outliers/IMG_0104_270.JPG" width="100%" height="100%" > 
+<img src="manuscript/eda/outliers/IMG_0122_369.JPG" width="100%" height="100%" > 
+<img src="manuscript/eda/outliers/IMG_0230_71.JPG" width="100%" height="100%" > 
+<img src="manuscript/eda/outliers/IMG_0284_13.JPG" width="100%" height="100%" > 
