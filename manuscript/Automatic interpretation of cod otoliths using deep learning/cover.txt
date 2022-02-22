@@ -1,0 +1,18 @@
+Dear Editor,
+
+Please find enclosed our manuscript titled "Automatic interpretation
+of cod-otoliths using deep learning" for consideration for publication in
+PLoS ONE.  Machine learning methods are now automating data processing
+in many fields, and have been particularly successful in image
+analysis.  We show that a ...
+
+Manual age estimation is labor intensive, and
+automating this task is an important step towards better and more
+sustainable stock management.
+
+Our system performs remarkably well compared to the human-estimated
+ground truth.  
+
+On behalf of the authors,
+
+Ketil Malde
