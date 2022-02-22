@@ -217,19 +217,19 @@ an ensemble prediction on the given model recorded as the expectation on predict
   \caption{Otolith from 2013, read age: 6. With light exposure: medium, low, high, 
   and expectation per channel of the three exposures. }
   \centering
-  \includegraphics[scale=0.015]{otolith/2013_70174_Nr06_age09_IMG_0031_32_33.png}
+  \includegraphics[scale=1.0]{otolith/2013_70174_Nr06_age09_IMG_0031_32_33.png}
   
   \label{marker1}
 \end{figure}
 
-\subsection*{Convolutional neural network}
+\subsection*{Training the Convolutional neural networks}
 
 There are two families of models used, EfficientNet B4-B6 \citep{EfficientNet}   from Tensorflow \citep{abadi2016tensorflow} with a Keras  \citep{keras} implementation plus weights, and a PyTorch \citep{PyTorch}  implementation of EfficientNet V2 medium, Large 
-and Xtra-Large \citep{EfficientNetV2} implementation with weights from Timm\citep{Timm}. Weights are ImageNet \citep{imagenet} weights, which is another prerequisite when working with small data sets, in addition to augmentation. The image size varies between 380 and 528 for EfficientNet Bx, and 384 for EfficientNetV2 size medium, large and xtra-large. While test-set size prediction has been done both on 384 and larger resolutions 480 and 512 as described in the paper. To investigate the image-taking protocol described in \citep{codImageProtocol} we have is also training on 9-channel images. Three images are stacked to produce a 9-channel. Using Timm\citep{Timm} the imagenet weights are duplicated on the input layer to accommodate 9 channels. The 3 images used are of dark, medium and light exposure of the first orientation.
+and Xtra-Large \citep{EfficientNetV2} implementation with weights from Timm\citep{rw2019timm}. Weights are ImageNet \citep{deng2009imagenet} weights, which is another prerequisite when working with small data sets, in addition to augmentation. The image size varies between 380 and 528 for EfficientNet Bx, and 384 for EfficientNetV2 size medium, large and xtra-large. While test-set size prediction has been done both on 384 and larger resolutions 480 and 512 as described in the paper. To investigate the image-taking protocol described in \citep{codOtolithsMyers} we have is also training on 9-channel images. Three images are stacked to produce a 9-channel. Using Timm\citep{rw2019timm} the imagenet weights are duplicated on the input layer to accommodate 9 channels. The 3 images used are of dark, medium and light exposure of the first orientation.
 
-EfficientNetV2 has been modified sligtly because the objective is regression as opposed to classification. The output layer of EfficientNetV2 becomes input to a Multi-Layer Perceptron (MLP) of 256 and 32 layers and then to a linear activation function which is the predicted age. More specifically; the 1280 layers output from EfficientNetV2 is input to 256 layer-MLP, then a leakyRelu \citep{leakyRelu} then 32 layer-MLP, another leakyRelu, then a linear activation function is the output. This outperformed a linear activation on the 1280 layers from EfficientNetV2, likely because we are doing a regression.
+EfficientNetV2 has been modified sligtly because the objective is regression as opposed to classification. The output layer of EfficientNetV2 becomes input to a Multi-Layer Perceptron (MLP) of 256 and 32 layers and then to a linear activation function which is the predicted age. More specifically; the 1280 layers output from EfficientNetV2 is input to 256 layer-MLP, then a leakyRelu \citep{DBLP:journals/corr/XuWCL15} then 32 layer-MLP, another leakyRelu, then a linear activation function is the output. This outperformed a linear activation on the 1280 layers from EfficientNetV2, likely because we are doing a regression.
 
-We train and tune EfficientNet B4, B5, B6 \citep{2015arXiv151200567S}, EfficienetNetV2 m, l \citep{szegedy2015going}, and xl. 
+We train and tune EfficientNet B4, B5, B6 \citep{DBLP:journals/corr/abs-1905-11946}, EfficienetNetV2 medium, large \citep{DBLP:journals/corr/abs-1905-11946}, and xl. 
 The test results from top models are ensembled to produce the final prediction.
 
 Hyper-parameter tuning is an important step when working with a new dataset and architecture. Some hyper-parameters
@@ -241,7 +241,7 @@ the exact configuration can be found the the results section of the github page 
 
 \subsection*{Ensemble of ensembles}
 
-As previously mentioned, the results recorded pr model is an ensemble of 10 models trained on 10-fold split of the
+As previously mentioned, the results recorded per model is an ensemble of 10 models trained on 10-fold split of the
 training data set. Typically the ensemble prediction is better than any single fold prediction. 
 This result can be improved further by taking ensemble predictions of multiple models as prediction on the test set.
 We look at all ensembles from tuple predictions consisting of 2 models, which produces an ensemble of 20 models,
@@ -252,24 +252,23 @@ of ensemble which will produce the best prediction on a test-set holdout set.
 
 \subsection*{Evaluation metric}
 
-The primary metric used for learning in the model is mean squared error (MSE)
-defined as $  ( \hat{y} - y)^{2} $ where \hat{y} is the CNN prediction and y is the read age.
-MSE produces a real number, while the prediction is a positive integer,
-which is produced by rounding to nearest integer. 
-The integer is used to measure accuracy. To reach human level accuracy
-a score of 85\% or higher is required \citep{ref_needed}.
+The primary metric used for training the models is mean squared error (MSE)
+while the primary metric used for evaluating the models is Accuracy.
+Accuracy is obtained by rounding the floating point number predictions
+to nearest integer and comparing the age classification against the true labels.
+To reach human level accuracy a score of 85\% or higher is required \citep{ref_needed}.
 
 \section*{Results}
 
 We have conducted a series of experiments on the EfficientNet family of CNNs, 
-with different hyper-parameters and on images withlight exposures 
+with different hyper-parameters and on images with light exposures 
 from the set light, medium, dark.
 Training has been done on the 10-fold cross validation set which produced 10 models.
 An ensemble of the best models produced the best accuracy score in table 3.1
 
 \begin{center}
 \begin{table}[hbt!]
-\caption{Accuracy on: light exposure/CNN architecture}
+\caption{Accuracy by: light exposure/CNN architecture}
 \begin{tabular}{ |l|c|c|c|c|c|c| }
 
 \hline
@@ -332,8 +331,84 @@ The models predicted can be viewed in a box plot
   \hfill
 \end{figure}
 
+By comparing the models on MSE we can se that larger models are better, e.g B6 has 
+higher mean than B5 and B4, and large is better than medium. 
+We also see that the EfficientNetV2 networks has higher mean than mean than the
+first generation EfficientNet. However, this is not true for the ensemble
+predictions (red line) nor for the mean or ensemble mean of the accuracy.
+We can also see that the effect of adding 3 images - 9 channels on the
+model is that the variance is reduced.
+
+\subsection*{Prediction by age class and residuals}
+
+\begin{figure}
+  \centering
+  \subfloat[B4 minimum exposure]{\label{ref_label1}\includegraphics[width=0.5\textwidth]{result_pr_model/b4_min/boxplot_pr_age.png}}
+  \subfloat[B4 minimum exposure residuals]{\label{ref_label2}\includegraphics[width=0.5\textwidth]{result_pr_model/b4_min/boxplot_residual.png}}
+
+  \subfloat[B5 minimum exposure]{\label{ref_label3}\includegraphics[width=0.5\textwidth]{result_pr_model/b5_min/boxplot_pr_age.png}}
+  \subfloat[B5 minimum exposure, residuals]{\label{ref_label4}\includegraphics[width=0.5\textwidth]{result_pr_model/b5_min/boxplot_residual.png}}
+  
+  \subfloat[B6 minimum exposure]{\label{ref_label3}\includegraphics[width=0.5\textwidth]{result_pr_model/b6_min/boxplot_pr_age.png}}
+  \subfloat[B6 minimum exposure, residuals]{\label{ref_label4}\includegraphics[width=0.5\textwidth]{result_pr_model/b6_min/boxplot_residual.png}}  
+  \caption{\label{ref_label_overall}Comparing the models, looking at age per age class, and the residuals per prediction}
+\end{figure}
+
+Lets look at the scatter-plot of the errors which causes missclasifications.
+
+\begin{figure}
+  \centering
+  \subfloat[B4 minimum exposure]{\label{ref_label1}\includegraphics[width=0.5\textwidth]{result_pr_model/b4_min/misclassification.png}}
+
+  \subfloat[B5 minimum exposure]{\label{ref_label3}\includegraphics[width=0.5\textwidth]{result_pr_model/b5_min/misclassification.png}}
+  
+  \subfloat[B6 minimum exposure]{\label{ref_label3}\includegraphics[width=0.5\textwidth]{result_pr_model/b6_min/misclassification.png}}
+  \caption{\label{ref_label_overall}Comparing the models, looking at age per age class, and the reciduals per perdiction}
+\end{figure}
+
 
 \subsection*{Ensemble of ensembles}
+
+We search the space of ensemble of ensemble predictions
+which are given by 
+$\sum_{k=1}^{N}\binom{N}{k} $ where $N=22$ and $k \in 1..N$
+
+\begin{figure}[h!]
+  \centering
+  \begin{minipage}[b]{0.49\textwidth}
+  \includegraphics[scale=0.2]{results/eoe_acc.png}
+    \caption{Ensemble of ensemble: accuracy of the 3 best models}
+   \label{marker5}
+  \end{minipage}
+  \hfill
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \begin{minipage}[b]{0.49\textwidth}
+  \includegraphics[scale=0.2]{results/eoe_mse.png}
+    \caption{Ensemble of ensemble: mse of the 3 best models}
+   \label{marker5}
+  \end{minipage}
+  \hfill
+\end{figure}
+
+\begin{center}
+\begin{table}[hbt!]
+\caption{Accuracy/MSE pr ensemble of ensemble.
+Eoe1 is ensemble of ensemble of all models, Eoe2 is for B4, B5 and B6,
+and Eoe3 is Eoe2 plus efficientNetV2 medium.}
+\begin{tabular}{ |l|c|c|c| }
+\hline
+score/ensemble & eoe1 & eoe2 & eoe3  \\ \hline
+Acc & 75.9 & 76.1 & 76.9 \\ 
+MSE & .247 & .248 & .248  \\ 
+\hline
+\end{tabular}
+\end{table}
+\end{center}
+
+
 
 \subsection*{Outliers}
 
@@ -357,7 +432,6 @@ with greatest magnitude of error.
 
 \section*{Discussion}
 
-\subsection*{Convolutional neural network}
 
 \section*{References}
 
