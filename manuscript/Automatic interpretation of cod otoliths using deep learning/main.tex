@@ -149,6 +149,18 @@ Information on fish age constitutes one of the most important biological variabl
 in the investigations of life history (e.g. growth, sexual maturation) and population dynamics
 \Mycite{campana2001accuracy}
 
+– The need for more Automated analysis. On the future of data analysis.
+– On the importance of determining age distributions for fisheries and ecosystem management.
+– How Cod otoliths are measured manually. The importance of otoliths for age determination of various species. Specifics about cod.
+– Related work. Halibut otoliths. Salmon scales. The Greeks.
+Knowledge of fish age structure is central to the study of fish and stock dynamics. It informs on population growth and mortality and, with size distribution, is one of the main criteria used for determining the health of exploited populations and monitoring the effects of selective fishing (Hidalgo et al., 2011; Brunel and Piet, 2013). Changes in the age distribution can track significant changes in population structure, such as a particularly strong year-class skewing the distribution (Reglero and Mosegaard, 2006), or the gradual truncation of older age classes as selective fishing mortality removes larger individuals (Siskey et al., 2016).
+Hard structures such as scales and otoliths are used worldwide as one of the primary sources of fish age estimates, due to their ability as natural physiological and environmental recorders to form regular, temporally resolved growth increments at the daily and annual levels (Campana, 2001; Francis and Campana, 2011; Albuquerque et al., 2019). While age is inferred from the “simple” counting of annual increments, the interpretation of this zonation pattern is species or even population-specific (Høie et al., 2009) and is based on precise knowledge of the timing of zone formation and of the correct identification of true and false zones (Panfili et al., 2002). This process therefore requires specific expertise and is subject to uncertainties in both between-reader precision and “true” age accuracy (Francis and Campana, 2011). Because those estimates are central to stock assessment, ageing errors or wrong interpretation of otolith zonation can have dramatic effects on the evaluation of fish biology and consequently stock size and structure (Tyler et al., 1989; Beamish and McFarlane, 1995; Ragonese, 2018). 
+Otolith reading is also time and resource consuming. Training of expert readers can take up to several years depending on the species, and otoliths often undergo a long processing phase before the final age estimates can be produced (Carbonara and Follesa, 2019). This is particularly true for demersal fish species, like Atlantic cod (Gadus morhua), that have large opaque otoliths that can’t be read whole and need to be prepared. These routines vary between populations and institutes and range from direct reading of broken otoliths under a magnifying glass, to embedding, thin sectioning and finally imaging of the sections under a microscope. There has been a variety of methods proposed to automatically interpret otoliths, which range from one-dimensional data analysis like intensity transects (Mahé, 2009) to the more recent effort toward developing machine learning (ML) frameworks (Moen et al., 2018; Politikos et al., 2021). Despite fast progress the results remain mixed and often yield lower precision and consistency than those obtained by trained human readers, which limits the application of automated methods in real conditions.
+However, one aspect that is often under considered by such studies are the practical time and cost benefits that implementing a functional ML framework would provide. As noted by Fisher and Hunter (2018) in their review of digital techniques for otolith analysis, “costs for human and machine ageing systems are broadly similar since a large part of the cost is associated with preparing the otolith sections”. As such, the net benefit of automated ageing routines is directly dependent on the ability to scale performance using a comparatively smaller number of samples than human readers or, alternatively, to train them on “rougher” data that can be produced faster and at a more efficient cost.
+MORE ON CNN ETC?
+In this study, we develop a deep learning network for estimating Atlantic cod age using multi-exposure images of broken otoliths set in place using simple plasticine. More on methods. Our results are positive and show the potential for developing automated pipelines that require minimum processing and could be able to produce near at-sea age estimates.
+
+
 \section*{Method and materials}
 
 \subsection*{Data Collection}
@@ -242,7 +254,10 @@ the exact configuration can be found the the results section of the github page 
 \subsection*{Ensemble of ensembles}
 
 As previously mentioned, the results recorded per model is an ensemble of 10 models trained on 10-fold split of the
-training data set. Typically the ensemble prediction is better than any single fold prediction. 
+training data set. Typically the ensemble prediction is better than any single fold prediction. Ensembles are better because they improve 
+performance. An ensemble can make better predictions and achieve better performance than any single contributing model, just as more
+experts will produce higher accuracy in predicting a single otolith.
+Robustness; An ensemble reduces the spread or dispersion of the predictions and model performance.
 This result can be improved further by taking ensemble predictions of multiple models as prediction on the test set.
 We look at all ensembles from tuple predictions consisting of 2 models, which produces an ensemble of 20 models,
 to ensemble of all models which produces an ensemble consisting of 210 models. 
@@ -264,36 +279,44 @@ We have conducted a series of experiments on the EfficientNet family of CNNs,
 with different hyper-parameters and on images with light exposures 
 from the set light, medium, dark.
 Training has been done on the 10-fold cross validation set which produced 10 models.
-An ensemble of the best models produced the best accuracy score in table 3.1
+An ensemble of the best models produced the best accuracy score in 
+table \ref{table1} and MSE in table \ref{table1}.
+It can be observed that in the efficientNetV1 family,
+larger networks has better MSE, while accuracy is more fluctuating.
+A similar pattern can be observed for the efficientNetV2 networks.
+Howerver it seems like efficientNetV1 is better than V2, unlike
+the results observed on ImageNet.
 
 \begin{center}
 \begin{table}[hbt!]
-\caption{Accuracy by: light exposure/CNN architecture}
+\caption{Accuracy by light exposure and CNN architectures}
 \begin{tabular}{ |l|c|c|c|c|c|c| }
 
 \hline
-lighting/CNN in acc & B4 & B5 & B6 & Medium & Large +MLP & Xtra Large \\ \hline
-min & 72.8 & 74.4 & 73.4 & 67.0* & - & - \\ 
-medium & - & - & - & 64.3* & 71.8 & - \\ 
-max & - & - & - & 65.8 & - & - \\ 
+MSE:light/CNN & B4 & B5 & B6 & Medium & Large & Xtra Large \\ \hline
+min        & 72.8 & 74.4 & 73.4 & 67.0* & - & - \\ 
+medium     & - & - & 74.4 & 72.4 & 71.8 & - \\ 
+max        & - & - & - & - & - & - \\ 
 9 channels & - & - & - & - & 71.7 & - \\ 
 \hline
+\label{table1}
 \end{tabular}
 \end{table}
 \end{center}
 
 \begin{center}
 \begin{table}[hbt!]
-\caption{MSE on: light exposure/CNN architecture}
+\caption{MSE by light exposure and CNN architectures}
 \begin{tabular}{ |l|c|c|c|c|c|c| }
 
 \hline
-lighting/CNN in acc & B4 & B5 & B6 & Medium+MLP & Large+MLP & Xtra Large \\ \hline
-min & .277 & .277 & .272 & .331* & - & - \\ 
-medium & - & - & - & .292 & .280 & - \\ 
-max & - & - & - & .381 & - & - \\ 
+ACC:light/CNN & B4 & B5 & B6 & Medium & Large & Xtra Large \\ \hline
+min        & .277 & .277 & .272 & .331* & - & - \\ 
+medium     & - & - & .262 & .292 & .280 & - \\ 
+max        & - & - & - & - & - & - \\ 
 9 channels & - & - & - & - & .281 & - \\ 
 \hline
+\label{table2}
 \end{tabular}
 \end{table}
 \end{center}
@@ -301,22 +324,29 @@ max & - & - & - & .381 & - & - \\
 
 \begin{figure}[h!]
   \centering
-  \begin{minipage}[b]{0.49\textwidth}
-  \includegraphics[scale=0.5]{results/fold_prediction_V2_m.png}
-    \caption{Sample of 25 predictions on a fold of training on EfficientNetV2 medium}
-   \label{marker5}
+  \begin{minipage}[b]{1.0\textwidth}
+  \includegraphics[scale=0.75]{results/fold_prediction_V2_m.png}
+    \caption{Sample of 25 predictions on a fold of training on EfficientNetV2 size medium with minimum light exposure, left number is prediction,
+    and right number is age read
+    
+    }
+   \label{marker3}
   \end{minipage}
   \hfill
 \end{figure}
 
-The models predicted can be viewed in a box plot
+We compare the 10 fold prediction accuracy of all the models in a box plot in
+figure \ref{marker4}, and for MSE in \ref{marker5}. The metric for
+each of the 10 folds are given by the box plot, and the red line 
+is the ensemble accuracy or MSE. The ensemble metric is either better than 
+all the folds or in the upper quantile.
 
 \begin{figure}[h!]
   \centering
   \begin{minipage}[b]{0.49\textwidth}
   \includegraphics[scale=0.2]{results/box_plot_models_acc.png}
     \caption{Accuracy score of 5 models and red line is ensemble prediction accuracy}
-   \label{marker5}
+   \label{marker4}
   \end{minipage}
   \hfill
 \end{figure}
@@ -331,7 +361,7 @@ The models predicted can be viewed in a box plot
   \hfill
 \end{figure}
 
-By comparing the models on MSE we can se that larger models are better, e.g B6 has 
+By comparing the models on MSE we can see that larger models are better, e.g B6 has 
 higher mean than B5 and B4, and large is better than medium. 
 We also see that the EfficientNetV2 networks has higher mean than mean than the
 first generation EfficientNet. However, this is not true for the ensemble
@@ -339,7 +369,72 @@ predictions (red line) nor for the mean or ensemble mean of the accuracy.
 We can also see that the effect of adding 3 images - 9 channels on the
 model is that the variance is reduced.
 
+The box-plots are produced from the fold metrics:
+\begin{table}[!ht]
+    \caption{MSE per CNN and per fold}
+    \centering
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
+    \hline
+        CNN/fold & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & mse \\ \hline
+        B4, min & .320 & .318 & .3. & .313 & .322 & .314 & .315 & .316 & .3. & .3. & .277 \\ \hline
+        B4, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B4, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B5, min & .324 & .322 & .325 & .336 & .291 & .314 & .320 & .331 & .33 & .317 & .277 \\ \hline
+        B5, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B5, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B6, min & .325 & .329 & .334 & .293 & .312 & .290 & .320 & .3. & .276 & .3. & .272 \\ \hline
+        B6, middle & .323 & .3. & .312 & .268 & .294 & .266 & .3. & .311 & .278 & .289 & .262 \\ \hline
+        B6, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        medium, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        med., mid. & .321 & .377 & .332 & .285 & .285 & .325 & .311 & .348 & .295 & .373 & .292 \\ \hline
+        medium, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        medium, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        large, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        large, middle & .3. & .281 & .299 & .318 & .282 & .3. & .280 & .334 & .3. & .310 & .280 \\ \hline
+        large, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        large, all & .292 & .289 & .289 & .326 & .3. & .327 & .283 & .30 & .335 & .295 & .281 \\ \hline
+        xl, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        xl, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        xl, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        xl, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Accuracy per CNN and per fold}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|}
+    \hline
+        CNN/fold & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & acc \\ \hline
+        B4, min & 69.9 & 68.9 & 68.7 & 68.3 & 68.9 & 70.1 & 69.7 & 66.8 & 68.9 & 72.4 & 72.8 \\ \hline
+        B4, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B4, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B5, min & 71.8 & 69.1 & 69.3 & 66.8 & 73.6 & 70.7 & 66.2 & 68.3 & 69.5 & 68.7 & 74.4 \\ \hline
+        B5, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B5, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B6, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        B6, middle & 68.3 & 68.5 & 66.4 & 72.4 & 70.7 & 70.9 & 69.3 & 69.3 & 72 & 68.9 & 73.4 \\ \hline
+        B6, max & 68.5 & 69.9 & 67.6 & 73.6 & 72.8 & 72 & 68 & 69.3 & 72 & 71.1 & 74.4 \\ \hline
+        medium, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        med., mid. & 68.7 & 67.6 & 68.3 & 71.1 & 70.1 & 70.5 & 69.9 & 68.3 & 69.9 & 66 & 72.4 \\ \hline
+        medium, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        medium, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        large, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        large, middle & 69.7 & 73.4 & 69.1 & 67 & 71.8 & 69.9 & 72.6 & 68.2 & 70.5 & 70.3 & 71.8 \\ \hline
+        large, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        large, all & 70.9 & 70.7 & 70.5 & 70.7 & 71.5 & 69.3 & 70.7 & 71.8 & 69.7 & 70.9 & 71.7 \\ \hline
+        xl, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        xl, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        xl, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+        xl, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+    \end{tabular}
+\end{table}
+
 \subsection*{Prediction by age class and residuals}
+
+The figures below shows the predictions per age group on the test-set. We
+can see that the prediction follows a linear trend $y=x$ except for the 2-3 last years.
+We also see the same on the residual plots
 
 \begin{figure}
   \centering
@@ -354,7 +449,7 @@ model is that the variance is reduced.
   \caption{\label{ref_label_overall}Comparing the models, looking at age per age class, and the residuals per prediction}
 \end{figure}
 
-Lets look at the scatter-plot of the errors which causes missclasifications.
+Lets look at the scatter-plot of the errors which causes misclassifications.
 
 \begin{figure}
   \centering
@@ -417,20 +512,28 @@ Looking at figure (x) we can see that the model under predicts the age of older 
 \begin{figure}[h!]
   \caption{The most common images miss predicted with more than 1.5 years}
   \centering
-  \includegraphics[scale=0.1]{outliers/IMG_0284_13.JPG}
-  \includegraphics[scale=0.1]{outliers/IMG_0230_71.JPG}
-  \includegraphics[scale=0.1]{outliers/IMG_0104_270.JPG}
-  \includegraphics[scale=0.1]{outliers/IMG_0044_342.JPG}
-  \includegraphics[scale=0.1]{outliers/IMG_0086_360.JPG}
-  \includegraphics[scale=0.1]{outliers/IMG_0122_369.JPG}
-  \label{marker7}
+  \includegraphics[scale=0.08]{outliers/IMG_0284_13.JPG}
+  \includegraphics[scale=0.08]{outliers/IMG_0230_71.JPG}
+  \includegraphics[scale=0.08]{outliers/IMG_0104_270.JPG} 
+
+  \includegraphics[scale=0.08]{outliers/IMG_0044_342.JPG}
+  \includegraphics[scale=0.08]{outliers/IMG_0086_360.JPG}
+  \includegraphics[scale=0.08]{outliers/IMG_0122_369.JPG}
+  
+  \label{marker10}
 \end{figure}
 
-Figure \ref{marker7} are the most commonly mis-classified images 
+Figure \ref{marker7} are the most commonly misclassified images 
 with greatest magnitude of error.
 
 
 \section*{Discussion}
+
+During initial training we trained a B4 network on ca 2000 images and obtained
+an accuracy of ca 60\%, later another 3000 images was added and the same
+network was trained on ca 5000 images which resulted in accuracy of ca 70\%.
+It could be interesting to investigating if adding another 3-5000 images
+would increase the accuracy to 80\%.
 
 
 \section*{References}
