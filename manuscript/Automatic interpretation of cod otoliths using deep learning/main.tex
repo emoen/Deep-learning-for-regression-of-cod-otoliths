@@ -209,21 +209,15 @@ can be found in \Mycite{codOtolithsMyers}
   \caption{Age distribution of 515 images from the test set}
 \end{figure}
 
-\subsection*{Preprocessing and augmentation}
+\subsection*{Convolutional neural network architecture}
 
-To create a large data set with millions of images needed to evaluate the models, we use image augmentation. Image augmentation has made it possible to do deep CNN training on smaller data sets \citep{krizhevsky2012imagenet}. By using this technique it is possible to create millions of training images.
+There are two families of models used, EfficientNet B4-B6 \citep{DBLP:journals/corr/abs-1905-11946}  and EfficientNet V2 medium, and Large \citep{DBLP:journals/corr/abs-1905-11946} 
 
-The augmentation methods that we use are rotation by 0 to 360 degrees, and reflection by the vertical (or horizontal) axis. This can be done without loss of information. Also the age reading is agnostic to orientation.
+Each CNN was trained using transfer learning by loading ImageNet \citep{deng2009imagenet} weights. The image size varied between 380x380 and 528x528 for EfficientNet Bx, and 384x384 for EfficientNetV2 size medium, large. While test-set size prediction has been done both on 384x384 and larger resolutions 480x480 and 512x512 as described in the paper. To investigate the image-taking protocol described in \citep{codOtolithsMyers} we have also training on 9-channel images. Three images are stacked to produce a 9-channel image. Using Timm\citep{rw2019timm} the imageNet weights were duplicated on the input layer to accommodate 9 channels. The 3 images used are of dark, medium and light exposure of the first orientation.
 
-No other augmentation techniques was used like  cropping, shifting or shearing as it can result in loss of age structure information.
+We apply state-of-the-art CNNs based on performance on the ImageNet benchmark. The imageNet benchmark has a classification while we treate ageing the cod-otoliths as a regression problem. So the last layer of the CNNs has been modified to output a linear output. In the EfficientNetV2 family we have done this by applying multilayer perceptron layers going from 1280 output of last hidden layer to dense 256-layer, then a leakyRelu \citep{DBLP:journals/corr/XuWCL15} layer, then dense 32-layer, then a leakyRelu layer, and finally linear output layer. While in EfficientNetV1 we only change the softmax layer to a linear out layer.
 
-The augmented data set can produce 360*2*5150 = 3.708.000 possible images.
-Depending on the augmentation factor and the number of images in a training cycle, the model will likely never see the same image twice.
-% \citep{boureau2010theoretical} 
-
-The data has been split into train and test-set with 10 \% test-set, 9 \% validation
-and 81 \% training-set. Training has been done on the 90 \% of the data set, 4635 images, with 10-fold split producing 10 models. While predictions are made on the 515 images in the test set. The final prediction is
-an ensemble prediction on the given model recorded as the expectation on predictions on the test set from the 10 models. 
+To each fold we apply Standard scalar, which Standardize the age by removing the mean and scaling to unit variance, on the training set. The standard scalar is then applied to validation and test-set. To get the test-set predictions we inverse transform the standard scalar.
 
 \begin{figure}[h!]
   \caption{Otolith from 2013, read age: 6. With light exposure: medium, low, high, 
@@ -234,44 +228,37 @@ an ensemble prediction on the given model recorded as the expectation on predict
   \label{marker1}
 \end{figure}
 
-\subsection*{Training the Convolutional neural networks}
+\subsection*{Implementation and training}
 
-There are two families of models used, EfficientNet B4-B6 \citep{EfficientNet}   from Tensorflow \citep{abadi2016tensorflow} with a Keras  \citep{keras} implementation plus weights, and a PyTorch \citep{PyTorch}  implementation of EfficientNet V2 medium, Large 
-and Xtra-Large \citep{EfficientNetV2} implementation with weights from Timm\citep{rw2019timm}. Weights are ImageNet \citep{deng2009imagenet} weights, which is another prerequisite when working with small data sets, in addition to augmentation. The image size varies between 380 and 528 for EfficientNet Bx, and 384 for EfficientNetV2 size medium, large and xtra-large. While test-set size prediction has been done both on 384 and larger resolutions 480 and 512 as described in the paper. To investigate the image-taking protocol described in \citep{codOtolithsMyers} we have is also training on 9-channel images. Three images are stacked to produce a 9-channel. Using Timm\citep{rw2019timm} the imagenet weights are duplicated on the input layer to accommodate 9 channels. The 3 images used are of dark, medium and light exposure of the first orientation.
+EfficientNetV1 B4, B5, and B6 was implemented with  tensorflow \citep{abadi2016tensorflow} and keras \citep{keras} software packages in python. Computation was done using CUDA 11.1 and CuDNN with Nvidia(Nvidia Corp., Santa Clara, California) A6000 accelerator card with 48 GB of GPU memory,
+EfficientNetV2 medium, and large was implemented with the pytorch \citep{PyTorch}  and TIMM citep{rw2019timm} sorfware package. Computation was done on P100 cards with 12 GB of GPU memory. Pretrained weights for EfficientNetV1 was available through Keras, and pretrained weights for EfficeintNetV2 was available through Timm.
 
-EfficientNetV2 has been modified sligtly because the objective is regression as opposed to classification. The output layer of EfficientNetV2 becomes input to a Multi-Layer Perceptron (MLP) of 256 and 32 layers and then to a linear activation function which is the predicted age. More specifically; the 1280 layers output from EfficientNetV2 is input to 256 layer-MLP, then a leakyRelu \citep{DBLP:journals/corr/XuWCL15} then 32 layer-MLP, another leakyRelu, then a linear activation function is the output. This outperformed a linear activation on the 1280 layers from EfficientNetV2, likely because we are doing a regression.
+Augmentation was applied to the training-set. The images were augmented using rotation between 0 and 360 degrees, and reflection by the vertical axis. The pixel values has a range between 0 and 255 which was normalized to between 0 and 1.
+No other augmentation techniques was used like  cropping, shifting or shearing as it can result in loss of age structure information.
 
-We train and tune EfficientNet B4, B5, B6 \citep{DBLP:journals/corr/abs-1905-11946}, EfficienetNetV2 medium, large \citep{DBLP:journals/corr/abs-1905-11946}, and xl. 
-The test results from top models are ensembled to produce the final prediction.
+The augmented data set can produce 360*2*5150 = 3.708.000 possible images.
+Depending on the augmentation factor and the number of images in a training cycle, the model will likely never see the same image twice.
 
-Hyper-parameter tuning is an important step when working with a new dataset and architecture. Some hyper-parameters
-that as been tuned are batch size, learning rate, k-fold size, weight decay, step size, number of epochs, early stopping, and
-patience. To keep track of all these parameters, a config.json file has been written for each model trained, and 
-the exact configuration can be found the the results section of the github page of this project
-(https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths)
+The primary metric used for training the models is mean squared error (MSE)
+while the primary metric used for evaluating the models and comparing it to expert readers is accuracy. Accuracy is obtained by rounding the floating point number predictions to nearest integer and comparing the age classification against the true labels.
+To reach human level accuracy a score of 85\% or higher is required \citep{ref_needed}.
 
+To get the most out of a small data-set we applied 10-fold cross-validation on 90\% of the data-set, 4635 images. Each fold of the 10 folds consists of 90\% of the cross-validation set and 81\% of the whole data-set, 4172 images for training. Each fold had then 463 images for validation which is 10\% of the cross-validation set, and 9\% of the whole data-set. Each model is training on the 4172 images and the model with the best MSE on the 463 images in the validation set is chosen. The best model on the validation set was then used to predict the age on the test-set, and the metric for accuracy and MSE was recorded. The test-set is chosen at random, while the 10-fold split is chosen using stratified-kfold split which preserves the distribution of the whole cross-validation set in each validation set. So the 463 images while have similar age distribution to that of the 4635 images in the cross-validation set. Both the test-set and the whole data-set follows a normal distribution with larges age-class, 5 year old, but with deviation in frequency in other age-classes.
 
-\subsection*{Ensemble of ensembles}
+The CNN hyper-parameters configurations varies a little between the two families of networks, but are kept the same within the families. Some hyper-parameters
+that has been tuned are batch size, learning rate, k-fold size, weight decay, step size, number of epochs, early stopping, and
+patience. To keep track of all these parameters we wrote the configuration to a JSON file, config.json. The configuration file has been written for each model trained, and the exact configuration can be found in the results section of the github page of this project (https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths)
 
-As previously mentioned, the results recorded per model is an ensemble of 10 models trained on 10-fold split of the
-training data set. Typically the ensemble prediction is better than any single fold prediction. Ensembles are better because they improve 
+As previously mentioned, we trained 10 models using 10-fold cross-validation which resulted in 10 predictions on the test-set. We then produce an ensemble prediction of the 10 models. Typically the ensemble prediction is better than any single fold prediction. Ensembles are better because they improve 
 performance. An ensemble can make better predictions and achieve better performance than any single contributing model, just as more
 experts will produce higher accuracy in predicting a single otolith.
 Robustness; An ensemble reduces the spread or dispersion of the predictions and model performance.
-This result can be improved further by taking ensemble predictions of multiple models as prediction on the test set.
-We look at all ensembles from tuple predictions consisting of 2 models, which produces an ensemble of 20 models,
-to ensemble of all models which produces an ensemble consisting of 210 models. 
+This result can be improved further by taking ensemble predictions of ensembles.
+We look at all ensembles from tuple-ensembles, consisting of 2 models, which produces an ensemble of 20 models, and triplet-ensembles consisting of 3 models, to ensemble of all models which produces an ensemble consisting of 180 models. 
+
 By choosing the best model we are over fitting to the test-set, but 
-selecting a subset of the best of these ensembles should produce a candidate ensemble
-of ensemble which will produce the best prediction on a test-set holdout set.
+selecting a subset of the best of these ensembles should produce a candidate ensemble of ensemble which will produce the best prediction on a hold-out test-set.
 
-\subsection*{Evaluation metric}
-
-The primary metric used for training the models is mean squared error (MSE)
-while the primary metric used for evaluating the models is Accuracy.
-Accuracy is obtained by rounding the floating point number predictions
-to nearest integer and comparing the age classification against the true labels.
-To reach human level accuracy a score of 85\% or higher is required \citep{ref_needed}.
 
 \section*{Results}
 
@@ -279,12 +266,12 @@ We have conducted a series of experiments on the EfficientNet family of CNNs,
 with different hyper-parameters and on images with light exposures 
 from the set light, medium, dark.
 Training has been done on the 10-fold cross validation set which produced 10 models.
-An ensemble of the best models produced the best accuracy score in 
-table \ref{table1} and MSE in table \ref{table1}.
-It can be observed that in the efficientNetV1 family,
+
+In table \ref{table1} and table \ref{table2} are the accuracy and MSE metrics
+for the ensembled predictions from the 10 fold training. It can be observed that in the efficientNetV1 family,
 larger networks has better MSE, while accuracy is more fluctuating.
 A similar pattern can be observed for the efficientNetV2 networks.
-Howerver it seems like efficientNetV1 is better than V2, unlike
+Howerver it seems like efficientNetV1 is better than V2 in both metrics unlike
 the results observed on ImageNet.
 
 \begin{center}
@@ -336,8 +323,7 @@ max        & - & - & - & - & - & - \\
 \end{figure}
 
 We compare the 10 fold prediction accuracy of all the models in a box plot in
-figure \ref{marker4}, and for MSE in \ref{marker5}. The metric for
-each of the 10 folds are given by the box plot, and the red line 
+figure \ref{marker4}, and for MSE in \ref{marker5}. The red line 
 is the ensemble accuracy or MSE. The ensemble metric is either better than 
 all the folds or in the upper quantile.
 
@@ -363,40 +349,42 @@ all the folds or in the upper quantile.
 
 By comparing the models on MSE we can see that larger models are better, e.g B6 has 
 higher mean than B5 and B4, and large is better than medium. 
-We also see that the EfficientNetV2 networks has higher mean than mean than the
+We also see that the EfficientNetV2 networks has higher  mean than the
 first generation EfficientNet. However, this is not true for the ensemble
-predictions (red line) nor for the mean or ensemble mean of the accuracy.
-We can also see that the effect of adding 3 images - 9 channels on the
-model is that the variance is reduced.
+predictions (red line) nor for the fold-mean or ensemble of the accuracy.
+We can also see that the effect of adding 3 images, creating 9 channels, on the
+model is that the variance is reduced, the fold mean metric increases,
+but the ensemble metric is reduced.
 
-The box-plots are produced from the fold metrics:
+The box plots are produced from the folds given in table \ref{table3} and \ref{table4}.
 \begin{table}[!ht]
     \caption{MSE per CNN and per fold}
     \centering
     \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|}
     \hline
         CNN/fold & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & mse \\ \hline
-        B4, min & .320 & .318 & .3. & .313 & .322 & .314 & .315 & .316 & .3. & .3. & .277 \\ \hline
+        B4, min & .320 & .318 & .306 & .313 & .322 & .314 & .315 & .316 & .306 & .302 & .277 \\ \hline
         B4, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         B4, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         B5, min & .324 & .322 & .325 & .336 & .291 & .314 & .320 & .331 & .33 & .317 & .277 \\ \hline
         B5, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         B5, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
-        B6, min & .325 & .329 & .334 & .293 & .312 & .290 & .320 & .3. & .276 & .3. & .272 \\ \hline
-        B6, middle & .323 & .3. & .312 & .268 & .294 & .266 & .3. & .311 & .278 & .289 & .262 \\ \hline
+        B6, min & .325 & .329 & .334 & .293 & .312 & .290 & .320 & .3. & .276 & .306 & .272 \\ \hline
+        B6, middle & .323 & .301 & .312 & .268 & .294 & .266 & .309 & .311 & .278 & .289 & .262 \\ \hline
         B6, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         medium, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         med., mid. & .321 & .377 & .332 & .285 & .285 & .325 & .311 & .348 & .295 & .373 & .292 \\ \hline
         medium, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         medium, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         large, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
-        large, middle & .3. & .281 & .299 & .318 & .282 & .3. & .280 & .334 & .3. & .310 & .280 \\ \hline
+        large, middle & .301 & .281 & .299 & .318 & .282 & .305 & .280 & .334 & .3 & .310 & .280 \\ \hline
         large, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
-        large, all & .292 & .289 & .289 & .326 & .3. & .327 & .283 & .30 & .335 & .295 & .281 \\ \hline
+        large, all & .292 & .289 & .289 & .326 & .307 & .327 & .283 & .30 & .335 & .295 & .281 \\ \hline
         xl, min & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         xl, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         xl, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         xl, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+    \label{table3}
     \end{tabular}
 \end{table}
 
@@ -427,14 +415,17 @@ The box-plots are produced from the fold metrics:
         xl, middle & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         xl, max & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
         xl, all & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ & ~ \\ \hline
+    \label{table4}
     \end{tabular}
 \end{table}
 
 \subsection*{Prediction by age class and residuals}
 
 The figures below shows the predictions per age group on the test-set. We
-can see that the prediction follows a linear trend $y=x$ except for the 2-3 last years.
-We also see the same on the residual plots
+can see that the prediction follows a linear trend $y=x$ except for the 2-3 last years,
+when the mean drops below $y=x$. This is even more obvious in the residual plots
+where the prediction drops below $y=0$ for the last 2-3 age groups.
+
 
 \begin{figure}
   \centering
@@ -447,9 +438,11 @@ We also see the same on the residual plots
   \subfloat[B6 minimum exposure]{\label{ref_label3}\includegraphics[width=0.5\textwidth]{result_pr_model/b6_min/boxplot_pr_age.png}}
   \subfloat[B6 minimum exposure, residuals]{\label{ref_label4}\includegraphics[width=0.5\textwidth]{result_pr_model/b6_min/boxplot_residual.png}}  
   \caption{\label{ref_label_overall}Comparing the models, looking at age per age class, and the residuals per prediction}
+  \label{marker6}
 \end{figure}
 
-Lets look at the scatter-plot of the errors which causes misclassifications.
+Figure \ref{marker7} shows scatter plots of all predictions that results in a misclassification. That is predictions
+that error greater than 0.5 in magnitude. Predictions that miss by more than 1.5 in magnitude are shown with red dots.
 
 \begin{figure}
   \centering
@@ -459,6 +452,7 @@ Lets look at the scatter-plot of the errors which causes misclassifications.
   
   \subfloat[B6 minimum exposure]{\label{ref_label3}\includegraphics[width=0.5\textwidth]{result_pr_model/b6_min/misclassification.png}}
   \caption{\label{ref_label_overall}Comparing the models, looking at age per age class, and the reciduals per perdiction}
+  \label{marker7}
 \end{figure}
 
 
@@ -467,6 +461,12 @@ Lets look at the scatter-plot of the errors which causes misclassifications.
 We search the space of ensemble of ensemble predictions
 which are given by 
 $\sum_{k=1}^{N}\binom{N}{k} $ where $N=22$ and $k \in 1..N$
+and find three ensemble of ensembles which produce the best
+results overall with accuracy of 75.9\%, 76.1\%, and 76.9\%
+and MSE 0.247, 0.248, and 0.248 from ensemble of 
+all networks, ensemble of B4, B5 and B6 with min exposure,
+and ensemble of B4, B5, B6 and middle with min exposure.
+
 
 \begin{figure}[h!]
   \centering
@@ -507,7 +507,57 @@ MSE & .247 & .248 & .248  \\
 
 \subsection*{Outliers}
 
-Looking at figure (x) we can see that the model under predicts the age of older otoliths. This pattern is especially observable for individuals read as 15 years and older. The oldest predication is 18 years while the test set contains individuals as old as 22 years. To better understand the bias, figure \ref{marker5} shows the 4 largest outliers from the test set which come from two pairs
+Looking at figure \ref{} we can see that the model under predicts the age of older otoliths. This pattern is especially observable for individuals read as 15 years and older. The oldest predication is 18 years while the test set contains individuals as old as 22 years. To better understand the bias, figure \ref{marker5} shows the 4 largest outliers from the test set which come from two pairs
+
+\begin{table}[!ht]
+    \centering
+    \caption{Outliers with more than 1.5 year error. Index of image in test-set per model}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|}
+    \hline
+        V2-m,mid. & V2-m,mid. & V2-l,all & V2-l,mid. & B4,min & B5,min &  B6,min & B6,mid.  \\ \hline
+        ~ & ~ & ~ & ~ & 13 & 13 & 13 & 13  \\ \hline
+        ~ & ~ & ~ & ~ & ~ & ~ & 48 &   \\ \hline
+        71 & 71 & 71 & 71 & 71 & 71 & 71 & 71  \\ \hline
+        92 & 92 & ~ & ~ & ~ & ~ & ~ &   \\ \hline
+        ~ & ~ & ~ & ~ & 270 & 270 & ~ & 270  \\ \hline
+        279 & 279 & 279 & 279 & 279 & 279 & 279 & 279  \\ \hline
+        ~ & ~ & 312 & 312 & ~ & ~ & ~ &   \\ \hline
+        ~ & ~ & ~ & 320 & 320 & ~ & ~ &   \\ \hline
+        362 & 362 & 362 & 362 & 362 & 362 & 362 & 362  \\ \hline
+        342 & 342 & 342 & 342 & 342 & 342 & 342 & 342  \\ \hline
+        369 & 369 & 369 & 369 & 369 & ~ & 369 & 369  \\ \hline
+        ~ & ~ & ~ & 393 & ~ & ~ & 393 & 393  \\ \hline
+        423 & 423 & 423 & 423 & ~ & ~ & ~ &   \\ \hline
+        ~ & ~ & ~ & ~ & ~ & 444 & ~ &   \\ \hline
+        ~ & ~ & ~ & ~ & ~ & ~ & 502 & 502  \\ \hline
+        ~ & ~ & ~ & ~ & ~ & ~ & ~ &   \\ \hline
+        7 & 7 & 7 & 9 & 8 & 7 & 9 & 9  \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \caption{Outliers with more than 1.5 year error. Prediction and true age, per model}
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+    \hline
+        Idx & V2-m,mid. & V2-l,all & V2-l,mid. & B4,min & B5,min &  B6,min & B6,mid. & Age  \\ \hline
+        13 & ~ & ~ & ~ & 9.79 & 9.64 & 9.74 & 9.58 & 8  \\ \hline
+        48 & ~ & ~ & ~ & ~ & ~ & 7.6 & ~ & 6  \\ \hline
+        71 & 4.96 & 4.98 & 4.94 & 5.14 & 4.79 & 5.06 & 5.12 & 7  \\ \hline
+        92 & 10.95 & ~ & ~ & ~ & ~ & ~ & ~ & 13  \\ \hline
+        270 & ~ & ~ & ~ & 11.66 & 11.71 & ~ & 11.53 & 10  \\ \hline
+        279 & 9.93 & 9.79 & 9.75 & 9.89 & 9.69 & 9.67 & 9.7 & 8  \\ \hline
+        312 & ~ & 9.42 & 9.38 & ~ & ~ & ~ & ~ & 11  \\ \hline
+        320 & ~ & ~ & 5.44 & 5.47 & ~ & ~ & ~ & 7  \\ \hline
+        362 & 5.11 & 5.14 & 5.23 & 5.11 & 5.29 & 5.24 & 5.15 & 7  \\ \hline
+        342 & 10.35 & 10.6 & 10.61 & 11.05 & 10.75 & 10.69 & 10.84 & 13  \\ \hline
+        369 & 8.17 & 8.13 & 8.23 & 8.24 & ~ & 7.85 & 8.29 & 10  \\ \hline
+        393 & ~ & ~ & 10.53 & ~ & ~ & 10.75 & 10.83 & 9  \\ \hline
+        423 & 5.39 & 5.69 & 5.43 & ~ & ~ & ~ & ~ & 8  \\ \hline
+        444 & ~ & ~ & ~ & ~ & 10.95 & ~ & ~ & 9  \\ \hline
+        502 & ~ & ~ & ~ & ~ & ~ & 9.4 & 9.43 & 11  \\ \hline
+    \end{tabular}
+\end{table}
 
 \begin{figure}[h!]
   \caption{The most common images miss predicted with more than 1.5 years}
