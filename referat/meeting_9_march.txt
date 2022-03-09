@@ -1,5 +1,5 @@
 In Methods: 
-- Describe the archtecture with number of layers, resolution, width.
+- Describe the archtecture with number of layers, resolution, width etc
 
 -Hyper-parameters 
   in supplementary materials + architecture overview table
