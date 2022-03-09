@@ -1,0 +1,17 @@
+In Methods: 
+
+Describe the archtecture with number of layers, resolution, width.
+
+Hyper-parameters 
+in supplementary materials + architecture overview table
+Methods: details on hp - short + with reference
+
+Create plot with accuracy pr age group
+
+Analysis: B4 vs v2 large - show statistical significanse
+
+Create plot:
+1. prediction vs prediction - each year has different color - or using reciduals.
+2. Do we have access to mounth of prediction?
+
+On holdout test-set: 1. physical otolith, 2. read from image, 3. then CNN read
