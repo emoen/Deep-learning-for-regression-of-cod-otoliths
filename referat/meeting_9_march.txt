@@ -11,6 +11,6 @@ Analysis: e.g B4 vs v2 large - show statistical significanse
 Create plot:
 1. accuracy pr age group
 2. prediction vs prediction - each year has different color - or using reciduals.
-3. Do we have access to mounth of prediction?
+3. Do we have access to month of prediction?
 
 On holdout test-set: 1. physical otolith, 2. read from image, 3. then CNN read
