@@ -1,0 +1,19 @@
+1. fargeleg per år
+2. velg utliggerne
+3. 
+
+***********
+-Come- rewrite
+-Introduction: forskjell på efficientNet V1 - V2, 
+- "scaled by CNNs" side 5, tabell network x input-size
+- side 5: normalisering age - 
+- To discussion: To reach human level accuracy a score of 85\% or higher is required
+- side 7:  delete: JSON file
+- side 7: Table 2 legg til config pr nettverk
+- side 7 - symon til diskusjon
+- siden 9 - 21 linjer og 10 rader over tid brukt på trening / eller box plot
+tabel 3 - last colonne ensemble of mse (ens)
+
+Introduction / Diskusjon
+
+1. skrive om regression/classification og tidligere arbeid

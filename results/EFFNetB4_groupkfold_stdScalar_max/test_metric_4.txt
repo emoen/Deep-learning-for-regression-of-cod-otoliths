@@ -1,0 +1,3 @@
+test metric:
+['loss', 'mse', 'binary_accuracy_for_regression']
+[0.04396779090166092, 0.04396779090166092, 0.0]
