@@ -18,7 +18,7 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 
 ## Residual accuracy and standard deviation pr age for each model
 
-|    |   l_all |   l_middle |   m_min |   m_middle |   m_max |   m_all |   b4_min |   b4_middle |   b4_max |   b5_min |   b6_min |   b6_middle |   b6_max |
+|Age/CNN|   l_all |   l_middle |   m_min |   m_middle |   m_max |   m_all |   b4_min |   b4_middle |   b4_max |   b5_min |   b6_min |   b6_middle |   b6_max |
 |---:|--------:|-----------:|--------:|-----------:|--------:|--------:|---------:|------------:|---------:|---------:|---------:|------------:|---------:|
 |  1 |    0.11 |       0.09 |    0.13 |       0.15 |    0.16 |    0.12 |     0.04 |        0.05 |     0    |     0.07 |     0.14 |        0.1  |     0.2  |
 |  2 |    0.14 |       0.12 |    0.1  |       0.14 |    0.16 |    0.13 |     0.14 |        0.11 |     0.1  |     0.17 |     0.17 |        0.12 |     0.14 |
@@ -36,7 +36,7 @@ Box-plot of models on the 10-fold predictions on the test-set. The red line is t
 
 ### Standard deviation
 
-|    |   l_all |   l_middle |   m_min |   m_middle |   m_max |   m_all |   b4_min |   b4_middle |   b4_max |   b5_min |   b6_min |   b6_middle |   b6_max |
+|Age/CNN|   l_all |   l_middle |   m_min |   m_middle |   m_max |   m_all |   b4_min |   b4_middle |   b4_max |   b5_min |   b6_min |   b6_middle |   b6_max |
 |---:|--------:|-----------:|--------:|-----------:|--------:|--------:|---------:|------------:|---------:|---------:|---------:|------------:|---------:|
 |  1 |    0.26 |       0.17 |    0.21 |       0.22 |    0.22 |    0.22 |     0.2  |        0.25 |     0.3  |     0.21 |     0.22 |        0.19 |     0.73 |
 |  2 |    0.27 |       0.27 |    0.29 |       0.29 |    0.28 |    0.27 |     0.33 |        0.32 |     0.34 |     0.31 |     0.31 |        0.3  |     0.29 |
