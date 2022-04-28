@@ -67,6 +67,8 @@ Summary of best results on training on cod otoliths compared to other projects:
 |EfficientNetV2-l MLP(256,32,1) MLE savepoints, same test image size, middle_old |0.301,<br/>0.697|0.281,<br/>0.734|0.299,<br/>0.691|0.318,<br/>0.670|0.282,<br/>0.718|0.305,<br/>0.699|0.280,<br/>0.726|0.334,<br/>0.682|0.300,<br/>0.705|0.310,<br/>0.703|0.280|0.718|5150|
 |EfficientNetV2-l MLP(256,32,1) max, mse savepoints, max |0.322,<br/>0.711| 0.295,<br/>0.701| 0.324,<br/>0.699| 0.353,<br/>0.742| 0.295,<br/>0.728| 
 0.306,<br/>0.711| 0.271,<br/>0.722| 0.292,<br/>0.711| 0.380,<br/>0.711| 0.299,<br/>0.701|0.286|0.724|5150|
+|EfficientNetV2-l MLP(256,32,1) middle, mse savepoints, middle |0.300,<br/>0.687| 0.332,<br/>0.680| 0.320,<br/>0.697| 0.300,<br/>0.718| 0.272,<br/>0.711| 
+0.302,<br/>0.711| 0.294,<br/>0.697| 0.285,<br/>0.705| 0.307,<br/>0.711| 0.285,<br/>0.720|0.275|0.728|5150|
 | EfficientNetV2-l MLP(256,32,1) Reload weights, middle| 0.322,<br/>0.666|0.3455,<br/>0.636|0.428,<br/>0.596|||||||||||5150|
 | EfficientNetV2-l MLP(256,32,1) Reload weights test_img size 480x480, middle|0.336,<br/>0.656|0.331,<br/>0.645|0.324,<br/>0.648|||||||||||5150|
 | EfficientNetV2-l MLP(256,32,1) 9 channels, mse savepoints,test_img=384 |0.292,<br/>0.709|0.289,<br/>0.707|0.289,<br/> 0.705|0.326,<br/>0.707|0.307,<br/>0.715|0.327,<br/>0.693|0.283,<br/>0.707|0.29997,<br/>0.718|0.335,<br/>0.697|0.295,<br/>0.709|0.281|0.717|5150|
