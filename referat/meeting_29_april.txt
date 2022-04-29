@@ -1,0 +1,4 @@
+1. Jeg: Hva er nytt siden sist:
+	a. Hva gjenstår av trening, 
+		- for normal-plot legg tilhistogram, og begge
+		- for heat-map: 0 nøytral farge -2 rød, 0 grå, 2 blå
