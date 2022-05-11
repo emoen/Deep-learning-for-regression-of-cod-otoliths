@@ -79,7 +79,7 @@ Summary of best results on training on cod otoliths compared to other projects:
 ### Age distribution of data set of 5150 images
 
 ```{1: 382, 2: 522, 3: 509, 4: 624, 5: 805, 6: 540, 7: 544, 8: 477, 9: 327, 10: 217, 11: 122, 12: 55, 13: 26}```
-| <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/age_distribution.png" width="50%" height="50%"> |
+| <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/manuscript/imgs/age_distribution2.png" width="50%" height="50%"> |
 |:--:| 
 | *Figure 2.:Age distribution of cod otoliths:* |
 
