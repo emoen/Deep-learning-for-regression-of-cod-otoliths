@@ -1,7 +1,7 @@
 referat 11 mai:
 1. Google doc has introduction
 2. Introduction: add history of CNNs
-3. Methods: Photographic protocol” start by mentioning savahans work
+v 3. Methods: Photographic protocol” start by mentioning savahans work
 4. Rescaling on CNNs chapter not in first methods
 5. "near the bottom of the camera." - not the case. Correct to: "The procimal surface should be up or down"
 6. Move table 1 to ensembles
