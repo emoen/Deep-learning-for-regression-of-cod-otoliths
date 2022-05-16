@@ -16,12 +16,12 @@ v 14. The best model-parameters on the validation set was then used to predict t
 v 15. combine table 3, 4, 5
 v 16. Scheduler on TF: min_lr 1e-06, weight_decay 1e-06
 ? 17. Introduction/Disussion move: Simple ensemble learning with averaging
-18. Inconsistency in tenses - present, past, future. Use past tense
-19. Conclusions in beginning of results
-20. dont use stars - use bold-face
-21. table 6. compare accuracy - add only red channels, or put a channel infront with 9 channels
-22. generality: how well does the network perform on other exposures.
-23. table 6 add the average for each column/row
+OK - 18. Inconsistency in tenses - present, past, future. Use past tense
+OK - 19. Conclusions in beginning of results
+v 20. dont use stars - use bold-face
+x 21. table 6. compare accuracy - add only red channels, or put a channel infront with 9 channels
+x 22. generality: how well does the network perform on other exposures.
+v 23. table 6 add the average for each column/row
 24. Remove: It looks like the residuals follow a normal-like distribution.
 25. Limit figure 6, 7, and 8
 26. ensembles - pick a random fold for each of the models - get the distribution for each of the 
