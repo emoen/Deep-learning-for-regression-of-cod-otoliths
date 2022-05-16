@@ -15,7 +15,7 @@ x 12. 10-fold cross validation rephrase on line 126
 v 14. The best model-parameters on the validation set was then used to predict the age on the test-set
 v 15. combine table 3, 4, 5
 v 16. Scheduler on TF: min_lr 1e-06, weight_decay 1e-06
-17. Introduction/Disussion move: Simple ensemble learning with averaging
+? 17. Introduction/Disussion move: Simple ensemble learning with averaging
 18. Inconsistency in tenses - present, past, future. Use past tense
 19. Conclusions in beginning of results
 20. dont use stars - use bold-face
