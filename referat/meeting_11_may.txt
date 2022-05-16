@@ -3,12 +3,12 @@ referat 11 mai:
 2. Introduction: add history of CNNs
 v 3. Methods: Photographic protocol” start by mentioning savahans work
 v 4. Rescaling on CNNs chapter not in first methods
-5. "near the bottom of the camera." - not the case. Correct to: "The procimal surface should be up or down"
-6. Move table 1 to ensembles
-7. line 76 and line 88 pixels size 512
-8. EfficeintNetV2 and EfficientNet different regressors
-9. subtract the mean
-10. Resizing images: "The pixel values 117 has a range between 0 and 255 which was normalized to between 0 and 1."
+v 5. "near the bottom of the camera." - not the case. Correct to: "The procimal surface should be up or down"
+x 6. Move table 1 to ensembles
+v Removed - 7. line 76 and line 88 pixels size 512
+? 8. EfficeintNetV2 and EfficientNet different regressors
+v 9. "removing the mean" should be "subtract the mean"
+v 10. Resizing images: "The pixel values has a range between 0 and 255 which was normalized to between 0 and 1."
 11. Remove: The augmented data set can produce 360×2×5150 = 3.708.000 possible images.
 12. 10-fold cross validation rephrase on line 126
 13. Define target audience - target people working on otoliths and techniqual (ecological info, ICES)
