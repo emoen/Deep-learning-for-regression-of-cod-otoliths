@@ -22,7 +22,7 @@ v 20. dont use stars - use bold-face
 x 21. table 6. compare accuracy - add only red channels, or put a channel infront with 9 channels
 x 22. generality: how well does the network perform on other exposures.
 v 23. table 6 add the average for each column/row
-24. Remove: It looks like the residuals follow a normal-like distribution.
+v 24. Remove: It looks like the residuals follow a normal-like distribution.
 25. Limit figure 6, 7, and 8
 26. ensembles - pick a random fold for each of the models - get the distribution for each of the 
 27. Double-check rank - sort it by count.
