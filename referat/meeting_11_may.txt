@@ -1,35 +1,35 @@
 referat 11 mai:
-1. Google doc has introduction
-2. Introduction: add history of CNNs
-3. Methods: Photographic protocol” start by mentioning savahans work
-4. Rescaling on CNNs chapter not in first methods
-5. "near the bottom of the camera." - not the case. Correct to: "The procimal surface should be up or down"
-6. Move table 1 to ensembles
-7. line 76 and line 88 pixels size 512
-8. EfficeintNetV2 and EfficientNet different regressors
-9. subtract the mean
-10. Resizing images: "The pixel values 117 has a range between 0 and 255 which was normalized to between 0 and 1."
-11. Remove: The augmented data set can produce 360×2×5150 = 3.708.000 possible images.
-12. 10-fold cross validation rephrase on line 126
-13. Define target audience - target people working on otoliths and techniqual (ecological info, ICES)
-14. The best model-parameters on the validation set was then used to predict the age on the test-set
-15. combine table 3, 4, 5
-16. Scheduler on TF: min_lr 1e-06, weight_decay 1e-06
-17. Introduction/Disussion move: Simple ensemble learning with averaging
-18. Inconsistency in tenses - present, past, future. Use past tense
-19. Conclusions in beginning of results
-20. dont use stars - use bold-face
-21. table 6. compare accuracy - add only red channels, or put a channel infront with 9 channels
-22. generality: how well does the network perform on other exposures.
-23. table 6 add the average for each column/row
-24. Remove: It looks like the residuals follow a normal-like distribution.
-25. Limit figure 6, 7, and 8
-26. ensembles - pick a random fold for each of the models - get the distribution for each of the 
-27. Double-check rank - sort it by count.
-28. Check time to do inference for each model - time x ensemble
-29. Correlation in appendix
-30. HCA - good relation - y-axis what is the unit (is it correlation difference)
-31. The B's are also correlated by exposures also
-32. Mention accuracy on 90's on for 1-2 year olds
-33. figure 6 add bar from -0.5, 0.5, x:[-2.5, 2.5] 
-34. Remove figure 12 add elbow - silhouett score method.
+v 1. Google doc has introduction
+? 2. Introduction: add history of CNNs
+v 3. Methods: Photographic protocol” start by mentioning savahans work
+v 4. Rescaling on CNNs chapter not in first methods
+v 5. "near the bottom of the camera." - not the case. Correct to: "The procimal surface should be up or down"
+x 6. Move table 1 to ensembles
+v Removed - 7. line 76 and line 88 pixels size 512
+? 8. EfficeintNetV2 and EfficientNet different regressors
+v 9. "removing the mean" should be "subtract the mean"
+v 10. Resizing images: "The pixel values has a range between 0 and 255 which was normalized to between 0 and 1."
+v 11. Remove: The augmented data set can produce 360×2×5150 = 3.708.000 possible images.
+x 12. 10-fold cross validation rephrase on line 126
+? 13. Define target audience - target people working on otoliths and techniqual (ecological info, ICES)
+v 14. The best model-parameters on the validation set was then used to predict the age on the test-set
+v 15. combine table 3, 4, 5
+v 16. Scheduler on TF: min_lr 1e-06, weight_decay 1e-06
+? 17. Introduction/Disussion move: Simple ensemble learning with averaging
+OK - 18. Inconsistency in tenses - present, past, future. Use past tense
+OK - 19. Conclusions in beginning of results
+v 20. dont use stars - use bold-face
+x 21. table 6. compare accuracy - add only red channels, or put a channel infront with 9 channels
+x 22. generality: how well does the network perform on other exposures.
+v 23. table 6 add the average for each column/row
+v 24. Remove: It looks like the residuals follow a normal-like distribution.
+x 25. Limit figure 6, 7, and 8
+x 26. ensembles - pick a random fold for each of the models - get the distribution for each of the 
+v 27. Double-check rank - sort it by count.
+x 28. Check time to do inference for each model - time x ensemble
+? 29. Correlation in appendix
+x 30. HCA - good relation - y-axis what is the unit (is it correlation difference)
+x 31. The B's are also correlated by exposures 
+x 32. Mention accuracy on 90's on for 1-2 year olds
+x 33. figure 6 add bar from -0.5, 0.5, x:[-2.5, 2.5] 
+x 34. Remove figure 12 add elbow - silhouett score method.
