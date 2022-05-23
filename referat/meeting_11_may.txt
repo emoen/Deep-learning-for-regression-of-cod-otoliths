@@ -9,7 +9,7 @@ v Removed - 7. line 76 and line 88 pixels size 512
 ? 8. EfficeintNetV2 and EfficientNet different regressors
 v 9. "removing the mean" should be "subtract the mean"
 v 10. Resizing images: "The pixel values has a range between 0 and 255 which was normalized to between 0 and 1."
-x 11. Remove: The augmented data set can produce 360×2×5150 = 3.708.000 possible images.
+v 11. Remove: The augmented data set can produce 360×2×5150 = 3.708.000 possible images.
 x 12. 10-fold cross validation rephrase on line 126
 ? 13. Define target audience - target people working on otoliths and techniqual (ecological info, ICES)
 v 14. The best model-parameters on the validation set was then used to predict the age on the test-set
@@ -23,13 +23,13 @@ x 21. table 6. compare accuracy - add only red channels, or put a channel infron
 x 22. generality: how well does the network perform on other exposures.
 v 23. table 6 add the average for each column/row
 v 24. Remove: It looks like the residuals follow a normal-like distribution.
-25. Limit figure 6, 7, and 8
-26. ensembles - pick a random fold for each of the models - get the distribution for each of the 
-27. Double-check rank - sort it by count.
-28. Check time to do inference for each model - time x ensemble
-29. Correlation in appendix
-30. HCA - good relation - y-axis what is the unit (is it correlation difference)
-31. The B's are also correlated by exposures also
-32. Mention accuracy on 90's on for 1-2 year olds
-33. figure 6 add bar from -0.5, 0.5, x:[-2.5, 2.5] 
-34. Remove figure 12 add elbow - silhouett score method.
+x 25. Limit figure 6, 7, and 8
+x 26. ensembles - pick a random fold for each of the models - get the distribution for each of the 
+v 27. Double-check rank - sort it by count.
+x 28. Check time to do inference for each model - time x ensemble
+? 29. Correlation in appendix
+x 30. HCA - good relation - y-axis what is the unit (is it correlation difference)
+x 31. The B's are also correlated by exposures 
+x 32. Mention accuracy on 90's on for 1-2 year olds
+x 33. figure 6 add bar from -0.5, 0.5, x:[-2.5, 2.5] 
+x 34. Remove figure 12 add elbow - silhouett score method.
