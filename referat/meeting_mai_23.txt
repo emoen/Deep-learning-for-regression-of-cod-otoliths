@@ -1,0 +1,8 @@
+* referanser på linje 62, 63
+* final pitch til diskusjon
+* 2 families of models på linje 79-80 til metode
+* backslash \_
+* Introduction: er ok
+* ICES - AI 
+* ensemble acc/training + evaluation
+* blås opp residual av sikrel/blink
