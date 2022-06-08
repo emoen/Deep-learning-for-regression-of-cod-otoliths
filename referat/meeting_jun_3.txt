@@ -1,0 +1,15 @@
+møte 03/06/22
+
+v -table1 ok
+v -implementation and training: pytorch and timm, distinct not implement efficientNetV2
+    -changed "implemented" to "imported and modified"
+x -imagenet - weights - version of keras and give url, also for pytorch
+    - Is imagenet weights part of the paper on EfficientNet and EfficentNetV2?
+-Simple ensemble learning with averaging: mixing background and what is done.
+	mention alternative. Describe ensemble of ensemble
+	we take the average of ensembles and then round
+
+	- simple mean of the 10-fold ensembles, simple mean of these ensembles, Simple ensemble average
+v  -figure 6 x-axis is fixed - there might be more data outside the range
+v -figure 7 make smaler font
+v -outliers - put in tables, makes bulletpoints the summary
