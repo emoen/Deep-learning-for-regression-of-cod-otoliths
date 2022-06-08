@@ -95,22 +95,32 @@
 }
 
 %Method and results
+@article{HAYKIN,
+ author =  {HAYKIN, S.},
+ title  = {Neural Networks - A Comprehensive Foundation.},
+ journal={Second edition. Pearson Prentice Hall},
+ year = {1999}
+}
+
 @article{Myers_etal,
  author = {Savannah Carolyn Myers and Anders Thorsen and Szymon Smoliński and Jane Aanestad Godiksen and Ketil Malde and Nils Olav Handegard (2019)},
  title  = {An efficient protocol and data set for automated otolith image analysis},
- doi    = {10.1002/gdj3.86}
+ doi    = {10.1002/gdj3.86},
+ year = {2019}
 }
 
 @article{moenetal,
-  author = {Moen E. and Nils Olav Handegard and Vaneeda Allken and Ole Thomas Albert and Alf Harbitz and Ketil Malde},
+  author = {Endre Moen and Nils Olav Handegard and Vaneeda Allken and Ole Thomas Albert and Alf Harbitz and Ketil Malde},
   title  = {Automatic interpretation of otoliths using deep learning},
   doi    = {10.21335/NMDC-1949633559 },
+  journal = {Plos One},
   year = {2018}
 }
 @article{vaboeetal,
-  author = {Vabø R. and Endre Moen and Szymon Smoliński and Åse Husebø and Nils Olav Handegard and Ketil Malde},
+  author = {Rune Vabø and Endre Moen and Szymon Smoliński and Åse Husebø and Nils Olav Handegard and Ketil Malde},
   title  = {Automatic interpretation of salmon scales using deep learning},
-  journal= {Ecol. Inform. 63, 101322 (2021).}
+  journal= {Ecol. Inform. 63, 101322 (2021).},
+  year = {2021}
 }
 
 @misc{rw2019timm,
@@ -163,10 +173,11 @@
   year={2019}
 }
 
-@article{Loshchilov_et_al,
+@article{Loshchilovetal,
     author = {Ilya Loshchilov and Frank Hutter},
     title  = {SGDR: STOCHASTIC GRADIENT DESCENT WITH WARM RESTARTS},
-    year = {2016}
+    year = {2016},
+    journal = {neurips}
 }
 @inproceedings{Tan2019EfficientNetRM,
   title={EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks},
@@ -374,11 +385,38 @@ url = {http://papers.nips.cc/paper/5347-how-transferable-are-features-in-deep-ne
   pages={807--814},
   year={2010}
 }
+@article{Szegedy2015,
+  author    = {Christian Szegedy and
+               Vincent Vanhoucke and
+               Sergey Ioffe and
+               Jonathon Shlens and
+               Zbigniew Wojna},
+  title     = {Rethinking the Inception Architecture for Computer Vision},
+  journal   = {CoRR},
+  volume    = {abs/1512.00567},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1512.00567},
+  eprinttype = {arXiv},
+  eprint    = {1512.00567},
+  timestamp = {Mon, 13 Aug 2018 16:49:07 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/SzegedyVISW15.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
 @article{hinton2012improving,
   title={Improving neural networks by preventing co-adaptation of feature detectors},
   author={Hinton, Geoffrey E and Srivastava, Nitish and Krizhevsky, Alex and Sutskever, Ilya and Salakhutdinov, Ruslan R},
   journal={arXiv preprint arXiv:1207.0580},
   year={2012}
+}
+@misc{Russakovsky2015,
+  doi = {10.48550/ARXIV.1409.0575},
+  url = {https://arxiv.org/abs/1409.0575},
+  author = {Russakovsky, Olga and Deng, Jia and Su, Hao and Krause, Jonathan and Satheesh, Sanjeev and Ma, Sean and Huang, Zhiheng and Karpathy, Andrej and Khosla, Aditya and Bernstein, Michael and Berg, Alexander C. and Fei-Fei, Li},
+  keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences, I.4.8; I.5.2},
+  title = {ImageNet Large Scale Visual Recognition Challenge},
+  publisher = {arXiv},
+  year = {2014},
+  copyright = {arXiv.org perpetual, non-exclusive license}
 }
 @incollection{krizhevsky_imagenet_2012,
 	title = {{ImageNet} {Classification} with {Deep} {Convolutional} {Neural} {Networks}},
