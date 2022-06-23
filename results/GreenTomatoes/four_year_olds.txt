@@ -1,0 +1,10 @@
+31, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70148/Nr04_age04/IMG_0614.JPG,1,0.0125
+48, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2013/70182/Nr01_age04/IMG_0002.JPG,1,0.01
+59, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70086/Nr06_age04/IMG_0032.JPG,1,0.0125
+63, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70068/Nr07_age04/IMG_0110.JPG,1,0.00625
+78, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70362/Nr05_age04/IMG_0098.JPG,1,0.008
+91, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2013/70162/Nr05_age04/IMG_0026_1.JPG,1,0.00625
+93, 4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70084/Nr06_age04/IMG_0350.JPG,1,0.02
+115,4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2013/70074/Nr06_age04/IMG_0206.JPG,1,0.0125
+119,4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70063_Del1/Nr02_age04/IMG_0128.JPG,1,0.008
+131,4,/gpfs/gpfs0/deep/data/Savannah_Professional_Practice2021_08_12_2021/CodOtholiths-MachineLearning/Savannah_Professional_Practice/2016/70017/Nr05_age04/IMG_0200.JPG,1,0.016666666666666666
