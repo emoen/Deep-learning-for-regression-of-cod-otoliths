@@ -1,0 +1,19 @@
+img 1. conseptual
+img 2. method
+img 3.4. results
+img 5. as needed
+img 6 3. with outliers - 3 with correct preds
+img 7. elimination
+
+combine 1,2,3
+
+no more than 5. figures
+
+keep figure 8 with 3 good images
+
+figure 5 and figure 10 - order by dendrogram
+
+anova test- put results in tekst
+2 way-anova
+
+-different objectivs

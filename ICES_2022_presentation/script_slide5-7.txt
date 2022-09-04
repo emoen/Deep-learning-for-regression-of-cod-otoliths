@@ -1,0 +1,33 @@
+4. Results: We trained 5 models on minimumn, middle, max exposure, and all exposures for the effnetV2. That is 9-channel image. 17 models in total
+We recorded the accuracy metrix to compare the network to experts, and Mean squared error was used as the loss function.
+The accuracy are shown in table 4. B5 min, B6-middle with 74.4% accuracy
+Minimum exposure was best with mean of 73.3% B5 was best network 73.7% 
+
+5. The results of the 17 models was obtained as the average prediction on the test set from 10-fold cross-validation.
+Here we see the distribution of the 10 folds for each model. 
+The blue bars are the ensemble score for accuracy and mean squared error, and the red bars are the best ensembles
+The orange bar is the average of the 10 folds.
+
+Looking at the left table accuracy:We see that medium -all and large all has a very small variance.
+and B5-max very large variance
+looking at the right table Mean squared error: we see that two models, B5-max and B6-max, has large variance 
+
+6. Table 8 shows binomial combination of simple average ensembles on 2 to 17 models.
+We see that the best ensemble is found with a combination of 6 models where the search space is more than 12000 models, 
+and the best average ensembles are found with a combination of 9 models where the search space is more than 24000.
+
+Looking at the rank statistics we see that B4-min and B6-min participate in most of the best ensembles, each participating in 15 of the 16 best ensembles.
+Looking at the average rank accross image exposure we find that
+Min had an average rank of 4, middle 9, all 10, and max 11
+
+7. All the models had correlated coefficient of between .98 and .99. 
+Figure 13 shows the scatterplot of the residual of the prediction on the test-set between 2 of the least correlated models. Medium-min and B5-min
+The inner most ring shows misprediction of .5 years, the outermost  1.5 years
+We see that the 2 models agreeeven on large outliers.
+
+9. Outliers with more than 1.5 years - Some otoliths were outliers to all models on all exposures - like image 71,342, 362, 369 in red)
+sow otoliths where outliers to a family of models and on all exposures - like image 13 missed by the B networks
+
+image 279 in upper right: Labeled as 8 years, read as 10 years all models except B6-max. The
+exposures is of good quality, but there were split rings in the middle
+
