@@ -17,3 +17,7 @@ anova test- put results in tekst
 2 way-anova
 
 -different objectivs
+
+dendogram order: 
+b5-min, b6-mid, l-max, l-all, l-min, l-middle, m-max, m-all, m-min, m-mid, 
+b5-max, b6-max, b4-min, b4-mid, b4-max, b5-mid, b6-min
