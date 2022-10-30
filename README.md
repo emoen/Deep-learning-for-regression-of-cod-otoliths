@@ -47,6 +47,17 @@ Exporatory Data Analysis (EDA) on the models: [readme eda](https://github.com/em
 Accuracy on each network - ensemble mean is higher than mean of the 10-folds
 <img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/img/results_in_r.png" width="50%" height="50%" >
 
+### 2-way anova with interactive plot on 10-fold ensemble average (higher than simple average)
+``` 
+#Df Sum Sq Mean Sq F value Pr(>F)
+#dataf$network   4  6.409  1.6023   2.369 0.1391
+#dataf$exposure  2  5.649  2.8247   4.176 0.0573 .
+#Residuals       8  5.411  0.6763
+#---
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+```
+<img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/img/two_way_anova_interactions.png" width="50%" height="50%" >
+
 
 ### Summary of best results on training on cod otoliths compared to other projects: 
 | Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f |
