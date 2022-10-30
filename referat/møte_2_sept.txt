@@ -13,7 +13,8 @@ keep figure 8 with 3 good images
 
 figure 5 and figure 10 - order by dendrogram
 
-anova test- put results in tekst
+anova test- put results in appendix
+
 2 way-anova
 
 -different objectivs

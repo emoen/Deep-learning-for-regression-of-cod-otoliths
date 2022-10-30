@@ -1,0 +1,16 @@
+1. two-way anova - T-test will show individual differences
+2. 17, models architecture - different image exposures - 2 factors
+3. move figure 7 to appendix
+4. move table 7 and 8
+5. remove figure 4
+
+Only 3 figures for paper table 8 - 10. Move hyper-parameter to appendix
+Remove table 11, remove table 10.
+
+Only 4 figures.
+keep table 4 - move table 5 to appendix
+figure 3 redundant - box-plot VS dendrogram
+
+Figure table 4, 5, 6 (accuracy - mse, PA) vs redundant in box-plot figure 3 - add box-plot with PA
+Remove figure 7 - use dendrogram.
+Remove PA table it is just Variance
