@@ -23,7 +23,31 @@ For full-precision results: [readme details](https://github.com/emoen/Deep-learn
 
 Exporatory Data Analysis (EDA) on the models: [readme eda](https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/README_eda.md)
 
-Summary of best results on training on cod otoliths compared to other projects: 
+## Final results of loss MSE, metric Accuracy, and Percentage Agreement
+| Acc:light/CNN | B4    | B5         | B6         | Medium    | Large | Mean |
+|---------------|-------|------------|------------|-----------|-------|------|
+| min           | 72.8  | **74.4**   | 73.4       | 74.0      | 72.0  | 73.3 |
+| middle        | 71.5  | 73.4       | **74.4**   | 72.4      | 72.8  | 72.9 |
+| max           | 70.9  | 73.2       | 71.5       | 71.3      | 72.4  | 71.9 |
+| 9 channels    | -     | -          | -          | 74.0      | 72.2  | 73.1 |
+| Mean          | 71.7  | 73.7       | 73.1       | 72.9      | 72.4  | 72.7 |
+| MSE:light/CNN |       |            |            |           |       |      |
+| min           | .277  | .277       | .272       | .273      | .280  | .276 |
+| middle        | .285  | .273       | **.262**   | .278      | .275  | .275 |
+| max           | .291  | .359       | .305       | .289      | .286  | .306 |
+| 9 channels    | -     | -          | -          | .273      | .271  | .272 |
+| Mean          | .284  | .303       | .280       | .278      | .278  | .284 |
+| PA:light/CNN  |       |            |            |           |       |      |
+| min           | 89.5  | 89.3       | 88.2       | 89.7      | 89.9  | 89.3 |
+| middle        | 88.2  | 89.5       | 90.9       | 91.1      | 87.8  | 89.5 |
+| max           | 87.6  | 90.5       | 88.0       | 89.5      | 90.3  | 89.2 |
+| 9 channels    | -     | -          | -          | **91.3**  | 91.1  | 91.2 |
+| Mean          | 88.1  | 89.8       | 89.0       | 90.4      | 89.8  | 89.6 |
+
+
+
+
+### Summary of best results on training on cod otoliths compared to other projects: 
 | Species              | Predict    |validLOSS| MSE  | MAPE | ACC | MCC |#trained |activ. f |
 | ---------------------| -----------|--------|------|-------|-----|-----|---------|---------|
 | Greenland Halibut(1) | age        | x      |2.65  |0.124  |0.262|x    |8875     | linear  |
