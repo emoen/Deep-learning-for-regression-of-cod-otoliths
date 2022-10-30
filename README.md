@@ -44,7 +44,8 @@ Exporatory Data Analysis (EDA) on the models: [readme eda](https://github.com/em
 | 9 channels    | -     | -          | -          | **91.3**  | 91.1  | 91.2 |
 | Mean          | 88.1  | 89.8       | 89.0       | 90.4      | 89.8  | 89.6 |
 
-
+Accuracy on each network - ensemble mean is higher than mean of the 10-folds
+<img src="https://github.com/emoen/Deep-learning-for-regression-of-cod-otoliths/blob/master/img/results_in_r.png" width="50%" height="50%" >
 
 
 ### Summary of best results on training on cod otoliths compared to other projects: 
