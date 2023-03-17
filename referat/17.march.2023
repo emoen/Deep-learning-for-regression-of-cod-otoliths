@@ -3,3 +3,5 @@
 3. SymonOur study found some feature for architecture - 
 4. come: hunter fisher - this work is on broken otoliths - hence faster - move from discusion to intro
 5. dont explain dendrogram
+
+Our study identified specific features of investigated architectures and suggest the best practices and strategies to develop CNN frameworks for the predictions of the age of fish based on otoliths. It can serve as a baseline for the future operationalization of CNN models and the inclusion of automatic otolith-based age interpretations in the biological data collection routines.
