@@ -1,0 +1,19 @@
+# figur 2 - fyll ut bredden, align right
+Ok # figur 4 - zoom inn bilde
+# figur 5 - fargelegge effnetv2 cluster
+ok # figure 6 - fjern - tilbake til correlation -   HCA found 3 clusters
+ok stor bokstav Figure
+ok dropp figure tabel - bare appendix 
+
+Table 11 in appendix F forklar i appendix - keep: ensemble decrease after 6 models.
+
+#slett: The table shows that the best ensemble improved the accuracy of prediction 263
+for all age classes, except 13-year-old’s which had 0% accuracy. A distribution plot like 264
+figure ?? for the best ensemble can be found in appendix D as figure 9.
+
+\include graphics scale =.0.8, width = 100%
+
+1. statistic - acc correlation - statistics figure 9 predictions pr age group
+2. outliers
+3. hyperparameters
+4. ensembles
