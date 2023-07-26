@@ -42,15 +42,19 @@ data2 = dataf
 library(car)
 data2$exposure = recode(data2$exposure, '1 = "Min"; 2 = "Middle"; 3 = "Max"')
 data2$network = recode(data2$network, '1 = "B4"; 2 = "B5"; 3 = "B6"; 4 = "Medium"; 5="Large"')
+x1 = factor(data2$network, levels=c("B4","B5","B6","Medium", "Large"))
 
 interaction.plot(x.factor = data2$exposure, 
-                 trace.factor = data2$network, 
+                 trace.factor = x1, 
                  response = data2$acc, 
                  fun = mean, 
                  type = "b", 
+                 lty=1:2,lwd=1:4,
+                 fixed = TRUE,
                  legend = TRUE, 
                  xlab = "Exposure",
                  ylab = "Accuracy",
                  pch = c(1,19), 
-                 col = c("red", "blue", "black", "pink", "green", "orange"),
+                 col = c("red", "blue", "gray", "pink", "green", "orange"),
                  trace.label = "Network")
+
