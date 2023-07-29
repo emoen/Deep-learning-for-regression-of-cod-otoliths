@@ -1,11 +1,11 @@
 # Deep learning for regression of cod otoliths
 
 ### Highlights:
-⋅⋅* Deep learning models can accurately estimate age from images of broken otoliths
-⋅⋅* All modern architectures perform similarly, so we recommend simple architectures
-⋅⋅* Under-exposed images are better, but combining multiple exposures may be beneficial
-⋅⋅* Models are highly correlated, which has implications for selection into ensembles
-⋅⋅* Deep learning models could be added to routine otolith-based age reading procedures
+* Deep learning models can accurately estimate age from images of broken otoliths
+* All modern architectures perform similarly, so we recommend simple architectures
+* Under-exposed images are better, but combining multiple exposures may be beneficial
+* Models are highly correlated, which has implications for selection into ensembles
+* Deep learning models could be added to routine otolith-based age reading procedures
 
 | Middle Exposure | Min Exposure | Max Exposure |
 | - | - | - |
